@@ -1,6 +1,6 @@
 ﻿namespace OOP_Game
 {
-    partial class Form1
+    partial class GameWindow
     {
         /// <summary>
         /// Обязательная переменная конструктора.
