@@ -45,12 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameWindow.cs">
+    <Compile Include="Forms\GameWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GameWindow.Designer.cs">
+    <Compile Include="Forms\GameWindow.Designer.cs">
       <DependentUpon>GameWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MainMenu.cs" />
     <Compile Include="GameLogic\Game.cs" />
     <Compile Include="GameLogic\Level.cs" />
     <Compile Include="GameLogic\Player.cs" />
