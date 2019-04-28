@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\FormUtils.cs" />
     <Compile Include="Forms\GameWindow.cs">
       <SubType>Form</SubType>
     </Compile>

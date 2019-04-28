@@ -1,6 +1,8 @@
 using System;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Net;
+using System.Net.Mime;
 
 namespace OOP_Game
 {
@@ -19,58 +21,34 @@ namespace OOP_Game
         
         private void InitializeMainMenu()
         {
-            var playButton = GetButtonWithTextAndFontColor("Новая игра", Color.Red);
+            var playButton = FormUtils.GetButtonWithTextAndFontColor("Новая игра", Color.Red, 20);
             playButton.Click += NewPlayClick;
-            var loadButton = GetButtonWithTextAndFontColor("Загрузить", Color.Blue);
+            var loadButton = FormUtils.GetButtonWithTextAndFontColor("Загрузить", Color.Blue, 20);
             loadButton.Click += LoadClick;
-            var exitButton = GetButtonWithTextAndFontColor("Выход", Color.Black);
+            var exitButton = FormUtils.GetButtonWithTextAndFontColor("Выход", Color.Black, 20);
             exitButton.Click += ExitClick;
 
-            var panel = InitializeTableLayoutPanel(5, 3);
+            var panel = FormUtils.InitializeTableLayoutPanel(5, 3);
             panel.Controls.Add(playButton, 1, 1);
             panel.Controls.Add(loadButton, 1, 2);
             panel.Controls.Add(exitButton, 1, 3);
             panel.Size = Size;
-            Controls.Add(panel);
-        }
-
-        public static TableLayoutPanel InitializeTableLayoutPanel(int rowsCount, int columnsCount)
-        {
-            var panel = new TableLayoutPanel();
             
-            panel.ColumnCount = columnsCount;
-            var columnSizeInPercent = 100 / panel.ColumnCount;
-            for (var i = 0; i < panel.ColumnCount; i++)
-                panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, columnSizeInPercent));           
-            
-            panel.RowCount = rowsCount;
-            var rowSizeInPercent = 100 / panel.RowCount;
-            for (var i = 0; i < panel.RowCount; i++)
-                panel.RowStyles.Add(new RowStyle(SizeType.Percent, rowSizeInPercent));
-
-            panel.Anchor = (AnchorStyles.Left | AnchorStyles.Right |
-                            AnchorStyles.Top | AnchorStyles.Bottom);
-            return panel;
-        }
-
-        public static Button GetButtonWithTextAndFontColor(string text, Color fontColor)
-        {
-            var button = new Button
+            var url = "https://up.enterdesk.com/edpic_360_360/db/7f/bf/db7fbf0a45eccdf1b03aeb493bc9d2ec.jpg";
+            using (WebClient webClient = new WebClient())
             {
-                Anchor = (AnchorStyles.Left | AnchorStyles.Right | 
-                          AnchorStyles.Top | AnchorStyles.Bottom),
-                ForeColor = fontColor,
-                Text = text,
-                Font = new Font("Arial", 20),
-                UseVisualStyleBackColor = true
-            };
-            return button;
+                panel.BackgroundImage = Image.FromStream(webClient.OpenRead(url));
+            }
+            panel.BackgroundImageLayout = ImageLayout.Zoom;
+            
+            Controls.Add(panel);
         }
         
         private void NewPlayClick(object sender, EventArgs e)
         {
+            parent.Location = Location;
             parent.Show();
-            Close();
+            Hide();
         }
         
         private void LoadClick(object sender, EventArgs e)

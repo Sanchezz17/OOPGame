@@ -26,19 +26,42 @@ namespace OOP_Game
             Size = new Size(SquareSize.Width * (ColumnsCount + 2),
                 SquareSize.Height * (RowsCount + 2));
             mainMenu = new MainMenu(this);
-            Shown += OnShown;
+            Shown += SwitchToMenu;
+            InitializeGameWindow();
         }
 
-        private void OnShown(object sender, EventArgs e)
+        private void InitializeGameWindow()
+        {
+            var mainPanel = FormUtils.InitializeTableLayoutPanel(2, 1);
+            mainPanel.RowStyles[0] = new RowStyle(SizeType.Percent, 20F);
+            mainPanel.RowStyles[1] = new RowStyle(SizeType.Percent, 80F);
+
+            var buttonsPanel = FormUtils.InitializeTableLayoutPanel(1, 4);
+            buttonsPanel.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 10F);
+            buttonsPanel.ColumnStyles[1] = new ColumnStyle(SizeType.Percent, 10F);
+            buttonsPanel.ColumnStyles[2] = new ColumnStyle(SizeType.Percent, 70F);
+            buttonsPanel.ColumnStyles[3] = new ColumnStyle(SizeType.Percent, 20F);
+            var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor("Главное меню", Color.Blue, 15);
+            exitToMenuButton.Click += SwitchToMenu;
+            buttonsPanel.Controls.Add(exitToMenuButton, 3, 0);
+            
+            mainPanel.Controls.Add(buttonsPanel, 0, 0);
+            mainPanel.Size = Size;
+            
+            Controls.Add(mainPanel);
+        }
+        
+        private void SwitchToMenu(object sender, EventArgs e)
         {
             Hide();
             mainMenu.Location = Location;
             mainMenu.Size = Size;
+            mainMenu.Show();
         }
 
         private void OnPaint(object sender, PaintEventArgs e)
         {
-            DrawMap(sender, e);
+            //DrawMap(sender, e);
             e.Graphics.DrawString("Игра в процессе разработки...",
                 new Font("Arial", 20),
                 Brushes.Black,
