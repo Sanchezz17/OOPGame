@@ -6,5 +6,6 @@ namespace OOP_Game.Units
     {
         int Health { get; set; }
         Point Position { get; set; }
+        State State { get; set; }
     }
 }

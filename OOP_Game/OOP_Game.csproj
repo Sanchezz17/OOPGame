@@ -55,6 +55,7 @@
     <Compile Include="Forms\MainMenu.cs" />
     <Compile Include="GameLogic\Game.cs" />
     <Compile Include="GameLogic\Level.cs" />
+    <Compile Include="GameLogic\Map.cs" />
     <Compile Include="GameLogic\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Units\IMovable.cs" />
     <Compile Include="Units\IStrike.cs" />
     <Compile Include="Units\ITriggered.cs" />
+    <Compile Include="Units\State.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
