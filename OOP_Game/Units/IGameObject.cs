@@ -4,8 +4,9 @@ namespace OOP_Game.Units
 {
     public interface IGameObject
     {
-        int Health { get; set; }
-        Point Position { get; set; }
-        State State { get; set; }
+        int Health { get; }
+        Point Position { get; }
+        State State { get; }
+        bool IsDead { get;  }
     }
 }

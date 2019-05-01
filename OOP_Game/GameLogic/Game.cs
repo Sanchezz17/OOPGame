@@ -7,7 +7,7 @@ namespace OOP_Game.GameLogic
     {
         private int CurrentLevelNumber;
         private readonly List<Level> Levels;
-        public Level CurrentLevel  => Levels[CurrentLevelNumber];
+        public Level CurrentLevel => Levels[CurrentLevelNumber];
 
         public Game(List<Level> levels)
         {

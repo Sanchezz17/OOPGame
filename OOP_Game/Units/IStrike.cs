@@ -1,7 +1,7 @@
 namespace OOP_Game.Units
 {
-    public interface IStrike
+    public interface IStrike : IGameObject
     {
-        
+        int ToDamage();
     }
 }
