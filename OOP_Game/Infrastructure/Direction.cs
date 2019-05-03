@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace OOP_Game.Units
+namespace OOP_Game.Infrastructure
 {
     public enum Direction
     {

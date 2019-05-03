@@ -70,8 +70,8 @@
     <Compile Include="Units\IMovable.cs" />
     <Compile Include="Units\IStrike.cs" />
     <Compile Include="Units\ITriggered.cs" />
-    <Compile Include="Units\Shot.cs" />
     <Compile Include="Units\State.cs" />
+    <Compile Include="Units\Strikes\Shot.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

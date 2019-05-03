@@ -1,4 +1,5 @@
 using System.Drawing;
+using OOP_Game.Infrastructure;
 
 
 namespace OOP_Game.Units
@@ -30,7 +31,7 @@ namespace OOP_Game.Units
         
         public void Move()
         {
-            Position = Position + (Size)DirectionExtension.DirectionToPoint(this.Direction);
+            Position += (Size)DirectionExtension.DirectionToPoint(Direction);
         }
     }
 }

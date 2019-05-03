@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace OOP_Game.Units
+namespace OOP_Game.Units.Heroes
 {
     public class IronMan : IHero
     {
