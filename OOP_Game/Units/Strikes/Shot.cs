@@ -6,7 +6,7 @@ namespace OOP_Game.Units
 {
     public class Shot : IStrike, IMovable
     {
-        public Direction Direction => Direction.Right;
+        public Direction Direction { get; private set; }
         public State State => State.Moves;
         public int Health { get; private set; }
         public Point Position { get; private set; }
@@ -22,16 +22,17 @@ namespace OOP_Game.Units
             return damage;
         }
 
-        public Shot(int damage, Point position)
+        public Shot(int damage, Point position, Direction direction)
         {
             Health = 1;
             this.damage = damage;
             Position = position;
+            Direction = direction;
         }
         
         public void Move()
         {
-            Position += (Size)DirectionExtension.DirectionToPoint(Direction);
+            Position += (Size)Direction.ToPoint();
         }
     }
 }

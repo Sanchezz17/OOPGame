@@ -9,9 +9,9 @@ namespace OOP_Game.Infrastructure
         Right
     }
 
-    public class DirectionExtension
+    public static class DirectionExtension
     {
-        public static Point DirectionToPoint(Direction direction)
+        public static Point ToPoint(this Direction direction)
         {
             switch (direction)
             {
