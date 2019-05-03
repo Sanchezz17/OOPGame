@@ -21,6 +21,7 @@ namespace OOP_Game
 
             panel.Anchor = (AnchorStyles.Left | AnchorStyles.Right |
                             AnchorStyles.Top | AnchorStyles.Bottom);
+            panel.Margin = Padding.Empty;
             return panel;
         }
 

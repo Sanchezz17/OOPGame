@@ -23,8 +23,9 @@ namespace OOP_Game
             Name = "GameForm";
             Text = "OOPGame";
             Paint += OnPaint;
-            Size = new Size(SquareSize.Width * (ColumnsCount + 2),
-                SquareSize.Height * (RowsCount + 2));
+//            Size = new Size(SquareSize.Width * (ColumnsCount + 2),
+//                SquareSize.Height * (RowsCount + 2));
+            Size = new Size(1200, 700);
             mainMenu = new MainMenu(this);
             Shown += SwitchToMenu;
             InitializeGameWindow();
@@ -33,8 +34,8 @@ namespace OOP_Game
         private void InitializeGameWindow()
         {
             var mainPanel = FormUtils.InitializeTableLayoutPanel(2, 1);
-            mainPanel.RowStyles[0] = new RowStyle(SizeType.Percent, 20F);
-            mainPanel.RowStyles[1] = new RowStyle(SizeType.Percent, 80F);
+            mainPanel.RowStyles[0] = new RowStyle(SizeType.Percent, 25F);
+            mainPanel.RowStyles[1] = new RowStyle(SizeType.Percent, 75F);
 
             var buttonsPanel = FormUtils.InitializeTableLayoutPanel(1, 4);
             buttonsPanel.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 10F);
@@ -42,12 +43,34 @@ namespace OOP_Game
             buttonsPanel.ColumnStyles[2] = new ColumnStyle(SizeType.Percent, 70F);
             buttonsPanel.ColumnStyles[3] = new ColumnStyle(SizeType.Percent, 20F);
             var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor("Главное меню", Color.Blue, 15);
+            exitToMenuButton.Margin = Padding.Empty;
             exitToMenuButton.Click += SwitchToMenu;
             buttonsPanel.Controls.Add(exitToMenuButton, 3, 0);
             
             mainPanel.Controls.Add(buttonsPanel, 0, 0);
-            mainPanel.Size = Size;
+            mainPanel.Size = new Size(Size.Width - 15, Size.Height - 40);
+            mainPanel.Location = Location;
+
+            var gamePanel = FormUtils.InitializeTableLayoutPanel(1, 2);
+            gamePanel.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 20F);
+            gamePanel.ColumnStyles[1] = new ColumnStyle(SizeType.Percent, 80F);
+
+            var headquartersControl = new Label();;
+            headquartersControl.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\headquarters.jpg");
+            headquartersControl.BackgroundImageLayout = ImageLayout.Stretch;
+            headquartersControl.Anchor = (AnchorStyles.Left | AnchorStyles.Right |
+                                   AnchorStyles.Top | AnchorStyles.Bottom);
+            headquartersControl.Margin = Padding.Empty;
+            gamePanel.Controls.Add(headquartersControl, 0, 0);
+
+            var fieldControl = FormUtils.InitializeTableLayoutPanel(5, 9);
+            fieldControl.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\field.jpg");
+            fieldControl.BackgroundImageLayout = ImageLayout.Stretch;
+            fieldControl.Margin = Padding.Empty;
+            // Именно внутри fieldControl и будут происходить основные события игры
+            gamePanel.Controls.Add(fieldControl, 1, 0);
             
+            mainPanel.Controls.Add(gamePanel, 0, 1);           
             Controls.Add(mainPanel);
         }
         
@@ -62,10 +85,6 @@ namespace OOP_Game
         private void OnPaint(object sender, PaintEventArgs e)
         {
             //DrawMap(sender, e);
-            e.Graphics.DrawString("Игра в процессе разработки...",
-                new Font("Arial", 20),
-                Brushes.Black,
-                new PointF(Location.X, Location.Y + 340));
         }
 
         private void DrawMap(object sender, PaintEventArgs e)

@@ -94,5 +94,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\field.jpg" />
+    <Content Include="Resources\headquarters.jpg" />
+    <Content Include="Resources\Heroes\IronMan\animation.gif" />
+    <Content Include="Resources\Heroes\IronMan\static.gif" />
+    <Content Include="Resources\main.jpg" />
+    <Content Include="Resources\Malefactors\Thanos\animation.gif" />
+    <Content Include="Resources\Malefactors\Thanos\static.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

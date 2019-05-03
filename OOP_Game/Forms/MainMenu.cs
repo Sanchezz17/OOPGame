@@ -15,31 +15,30 @@ namespace OOP_Game
             this.parent = parent;
             Name = "MainMenu";
             Text = "Главное меню";
+            Closed += OnExit;
             InitializeMainMenu();
             Show();
         }       
         
         private void InitializeMainMenu()
         {
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            
             var playButton = FormUtils.GetButtonWithTextAndFontColor("Новая игра", Color.Red, 20);
             playButton.Click += NewPlayClick;
             var loadButton = FormUtils.GetButtonWithTextAndFontColor("Загрузить", Color.Blue, 20);
             loadButton.Click += LoadClick;
             var exitButton = FormUtils.GetButtonWithTextAndFontColor("Выход", Color.Black, 20);
-            exitButton.Click += ExitClick;
+            exitButton.Click += OnExit;
 
             var panel = FormUtils.InitializeTableLayoutPanel(5, 3);
             panel.Controls.Add(playButton, 1, 1);
             panel.Controls.Add(loadButton, 1, 2);
             panel.Controls.Add(exitButton, 1, 3);
             panel.Size = Size;
-            
-            var url = "https://up.enterdesk.com/edpic_360_360/db/7f/bf/db7fbf0a45eccdf1b03aeb493bc9d2ec.jpg";
-            using (WebClient webClient = new WebClient())
-            {
-                panel.BackgroundImage = Image.FromStream(webClient.OpenRead(url));
-            }
-            panel.BackgroundImageLayout = ImageLayout.Zoom;
+
+            panel.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\main.jpg");
+            panel.BackgroundImageLayout = ImageLayout.Stretch;
             
             Controls.Add(panel);
         }
@@ -56,7 +55,7 @@ namespace OOP_Game
             // загрузка сохранения
         }
         
-        private void ExitClick(object sender, EventArgs e)
+        private void OnExit(object sender, EventArgs e)
         {
             Application.Exit();
         }
