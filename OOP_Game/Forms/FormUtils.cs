@@ -27,7 +27,7 @@ namespace OOP_Game
 
         public static Button GetButtonWithTextAndFontColor(string text, Color fontColor, int fontSize)
         {
-            var button = new Button
+            return new Button
             {
                 Anchor = (AnchorStyles.Left | AnchorStyles.Right | 
                           AnchorStyles.Top | AnchorStyles.Bottom),
@@ -36,7 +36,21 @@ namespace OOP_Game
                 Font = new Font("Arial", fontSize),
                 UseVisualStyleBackColor = true
             };
-            return button;
+        }
+
+        public static Label GetLabelWithTextAndFontColor(string text, Color fontColor, int fontSize)
+        {
+            return new Label()
+            {
+                Anchor = (AnchorStyles.Left | AnchorStyles.Right | 
+                          AnchorStyles.Top | AnchorStyles.Bottom),
+                Text = text,
+                ForeColor = fontColor,
+                Font = new Font("Arial", fontSize),
+                TextAlign = ContentAlignment.MiddleCenter,
+                BorderStyle = BorderStyle.FixedSingle,
+                Margin = Padding.Empty
+            };
         }
     }
 }

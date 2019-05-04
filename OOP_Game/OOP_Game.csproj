@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="Forms\MainMenu.cs" />
     <Compile Include="GameLogic\Game.cs" />
+    <Compile Include="GameLogic\GameFactory.cs" />
     <Compile Include="GameLogic\Level.cs" />
     <Compile Include="GameLogic\Map.cs" />
     <Compile Include="GameLogic\Player.cs" />
@@ -96,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\field.jpg" />
+    <Content Include="Resources\gem.jpg" />
     <Content Include="Resources\headquarters.jpg" />
     <Content Include="Resources\Heroes\IronMan\animation.gif" />
     <Content Include="Resources\Heroes\IronMan\static.gif" />
