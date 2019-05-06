@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Windows;
 
 namespace OOP_Game.Infrastructure
 {
@@ -11,14 +12,14 @@ namespace OOP_Game.Infrastructure
 
     public static class DirectionExtension
     {
-        public static Point ToPoint(this Direction direction)
+        public static Vector ToVector(this Direction direction)
         {
             switch (direction)
             {
                 case Direction.Left:
-                    return new Point(1, 0);
+                    return new Vector(-1, 0);
                 case Direction.Right:
-                    return new Point(-1, 0);
+                    return new Vector(1, 0);
                 default:
                     throw new ArgumentException();
             }

@@ -5,9 +5,9 @@ namespace OOP_Game
 {
     public class FormUtils
     {
-        public static TableLayoutPanel InitializeTableLayoutPanel(int rowsCount, int columnsCount)
+        public static DBLayoutPanel InitializeTableLayoutPanel(int rowsCount, int columnsCount)
         {
-            var panel = new TableLayoutPanel();
+            var panel = new DBLayoutPanel();
             
             panel.ColumnCount = columnsCount;
             var columnSizeInPercent = 100 / panel.ColumnCount;
@@ -51,6 +51,17 @@ namespace OOP_Game
                 BorderStyle = BorderStyle.FixedSingle,
                 Margin = Padding.Empty
             };
+        }
+
+        public static Label GetHeroLabel(Image image)
+        {
+            var heroLabel = new Label();
+            heroLabel.Anchor = (AnchorStyles.Left | AnchorStyles.Right |
+                                  AnchorStyles.Top | AnchorStyles.Bottom);
+            heroLabel.BackgroundImage = image;
+            heroLabel.BackgroundImageLayout = ImageLayout.Stretch;
+            heroLabel.BackColor = Color.Transparent;
+            return heroLabel;
         }
     }
 }

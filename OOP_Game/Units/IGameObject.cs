@@ -1,11 +1,12 @@
 using System.Drawing;
+using System.Windows;
 
 namespace OOP_Game.Units
 {
     public interface IGameObject
     {
         int Health { get; }
-        Point Position { get; }
+        Vector Position { get; }
         State State { get; }
         bool IsDead { get;  }
     }

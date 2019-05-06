@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using OOP_Game.Units;
@@ -8,16 +9,18 @@ namespace OOP_Game.GameLogic
     public class Map
     {
         private List<HashSet<IMalefactor>> linesMalefactors;
-        private List<HashSet<IHero>> linesHeroes; 
-        private int height;
-        private int width;
+        private List<HashSet<IHero>> linesHeroes;
+        private List<HashSet<IStrike>> linesStrikes;
+        public int Height { get; }
+        public int Width { get; }
 
         public Map(int height, int width)
         {
-            this.height = height;
-            this.width = width;
-            linesMalefactors = CreateLines<IMalefactor>(this.height);
-            linesHeroes = CreateLines<IHero>(this.height);
+            Height = height;
+            Width = width;
+            linesMalefactors = CreateLines<IMalefactor>(Height);
+            linesHeroes = CreateLines<IHero>(Height);
+            linesStrikes = CreateLines<IStrike>(Height);
         }
 
         private static List<HashSet<T>> CreateLines<T>(int count)
@@ -27,12 +30,24 @@ namespace OOP_Game.GameLogic
                 .ToList();
         }
 
+        public IEnumerable<IHero> GetHeroesFromLine(int numberLine)
+        {
+            return linesHeroes[numberLine];
+        }
+        
+        public IEnumerable<IMalefactor> GetMalefactorFromLine(int numberLine)
+        {
+            return linesMalefactors[numberLine];
+        }
+
         public IEnumerable<IGameObject> ForEachGameObject()
         {
             foreach (var hero in ForEachHeroes())
                 yield return hero;
             foreach (var malefactor in ForEachMalefactors())
                 yield return malefactor;
+            foreach (var strike in ForEachStrikes())
+                yield return strike;
         }
 
         public IEnumerable<IHero> ForEachHeroes()
@@ -45,9 +60,14 @@ namespace OOP_Game.GameLogic
             return linesMalefactors.SelectMany(line => line);
         }
 
+        public IEnumerable<IStrike> ForEachStrikes()
+        {
+            return linesStrikes.SelectMany(strike => strike);
+        }
+
         public void Add(IGameObject gameObject)
         {
-            var numberLine = gameObject.Position.Y;
+            var numberLine = (int)gameObject.Position.Y;
             switch (gameObject)
             {
                 case IHero hero:
@@ -56,6 +76,9 @@ namespace OOP_Game.GameLogic
                 case IMalefactor malefactor:
                     linesMalefactors[numberLine].Add(malefactor);
                     break;
+                case IStrike strike:
+                    linesStrikes[numberLine].Add(strike);
+                    break;
                 default:
                     throw new ArgumentException();
             }
@@ -63,7 +86,7 @@ namespace OOP_Game.GameLogic
         
         public void Delete(IGameObject gameObject)
         {
-            var numberLine = gameObject.Position.Y;
+            var numberLine = (int)gameObject.Position.Y;
             switch (gameObject)
             {
                 case IHero hero:
@@ -71,6 +94,9 @@ namespace OOP_Game.GameLogic
                     break;
                 case IMalefactor malefactor:
                     linesMalefactors[numberLine].Remove(malefactor);
+                    break;
+                case IStrike strike:
+                    linesStrikes[numberLine].Add(strike);
                     break;
                 default:
                     throw new ArgumentException();

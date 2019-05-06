@@ -4,10 +4,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OOP_Game.GameLogic;
+using OOP_Game.Units;
 
 namespace OOP_Game
 {
@@ -23,13 +25,22 @@ namespace OOP_Game
         private Label scoreLabel;
         private TableLayoutPanel purchasePanel;
         private readonly Image gemImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\gem.jpg");
+        private ResourceManager resourceManager = new ResourceManager();
         
         public GameWindow()
         {
+            SetStyle(
+                ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
+                | ControlStyles.UserPaint, true);
+            UpdateStyles();
             DoubleBuffered = true;
             Name = "GameForm";
             Text = "OOPGame";
             Paint += OnPaint;
+            var timer = new Timer();
+            timer.Interval = 400;
+            timer.Tick += (sender, e) => Invalidate();
+            timer.Start();
             Size = new Size(1200, 700);
             mainMenu = new MainMenu(this);
             Shown += SwitchToMenu;
@@ -115,20 +126,7 @@ namespace OOP_Game
 //                Environment.CurrentDirectory + @"\Resources\Heroes\IronMan\static.gif");
 //            ironManFake.BackgroundImageLayout = ImageLayout.Stretch;
 //            ironManFake.BackColor = Color.Transparent;
-            for (var i = 0; i < 5; i++)
-            {
-                for (var j = 0; j < 9; j++)
-                {
-                    var ironManFake = new Label();
-                    ironManFake.Anchor = (AnchorStyles.Left | AnchorStyles.Right |
-                                          AnchorStyles.Top | AnchorStyles.Bottom);
-                    ironManFake.BackgroundImage = Image.FromFile(
-                        Environment.CurrentDirectory + @"\Resources\Heroes\IronMan\static.gif");
-                    ironManFake.BackgroundImageLayout = ImageLayout.Stretch;
-                    ironManFake.BackColor = Color.Transparent;
-                    fieldPanel.Controls.Add(ironManFake, j, i);
-                }
-            }
+            
             //fieldPanel.Controls.Add(ironManFake, 3, 3);
             
             
@@ -151,7 +149,31 @@ namespace OOP_Game
 
         private void OnPaint(object sender, PaintEventArgs e)
         {
-            //DrawMap(sender, e);
+            Game.MakeGameIteration();
+            DrawMap(sender, e);
+        }
+
+
+        private void DrawMap(object sender, PaintEventArgs e)
+        {
+            fieldPanel.SuspendLayout();
+            fieldPanel.Controls.Clear();
+            foreach (var gameObject in Game.CurrentLevel.Map.ForEachGameObject())
+            {
+                if (gameObject is IHero hero)
+                {
+                    var visualObject = resourceManager.VisualObjects[gameObject.GetType().Name];
+                    var heroLabel = FormUtils.GetHeroLabel(visualObject.PassiveImage);
+                    fieldPanel.Controls.Add(heroLabel, (int)gameObject.Position.X, (int)gameObject.Position.Y);
+                }
+                if (gameObject is IMalefactor malefactor)
+                {
+                    var visualObject = resourceManager.VisualObjects[gameObject.GetType().Name];
+                    var heroLabel = FormUtils.GetHeroLabel(visualObject.PassiveImage);
+                    fieldPanel.Controls.Add(heroLabel, (int)gameObject.Position.X, (int)gameObject.Position.Y);
+                }
+            }
+            fieldPanel.ResumeLayout();
         }
     }
 }

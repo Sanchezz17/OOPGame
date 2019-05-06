@@ -1,15 +1,15 @@
-using System.Drawing;
+using System.Windows;
 
 namespace OOP_Game.Units.Heroes
 {
     public class IronMan : IHero
     {
         public int Health { get; private set; }
-        public Point Position { get; private set; }
+        public Vector Position { get; private set; }
         public State State { get; private set; }
         public bool IsDead { get; private set; }
 
-        public IronMan(int health, Point position)
+        public IronMan(int health, Vector position)
         {
             Health = health;
             Position = position;
