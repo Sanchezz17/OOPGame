@@ -6,7 +6,7 @@ namespace OOP_Game.Units.Heroes
     {
         public int Health { get; private set; }
         public Vector Position { get; private set; }
-        public State State { get; private set; }
+        public State State { get;  set; }
         public bool IsDead { get; private set; }
 
         public IronMan(int health, Vector position)
@@ -19,7 +19,7 @@ namespace OOP_Game.Units.Heroes
         public void Trigger(IStrike strike)
         {
             Health -= strike.ToDamage();
-            if (Health == 0)
+            if (Health <= 0)
                 IsDead = true;
         }
 

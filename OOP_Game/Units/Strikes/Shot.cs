@@ -9,7 +9,7 @@ namespace OOP_Game.Units
     public class Shot : IStrike, IMovable
     {
         public Direction Direction { get; private set; }
-        public State State => State.Moves;
+        public State State { get; set; }
         public int Health { get; private set; }
         public Vector Position { get; private set; }
         
@@ -19,7 +19,7 @@ namespace OOP_Game.Units
         public int ToDamage()
         {
             Health -= 1;
-            if (Health == 0)
+            if (Health <= 0)
                 IsDead = true;
             return damage;
         }
@@ -30,6 +30,7 @@ namespace OOP_Game.Units
             this.damage = damage;
             Position = position;
             Direction = direction;
+            State = State.Moves;
         }
         
         public void Move()

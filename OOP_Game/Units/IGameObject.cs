@@ -7,7 +7,7 @@ namespace OOP_Game.Units
     {
         int Health { get; }
         Vector Position { get; }
-        State State { get; }
+        State State { get; set; }
         bool IsDead { get;  }
     }
 }

@@ -38,7 +38,7 @@ namespace OOP_Game
             Text = "OOPGame";
             Paint += OnPaint;
             var timer = new Timer();
-            timer.Interval = 400;
+            timer.Interval = 40;
             timer.Tick += (sender, e) => Invalidate();
             timer.Start();
             Size = new Size(1200, 700);

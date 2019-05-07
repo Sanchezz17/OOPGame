@@ -17,7 +17,7 @@ namespace OOP_Game.GameLogic
             CurrentLevelNumber = 0;
             Levels = levels;
         }
-        
+
 
         public void MakeGameIteration()
         {
@@ -30,36 +30,46 @@ namespace OOP_Game.GameLogic
                     if (gameObject is IMalefactor && gameObject.Position.X <= 0)
                         GameIsOver = true;
                 }
+            }
 
-                for (var i = 0; i < CurrentLevel.Map.Height; i++)
+            for (var i = 0; i < CurrentLevel.Map.Height; i++)
+            {
+                var malefactors = (HashSet<IMalefactor>) CurrentLevel.Map.GetMalefactorFromLine(i);
+                foreach (var malefactor in malefactors)
                 {
-                    var malefactors = (HashSet<IMalefactor>)CurrentLevel.Map.GetMalefactorFromLine(i);
-                    foreach (var hero in CurrentLevel.Map.GetHeroesFromLine(i))
+                    malefactor.State = State.Moves;
+                }
+                foreach (var hero in CurrentLevel.Map.GetHeroesFromLine(i))
+                {
+                    if (malefactors.Count != 0)
+                        objectsForAdd.Add(hero.Attack());
+                    foreach (var malefactor in malefactors)
                     {
-                        if (malefactors.Count != 0)
-                            objectsForAdd.Add(hero.Attack());
-                        foreach (var malefactor in malefactors)
+                        if ((malefactor.Position - hero.Position).Length < 1)
                         {
-                            if ((malefactor.Position - hero.Position).Length < 1)
-                            {
-                                hero.Trigger(malefactor.Attack());
-                            }
+                            malefactor.State = State.Attacks;
+                            hero.Trigger(malefactor.Attack());
                         }
-                    }
-
-                    foreach (var strike in CurrentLevel.Map.ForEachStrikes())
-                    {
-                        foreach (var malefactor in malefactors)
+                        else
                         {
-                            if ((malefactor.Position - strike.Position).Length < .1)
-                            {
-                                malefactor.Trigger(strike);
-                            }
+                            malefactor.State = State.Moves;
                         }
                     }
                 }
-            }
 
+                foreach (var strike in CurrentLevel.Map.ForEachStrikes())
+                {
+                    foreach (var malefactor in malefactors)
+                    {
+                        if ((malefactor.Position - strike.Position).Length < .1)
+                        {
+                            malefactor.Trigger(strike);
+                        }
+                    }
+                }
+                
+            }
+            
             foreach (var gameObject in objectsForAdd)
             {
                 CurrentLevel.Map.Add(gameObject);
@@ -68,7 +78,7 @@ namespace OOP_Game.GameLogic
             var objectsForDelete = new HashSet<IGameObject>();
             foreach (var gameObject in CurrentLevel.Map.ForEachGameObject())
             {
-                if (gameObject.IsDead)
+                if (gameObject.IsDead || gameObject.Position.X > 10)
                     objectsForDelete.Add(gameObject);
             }
             foreach (var gameObject in objectsForDelete)

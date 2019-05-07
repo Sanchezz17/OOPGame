@@ -9,7 +9,7 @@ namespace OOP_Game.Units
         {
             public int Health { get; private set; }
             public Vector Position { get; private set; }
-            public State State { get; private set; }
+            public State State { get;  set; }
             public bool IsDead { get; private set; }
             public Direction Direction => Direction.Left;
 
@@ -34,7 +34,7 @@ namespace OOP_Game.Units
             public void Trigger(IStrike strike)
             {
                 Health -= strike.ToDamage();
-                if (Health == 0)
+                if (Health <= 0)
                     IsDead = true;
             }
         }
