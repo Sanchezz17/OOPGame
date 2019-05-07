@@ -47,6 +47,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graphics\Animation.cs" />
+    <Compile Include="Graphics\AnimationUtils.cs" />
     <Compile Include="Graphics\DBLayout.cs" />
     <Compile Include="Graphics\FormUtils.cs" />
     <Compile Include="Graphics\GameWindow.cs">
@@ -106,10 +108,17 @@
     <Content Include="Resources\gem.jpg" />
     <Content Include="Resources\headquarters.jpg" />
     <Content Include="Resources\Heroes\IronMan\attack.gif" />
-    <Content Include="Resources\Heroes\IronMan\static.gif" />
+    <Content Include="Resources\Heroes\IronMan\passive.gif" />
+    <Content Include="Resources\Heroes\Vision\attack.gif" />
+    <Content Include="Resources\Heroes\Vision\passive.gif" />
     <Content Include="Resources\main.jpg" />
+    <Content Include="Resources\Malefactors\Octavius\attack.gif" />
+    <Content Include="Resources\Malefactors\Octavius\move.gif" />
+    <Content Include="Resources\Malefactors\Octavius\passive.gif" />
     <Content Include="Resources\Malefactors\Thanos\attack.gif" />
-    <Content Include="Resources\Malefactors\Thanos\static.gif" />
+    <Content Include="Resources\Malefactors\Thanos\move.gif" />
+    <Content Include="Resources\Malefactors\Thanos\passive.gif" />
+    <Content Include="Resources\Strikes\Shot\Shot.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

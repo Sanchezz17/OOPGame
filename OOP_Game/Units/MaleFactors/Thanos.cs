@@ -28,7 +28,7 @@ namespace OOP_Game.Units
 
             public void Move()
             {
-                Position += Direction.ToVector() * .1;
+                Position += Direction.ToVector() * 0.025;
             }
 
             public void Trigger(IStrike strike)

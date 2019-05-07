@@ -17,8 +17,8 @@ namespace OOP_Game
             {
                 var visualObject = new VisualObject();
                 VisualObjects[heroDir.Name] = visualObject;
-                visualObject.PassiveImage = Image.FromFile(heroDir.FullName + @"\static.gif");
-                visualObject.AttackImage = Image.FromFile(heroDir.FullName + @"\attack.gif");
+                visualObject.PassiveImage = new Bitmap(heroDir.FullName + @"\passive.gif");
+                visualObject.AttackImage = new Bitmap(heroDir.FullName + @"\attack.gif");
             }
             
             var malefactorsDir = new DirectoryInfo(Environment.CurrentDirectory + @"\Resources\Malefactors");
@@ -26,12 +26,24 @@ namespace OOP_Game
             {
                 var visualObject = new VisualObject();
                 VisualObjects[malefactorDir.Name] = visualObject;
-                visualObject.PassiveImage = Image.FromFile(malefactorDir.FullName + @"\static.gif");
-                visualObject.AttackImage = Image.FromFile(malefactorDir.FullName + @"\attack.gif");
-                //visualObject.MoveImage = Image.FromFile(malefactorDir.FullName + @"\move.gif");
+                visualObject.PassiveImage = new Bitmap(malefactorDir.FullName + @"\passive.gif");
+                visualObject.AttackImage = new Bitmap(malefactorDir.FullName + @"\attack.gif");
+                visualObject.MoveImage = new Bitmap(malefactorDir.FullName + @"\move.gif");
             }
-            //var gemVisual = new VisualObject();
-            //VisualObjects[]
+            
+            var shotsDir = new DirectoryInfo(Environment.CurrentDirectory + @"\Resources\Strikes");
+            foreach (var shotDir in shotsDir.EnumerateDirectories())
+            {
+                var visualObject = new VisualObject();
+                VisualObjects[shotDir.Name] = visualObject;
+                visualObject.PassiveImage = new Bitmap(
+                    shotDir.FullName + $@"\{shotDir.Name}.gif");
+                visualObject.MoveImage = visualObject.PassiveImage;
+            }
+            
+            var gemVisual = new VisualObject();
+            VisualObjects["Gem"] = gemVisual;
+            gemVisual.PassiveImage = new Bitmap(Environment.CurrentDirectory + @"\Resources\gem.jpg");
         }
         
     }

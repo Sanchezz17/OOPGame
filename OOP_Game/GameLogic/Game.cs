@@ -7,7 +7,6 @@ namespace OOP_Game.GameLogic
 {
     public class Game
     {
-        public Vector p; 
         public int CurrentLevelNumber { get; private set; }
         private readonly List<Level> Levels;
         public Level CurrentLevel => Levels[CurrentLevelNumber];
@@ -42,10 +41,15 @@ namespace OOP_Game.GameLogic
                 foreach (var hero in CurrentLevel.Map.GetHeroesFromLine(i))
                 {
                     if (malefactors.Count != 0)
+                    {
                         objectsForAdd.Add(hero.Attack());
+                        hero.State = State.Attacks;
+                    }
+                    
+
                     foreach (var malefactor in malefactors)
                     {
-                        if ((malefactor.Position - hero.Position).Length < 1)
+                        if ((malefactor.Position - hero.Position).Length < 0.6)
                         {
                             malefactor.State = State.Attacks;
                             hero.Trigger(malefactor.Attack());

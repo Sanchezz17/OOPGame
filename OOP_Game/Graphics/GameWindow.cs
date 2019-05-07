@@ -7,9 +7,11 @@ using System.Linq;
 using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using OOP_Game.GameLogic;
 using OOP_Game.Units;
+using Size = System.Drawing.Size;
 
 namespace OOP_Game
 {
@@ -36,10 +38,10 @@ namespace OOP_Game
             DoubleBuffered = true;
             Name = "GameForm";
             Text = "OOPGame";
-            Paint += OnPaint;
+           // Paint += OnPaint;
             var timer = new Timer();
             timer.Interval = 40;
-            timer.Tick += (sender, e) => Invalidate();
+            timer.Tick += OnTimer;
             timer.Start();
             Size = new Size(1200, 700);
             mainMenu = new MainMenu(this);
@@ -78,7 +80,7 @@ namespace OOP_Game
             // фейковый Железный Человек на панели
             var ironManPurchase = FormUtils.GetButtonWithTextAndFontColor("50", Color.Black, 15);
             ironManPurchase.BackgroundImage = Image.FromFile(
-                Environment.CurrentDirectory + @"\Resources\Heroes\IronMan\static.gif");
+                Environment.CurrentDirectory + @"\Resources\Heroes\IronMan\passive.gif");
             ironManPurchase.BackgroundImageLayout = ImageLayout.Zoom;
             ironManPurchase.TextAlign = ContentAlignment.BottomCenter;
             ironManPurchase.Margin = Padding.Empty;
@@ -96,6 +98,8 @@ namespace OOP_Game
             var gamePanel = GetGamePanel();
             mainPanel.Controls.Add(gamePanel, 0, 1);           
             Controls.Add(mainPanel);
+            
+            BringToFront();
         }
 
         private TableLayoutPanel GetGamePanel()
@@ -116,18 +120,11 @@ namespace OOP_Game
             fieldPanel.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\field.jpg");
             fieldPanel.BackgroundImageLayout = ImageLayout.Stretch;
             fieldPanel.Margin = Padding.Empty;
+            var fakeLabel = FormUtils.GetHeroLabel(null);
+            fieldPanel.Controls.Add(fakeLabel, 0, 0);
+            fieldPanel.Paint += OnPaint;
+            
             // Именно внутри fieldControl и будут происходить основные события игры
-            
-            //фейковый Железный человек на поле
-//            var ironManFake = new Label();
-//            ironManFake.Anchor = (AnchorStyles.Left | AnchorStyles.Right |
-//                      AnchorStyles.Top | AnchorStyles.Bottom);
-//            ironManFake.BackgroundImage = Image.FromFile(
-//                Environment.CurrentDirectory + @"\Resources\Heroes\IronMan\static.gif");
-//            ironManFake.BackgroundImageLayout = ImageLayout.Stretch;
-//            ironManFake.BackColor = Color.Transparent;
-            
-            //fieldPanel.Controls.Add(ironManFake, 3, 3);
             
             
             gamePanel.Controls.Add(fieldPanel, 1, 0);
@@ -147,33 +144,68 @@ namespace OOP_Game
             mainMenu.Show();
         }
 
-        private void OnPaint(object sender, PaintEventArgs e)
+        private void OnTimer(object sender, EventArgs e)
         {
             Game.MakeGameIteration();
+            fieldPanel.Invalidate();
+        }
+
+        private void OnPaint(object sender, PaintEventArgs e)
+        {
             DrawMap(sender, e);
+        }
+        
+        private void OnFrameChanged(object o, EventArgs e) => fieldPanel.Invalidate();
+        
+        private void AnimateImage(Animation animation, Bitmap currentAnimation)
+        {
+            if (animation.CurrentAnimation != currentAnimation)
+                animation.CurrentlyAnimating = false;
+            if (!animation.CurrentlyAnimating)
+            {
+                ImageAnimator.Animate(currentAnimation, new EventHandler(OnFrameChanged));
+                animation.CurrentlyAnimating = true;
+                animation.CurrentAnimation = currentAnimation;
+            }
+        }
+        
+        private RectangleF GetCoordinatesInMapLayout(Vector location)
+        {
+            var cell = fieldPanel.GetControlFromPosition(0, 0);
+            var x = (float)(location.X * cell.Size.Width);
+            var y = (float)(location.Y * cell.Size.Height);
+            return new RectangleF(x, y, cell.Width, cell.Height);
         }
 
 
         private void DrawMap(object sender, PaintEventArgs e)
         {
-            fieldPanel.SuspendLayout();
-            fieldPanel.Controls.Clear();
             foreach (var gameObject in Game.CurrentLevel.Map.ForEachGameObject())
             {
-                if (gameObject is IHero hero)
+                var visualObject = resourceManager.VisualObjects[gameObject.GetType().Name];
+                var currentAnimation = visualObject.PassiveImage;
+                if (gameObject.State != State.Idle)
                 {
-                    var visualObject = resourceManager.VisualObjects[gameObject.GetType().Name];
-                    var heroLabel = FormUtils.GetHeroLabel(visualObject.PassiveImage);
-                    fieldPanel.Controls.Add(heroLabel, (int)gameObject.Position.X, (int)gameObject.Position.Y);
+                    currentAnimation = gameObject.State == State.Attacks
+                        ? visualObject.AttackImage
+                        : visualObject.MoveImage;
+                    if (!visualObject.Animations.ContainsKey(gameObject))
+                    {
+                        visualObject.Animations[gameObject] = new Animation(
+                            false, currentAnimation);
+                    }
+                    AnimateImage(visualObject.Animations[gameObject], currentAnimation);
+                    ImageAnimator.UpdateFrames();               
                 }
-                if (gameObject is IMalefactor malefactor)
+                var rectangleInMapLayout = GetCoordinatesInMapLayout(gameObject.Position);
+                if (gameObject is IStrike)
                 {
-                    var visualObject = resourceManager.VisualObjects[gameObject.GetType().Name];
-                    var heroLabel = FormUtils.GetHeroLabel(visualObject.PassiveImage);
-                    fieldPanel.Controls.Add(heroLabel, (int)gameObject.Position.X, (int)gameObject.Position.Y);
+                    rectangleInMapLayout.Width /= 30;
+                    rectangleInMapLayout.Height /= 30;
+                    rectangleInMapLayout.Y += rectangleInMapLayout.Height / 2;
                 }
+                e.Graphics.DrawImage(currentAnimation, rectangleInMapLayout);
             }
-            fieldPanel.ResumeLayout();
         }
     }
 }

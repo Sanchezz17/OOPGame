@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace OOP_Game
@@ -13,6 +14,8 @@ namespace OOP_Game
             SetStyle(ControlStyles.AllPaintingInWmPaint |
                      ControlStyles.OptimizedDoubleBuffer |
                      ControlStyles.UserPaint, true);
+            ForeColor = Color.Transparent;
+            BackColor = Color.Transparent;
         }
     }
 }
