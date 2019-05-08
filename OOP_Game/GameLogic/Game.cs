@@ -17,7 +17,6 @@ namespace OOP_Game.GameLogic
             Levels = levels;
         }
 
-
         public void MakeGameIteration()
         {
             var objectsForAdd = new HashSet<IGameObject>();
@@ -42,10 +41,17 @@ namespace OOP_Game.GameLogic
                 {
                     if (malefactors.Count != 0)
                     {
-                        objectsForAdd.Add(hero.Attack());
+                        if (hero.RechargeTimeInTicks == 0)
+                        {
+                            objectsForAdd.Add(hero.Attack());
+                            hero.RechargeTimeInTicks = 15;
+                        }
+                        else
+                        {
+                            hero.RechargeTimeInTicks--;
+                        }
                         hero.State = State.Attacks;
-                    }
-                    
+                    }                  
 
                     foreach (var malefactor in malefactors)
                     {
@@ -65,13 +71,12 @@ namespace OOP_Game.GameLogic
                 {
                     foreach (var malefactor in malefactors)
                     {
-                        if ((malefactor.Position - strike.Position).Length < .1)
+                        if ((malefactor.Position - strike.Position).Length < 0.1)
                         {
                             malefactor.Trigger(strike);
                         }
                     }
-                }
-                
+                }              
             }
             
             foreach (var gameObject in objectsForAdd)
@@ -88,8 +93,7 @@ namespace OOP_Game.GameLogic
             foreach (var gameObject in objectsForDelete)
             {
                 CurrentLevel.Map.Delete(gameObject);
-            }
-            
+            }            
         }
     }
 }

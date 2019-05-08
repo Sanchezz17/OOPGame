@@ -21,13 +21,13 @@ namespace OOP_Game
         private const int ColumnsCount = 9;
         
         private Game Game = GameFactory.GetStandardGame();
-        private Form mainMenu;
+        private readonly Form mainMenu;
         private TableLayoutPanel fieldPanel;
         private Label currentLevelLabel;
         private Label scoreLabel;
         private TableLayoutPanel purchasePanel;
         private readonly Image gemImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\gem.jpg");
-        private ResourceManager resourceManager = new ResourceManager();
+        private readonly ResourceManager resourceManager = new ResourceManager();
         
         public GameWindow()
         {
@@ -35,10 +35,8 @@ namespace OOP_Game
                 ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
                 | ControlStyles.UserPaint, true);
             UpdateStyles();
-            DoubleBuffered = true;
             Name = "GameForm";
             Text = "OOPGame";
-           // Paint += OnPaint;
             var timer = new Timer();
             timer.Interval = 40;
             timer.Tick += OnTimer;
@@ -92,14 +90,13 @@ namespace OOP_Game
             var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor("Главное меню", Color.Blue, 15);
             exitToMenuButton.Margin = Padding.Empty;
             exitToMenuButton.Click += SwitchToMenu;
-            topPanel.Controls.Add(exitToMenuButton, 3, 0);            
+            topPanel.Controls.Add(exitToMenuButton, 3, 0);
+            
             mainPanel.Controls.Add(topPanel, 0, 0);
 
             var gamePanel = GetGamePanel();
             mainPanel.Controls.Add(gamePanel, 0, 1);           
             Controls.Add(mainPanel);
-            
-            BringToFront();
         }
 
         private TableLayoutPanel GetGamePanel()
@@ -120,12 +117,11 @@ namespace OOP_Game
             fieldPanel.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\field.jpg");
             fieldPanel.BackgroundImageLayout = ImageLayout.Stretch;
             fieldPanel.Margin = Padding.Empty;
-            var fakeLabel = FormUtils.GetHeroLabel(null);
+            var fakeLabel = FormUtils.GetTransparentLabel();
             fieldPanel.Controls.Add(fakeLabel, 0, 0);
             fieldPanel.Paint += OnPaint;
             
-            // Именно внутри fieldControl и будут происходить основные события игры
-            
+            // Именно внутри fieldControl и будут происходить основные события игры           
             
             gamePanel.Controls.Add(fieldPanel, 1, 0);
             return gamePanel;
@@ -200,8 +196,7 @@ namespace OOP_Game
                 var rectangleInMapLayout = GetCoordinatesInMapLayout(gameObject.Position);
                 if (gameObject is IStrike)
                 {
-                    rectangleInMapLayout.Width /= 30;
-                    rectangleInMapLayout.Height /= 30;
+                    rectangleInMapLayout.Height /= 3;
                     rectangleInMapLayout.Y += rectangleInMapLayout.Height / 2;
                 }
                 e.Graphics.DrawImage(currentAnimation, rectangleInMapLayout);

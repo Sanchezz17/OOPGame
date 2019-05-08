@@ -11,7 +11,8 @@ namespace OOP_Game.Units
             public Vector Position { get; private set; }
             public State State { get;  set; }
             public bool IsDead { get; private set; }
-            public Direction Direction => Direction.Left;
+            public Direction Direction => Direction.Left; 
+            public int RechargeTimeInTicks { get; set; }      
 
             public Thanos(int health, Vector position)
             {

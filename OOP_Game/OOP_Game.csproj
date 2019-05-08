@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\Animation.cs" />
-    <Compile Include="Graphics\AnimationUtils.cs" />
     <Compile Include="Graphics\DBLayout.cs" />
     <Compile Include="Graphics\FormUtils.cs" />
     <Compile Include="Graphics\GameWindow.cs">

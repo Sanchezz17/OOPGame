@@ -35,7 +35,7 @@ namespace OOP_Game.Units
         
         public void Move()
         {
-            Position += Direction.ToVector() * .5;
+            Position += Direction.ToVector() * 0.5;
         }
     }
 }
