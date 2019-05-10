@@ -96,7 +96,7 @@ namespace OOP_Game.GameLogic
                     linesMalefactors[numberLine].Remove(malefactor);
                     break;
                 case IStrike strike:
-                    linesStrikes[numberLine].Add(strike);
+                    linesStrikes[numberLine].Remove(strike);
                     break;
                 default:
                     throw new ArgumentException();

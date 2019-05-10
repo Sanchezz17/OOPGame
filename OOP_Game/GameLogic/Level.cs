@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using OOP_Game.Units;
@@ -8,13 +9,14 @@ namespace OOP_Game.GameLogic
     {
         public Map Map { get; }
         public int Score { get; }
-        public IEnumerable<IHero> availableHeroes { get; }
+        public IEnumerable<Type> availableHeroes { get; }
         
 
-        public Level(Map map)
+        public Level(Map map, IEnumerable<Type> _availableHeroes)
         {
             Score = 0;
             Map = map;
+            availableHeroes = _availableHeroes;
         }
 
     }

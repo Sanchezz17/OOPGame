@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using OOP_Game.GameLogic;
@@ -17,9 +11,6 @@ namespace OOP_Game
 {
     public partial class GameWindow : Form
     {
-        private const int RowsCount = 5;
-        private const int ColumnsCount = 9;
-        
         private Game Game = GameFactory.GetStandardGame();
         private readonly Form mainMenu;
         private TableLayoutPanel fieldPanel;
@@ -74,16 +65,22 @@ namespace OOP_Game
             topPanel.Controls.Add(scoreLabel, 1, 0);
 
             purchasePanel = FormUtils.InitializeTableLayoutPanel(1, 5);
-            
-            // фейковый Железный Человек на панели
-            var ironManPurchase = FormUtils.GetButtonWithTextAndFontColor("50", Color.Black, 15);
-            ironManPurchase.BackgroundImage = Image.FromFile(
-                Environment.CurrentDirectory + @"\Resources\Heroes\IronMan\passive.gif");
-            ironManPurchase.BackgroundImageLayout = ImageLayout.Zoom;
-            ironManPurchase.TextAlign = ContentAlignment.BottomCenter;
-            ironManPurchase.Margin = Padding.Empty;
+            var i = 0;
+            foreach (var hero in Game.CurrentLevel.availableHeroes)
+            {
+
+                // фейковый Железный Человек на панели
+                var heroPurchase = FormUtils.GetButtonWithTextAndFontColor("50", Color.Black, 15);
+                heroPurchase.BackgroundImage = resourceManager.VisualObjects[hero.Name].PassiveImage;
+                heroPurchase.BackgroundImageLayout = ImageLayout.Zoom;
+                heroPurchase.TextAlign = ContentAlignment.BottomCenter;
+                heroPurchase.Margin = Padding.Empty;
+                purchasePanel.Controls.Add(heroPurchase, i, 0);
+                i++;
+            }
+
             // добавить персонажей, доступных к покупке на панель
-            purchasePanel.Controls.Add(ironManPurchase, 0, 0);
+            
             
             topPanel.Controls.Add(purchasePanel, 2, 0);
             
@@ -176,6 +173,8 @@ namespace OOP_Game
 
         private void DrawMap(object sender, PaintEventArgs e)
         {
+            if(Game.GameIsOver)
+               return; 
             foreach (var gameObject in Game.CurrentLevel.Map.ForEachGameObject())
             {
                 var visualObject = resourceManager.VisualObjects[gameObject.GetType().Name];
