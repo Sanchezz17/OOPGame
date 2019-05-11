@@ -45,14 +45,22 @@ namespace OOP_Game.GameLogic
                             objectsForAdd.Add(hero.Attack());
                         hero.State = State.Attacks;
                     }
+                    else
+                    {
+                        hero.State = State.Idle;
+                    }
+                       
                     foreach (var malefactor in malefactors)
                     {
                         malefactor.State = State.Moves;
                         if ((malefactor.Position - hero.Position).Length < 0.8)
                         {
+                            if (malefactor.IsAttackAvailable())
+                                hero.Trigger(malefactor.Attack());
                             malefactor.State = State.Attacks;
-                            hero.Trigger(malefactor.Attack());
                         }
+                        else
+                            malefactor.State = State.Moves;
                     }
                 }
             }

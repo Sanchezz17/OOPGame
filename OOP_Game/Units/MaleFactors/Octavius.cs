@@ -1,5 +1,6 @@
 using System.Windows;
 using OOP_Game.Infrastructure;
+using OOP_Game.Units.Strikes;
 
 namespace OOP_Game.Units
 {
@@ -31,7 +32,7 @@ namespace OOP_Game.Units
 
         public IStrike Attack()
         {
-            return new Shot(3, Position, Direction);
+            return new IronManAttack(3, Position, Direction);
         }
 
         public bool IsAttackAvailable()
@@ -47,7 +48,8 @@ namespace OOP_Game.Units
 
         public void Trigger(IStrike strike)
         {
-            Health -= strike.ToDamage();
+            var parametres = new UnitParameters(Health, Position, State, IsDead, baseRechargeTimeInTicks);
+            Health -= strike.ToDamage(parametres);
             if (Health <= 0)
                 IsDead = true;
         }

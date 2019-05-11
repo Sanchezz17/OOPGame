@@ -6,33 +6,23 @@ using Size = System.Drawing.Size;
 
 namespace OOP_Game.Units
 {
-    public class Shot : IStrike, IMovable
+    public abstract class Shot : IStrike, IMovable
     {
-        public Direction Direction { get; private set; }
+        public Direction Direction { get; set; }
+        public int Health{ get; set; }
+        public Vector Position { get; set; }
+        public bool IsDead { get; set; }
+        public int Damage { get; set; }
         public State State { get; set; }
-        public int Health { get; private set; }
-        public Vector Position { get; private set; }
-        
-        public bool IsDead { get; private set; }
 
-        private int damage;
-        public int ToDamage()
+        public virtual int ToDamage(UnitParameters parameters)
         {
             Health -= 1;
             if (Health <= 0)
                 IsDead = true;
-            return damage;
+            return Damage;
         }
 
-        public Shot(int damage, Vector position, Direction direction)
-        {
-            Health = 1;
-            this.damage = damage;
-            Position = position;
-            Direction = direction;
-            State = State.Moves;
-        }
-        
         public void Move()
         {
             Position += Direction.ToVector() * 0.5;

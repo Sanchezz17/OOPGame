@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using OOP_Game.Infrastructure;
+using OOP_Game.Units.Strikes;
 
 namespace OOP_Game.Units
 {
@@ -38,7 +39,7 @@ namespace OOP_Game.Units
 
             public IStrike Attack()
             {
-                return new Shot(10, Position, Direction);
+                return new ThanosAttack(Position, Direction);
             }
 
             public void Move()
@@ -48,7 +49,8 @@ namespace OOP_Game.Units
 
             public void Trigger(IStrike strike)
             {
-                Health -= strike.ToDamage();
+                var parametres = new UnitParameters(Health, Position, State, IsDead, baseRechargeTimeInTicks);
+                Health -= strike.ToDamage(parametres);
                 if (Health <= 0)
                     IsDead = true;
             }

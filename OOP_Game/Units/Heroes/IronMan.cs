@@ -1,10 +1,12 @@
 using System.Windows;
 using OOP_Game.Infrastructure;
+using OOP_Game.Units.Strikes;
 
 namespace OOP_Game.Units.Heroes
 {
     public class IronMan : IHero
     {
+        public UnitParameters parametres { get; private set; }
         public int Health { get; private set; }
         public Vector Position { get; private set; }
         public State State { get;  set; }
@@ -23,14 +25,15 @@ namespace OOP_Game.Units.Heroes
         
         public void Trigger(IStrike strike)
         {
-            Health -= strike.ToDamage();
+            var parametres = new UnitParameters(Health, Position, State, IsDead, baseRechargeTimeInTicks);
+            Health -= strike.ToDamage(parametres);
             if (Health <= 0)
                 IsDead = true;
         }
 
         public IStrike Attack()
         {
-            return new Shot(10, Position + Direction.Right.ToVector() / 2,
+            return new IronManAttack(10, Position + Direction.Right.ToVector() / 2,
                 Direction.Right);
         }
 
