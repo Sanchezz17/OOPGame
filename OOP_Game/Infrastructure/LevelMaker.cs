@@ -6,13 +6,32 @@ using OOP_Game.Units.Heroes;
 
 namespace OOP_Game.Infrastructure
 {
+    public class PurchaseObject
+    {
+        public Type Type { get; }
+        public int Price { get; }
+        public int Health { get; }
+
+        public PurchaseObject(Type type, int price, int health)
+        {
+            Type = type;
+            Price = price;
+            Health = health;
+        }
+    }
+    
     public class LevelMaker
     {
         private Level level;
 
         public LevelMaker()
         {
-            level = new Level(new Map(5, 9), new List<Type> {typeof(IronMan), typeof(Octavius)});
+            level = new Level(
+                new Map(5, 9),
+                new List<PurchaseObject>
+                {
+                    new PurchaseObject(typeof(IronMan), 50, 3000)
+                });
         }
 
         public LevelMaker AddMalefactor(IMalefactor malefactor)

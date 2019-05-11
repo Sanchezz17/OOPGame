@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using OOP_Game.Infrastructure;
 using OOP_Game.Units;
 
 namespace OOP_Game.GameLogic
@@ -8,16 +9,14 @@ namespace OOP_Game.GameLogic
     public class Level
     {
         public Map Map { get; }
-        public int Score { get; }
-        public IEnumerable<Type> availableHeroes { get; }
-        
+        public int GemCount { get; set; }
+        public List<PurchaseObject> availableHeroes { get; }      
 
-        public Level(Map map, IEnumerable<Type> _availableHeroes)
+        public Level(Map map, List<PurchaseObject> availableHeroes)
         {
-            Score = 0;
+            GemCount = 100;
             Map = map;
-            availableHeroes = _availableHeroes;
+            this.availableHeroes = availableHeroes;
         }
-
     }
 }

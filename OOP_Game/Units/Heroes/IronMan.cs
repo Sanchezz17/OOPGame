@@ -30,7 +30,7 @@ namespace OOP_Game.Units.Heroes
 
         public IStrike Attack()
         {
-            return new Shot(1, Position + Direction.Right.ToVector() / 2,
+            return new Shot(10, Position + Direction.Right.ToVector() / 2,
                 Direction.Right);
         }
 

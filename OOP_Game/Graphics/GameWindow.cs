@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using OOP_Game.GameLogic;
+using OOP_Game.Infrastructure;
 using OOP_Game.Units;
 using Size = System.Drawing.Size;
 
@@ -19,6 +20,7 @@ namespace OOP_Game
         private TableLayoutPanel purchasePanel;
         private readonly Image gemImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\gem.jpg");
         private readonly ResourceManager resourceManager = new ResourceManager();
+        private PurchaseObject currentObjectToPurchase = null;
         
         public GameWindow()
         {
@@ -32,7 +34,7 @@ namespace OOP_Game
             timer.Interval = 40;
             timer.Tick += OnTimer;
             timer.Start();
-            Size = new Size(1200, 700);
+            Size = new Size(950, 700);
             mainMenu = new MainMenu(this);
             Shown += SwitchToMenu;
             InitializeGameWindow();
@@ -61,27 +63,11 @@ namespace OOP_Game
             scoreLabel.BackgroundImage = gemImage;
             scoreLabel.BackgroundImageLayout = ImageLayout.Zoom;
             scoreLabel.TextAlign = ContentAlignment.BottomCenter;
-            scoreLabel.Text = Game.CurrentLevel.Score.ToString();
+            scoreLabel.Text = Game.CurrentLevel.GemCount.ToString();
             topPanel.Controls.Add(scoreLabel, 1, 0);
 
-            purchasePanel = FormUtils.InitializeTableLayoutPanel(1, 5);
-            var i = 0;
-            foreach (var hero in Game.CurrentLevel.availableHeroes)
-            {
 
-                // фейковый Железный Человек на панели
-                var heroPurchase = FormUtils.GetButtonWithTextAndFontColor("50", Color.Black, 15);
-                heroPurchase.BackgroundImage = resourceManager.VisualObjects[hero.Name].PassiveImage;
-                heroPurchase.BackgroundImageLayout = ImageLayout.Zoom;
-                heroPurchase.TextAlign = ContentAlignment.BottomCenter;
-                heroPurchase.Margin = Padding.Empty;
-                purchasePanel.Controls.Add(heroPurchase, i, 0);
-                i++;
-            }
-
-            // добавить персонажей, доступных к покупке на панель
-            
-            
+            InitializePurchasePanel();
             topPanel.Controls.Add(purchasePanel, 2, 0);
             
             var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor("Главное меню", Color.Blue, 15);
@@ -96,6 +82,37 @@ namespace OOP_Game
             Controls.Add(mainPanel);
         }
 
+        private void InitializePurchasePanel()
+        {
+            purchasePanel = FormUtils.InitializeTableLayoutPanel(1, 5);
+            var i = 0;
+            foreach (var hero in Game.CurrentLevel.availableHeroes)
+            {
+                var heroPurchase = FormUtils.GetButtonWithTextAndFontColor(
+                    hero.Price.ToString(), Color.Black, 15);
+                heroPurchase.BackgroundImage = resourceManager.VisualObjects[hero.Type.Name].PassiveImage;
+                heroPurchase.BackgroundImageLayout = ImageLayout.Zoom;
+                heroPurchase.TextAlign = ContentAlignment.BottomCenter;
+                heroPurchase.Margin = Padding.Empty;
+                heroPurchase.Click += (sender, e) => currentObjectToPurchase = hero;
+                purchasePanel.Controls.Add(heroPurchase, i++, 0);
+            }
+        }       
+        
+        private void AddHeroToField(object sender, MouseEventArgs e)
+        {
+            if (currentObjectToPurchase != null && Game.CurrentLevel.GemCount >= currentObjectToPurchase.Price)
+            {
+                var coordinatesInMap = CoordinatesInLayoutToMap(new Vector(e.X, e.Y));
+                var ctor = currentObjectToPurchase.Type.GetConstructors()[0];
+                var heroToAdd = (IHero)ctor.Invoke(
+                    new object[] {currentObjectToPurchase.Health, coordinatesInMap});
+                Game.CurrentLevel.Map.Add(heroToAdd);
+                Game.CurrentLevel.GemCount -= currentObjectToPurchase.Price;
+                currentObjectToPurchase = null;
+            }
+        }      
+
         private TableLayoutPanel GetGamePanel()
         {
             var gamePanel = FormUtils.InitializeTableLayoutPanel(1, 2);
@@ -105,8 +122,7 @@ namespace OOP_Game
             var headquartersControl = new Label();
             headquartersControl.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\headquarters.jpg");
             headquartersControl.BackgroundImageLayout = ImageLayout.Stretch;
-            headquartersControl.Anchor = (AnchorStyles.Left | AnchorStyles.Right |
-                                          AnchorStyles.Top | AnchorStyles.Bottom);
+            FormUtils.SetAnchorForAllSides(headquartersControl);
             headquartersControl.Margin = Padding.Empty;
             gamePanel.Controls.Add(headquartersControl, 0, 0);
 
@@ -114,19 +130,17 @@ namespace OOP_Game
             fieldPanel.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\field.jpg");
             fieldPanel.BackgroundImageLayout = ImageLayout.Stretch;
             fieldPanel.Margin = Padding.Empty;
+            // фейковый label для размеров клетки
             var fakeLabel = FormUtils.GetTransparentLabel();
+            fakeLabel.MouseClick += AddHeroToField;
             fieldPanel.Controls.Add(fakeLabel, 0, 0);
             fieldPanel.Paint += OnPaint;
+            fieldPanel.MouseClick += AddHeroToField;
             
             // Именно внутри fieldControl и будут происходить основные события игры           
             
             gamePanel.Controls.Add(fieldPanel, 1, 0);
             return gamePanel;
-        }
-
-        private void AddHeroToField(object sender, EventArgs e)
-        {
-            
         }
         
         private void SwitchToMenu(object sender, EventArgs e)
@@ -145,6 +159,7 @@ namespace OOP_Game
 
         private void OnPaint(object sender, PaintEventArgs e)
         {
+            scoreLabel.Text = Game.CurrentLevel.GemCount.ToString();
             DrawMap(sender, e);
         }
         
@@ -170,10 +185,17 @@ namespace OOP_Game
             return new RectangleF(x, y, cell.Width, cell.Height);
         }
 
+        private Vector CoordinatesInLayoutToMap(Vector coordinatesInLayout)
+        {
+            var cell = fieldPanel.GetControlFromPosition(0, 0);
+            var x = Math.Truncate(coordinatesInLayout.X / cell.Size.Width);
+            var y = Math.Truncate(coordinatesInLayout.Y / cell.Size.Height);
+            return new Vector(x, y);
+        }
 
         private void DrawMap(object sender, PaintEventArgs e)
         {
-            if(Game.GameIsOver)
+            if (Game.GameIsOver)
                return; 
             foreach (var gameObject in Game.CurrentLevel.Map.ForEachGameObject())
             {
