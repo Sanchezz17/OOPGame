@@ -86,7 +86,7 @@ namespace OOP_Game
         {
             purchasePanel = FormUtils.InitializeTableLayoutPanel(1, 5);
             var i = 0;
-            foreach (var hero in Game.CurrentLevel.availableHeroes)
+            foreach (var hero in Game.CurrentLevel.AvailableHeroes)
             {
                 var heroPurchase = FormUtils.GetButtonWithTextAndFontColor(
                     hero.Price.ToString(), Color.Black, 15);
@@ -101,9 +101,12 @@ namespace OOP_Game
         
         private void AddHeroToField(object sender, MouseEventArgs e)
         {
-            if (currentObjectToPurchase != null && Game.CurrentLevel.GemCount >= currentObjectToPurchase.Price)
+            var coordinatesInMap = CoordinatesInLayoutToMap(new Vector(e.X, e.Y));
+            if (currentObjectToPurchase != null 
+                && Game.CurrentLevel.GemCount >= currentObjectToPurchase.Price
+                && !Game.CurrentLevel.Map.ForEachHeroes().Any(hero => (coordinatesInMap - hero.Position).Length < 0.1))
             {
-                var coordinatesInMap = CoordinatesInLayoutToMap(new Vector(e.X, e.Y));
+                
                 var ctor = currentObjectToPurchase.Type.GetConstructors()[0];
                 var heroToAdd = (IHero)ctor.Invoke(
                     new object[] {currentObjectToPurchase.Health, coordinatesInMap});

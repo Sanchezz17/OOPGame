@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using OOP_Game.Infrastructure;
-using OOP_Game.Units;
 
 namespace OOP_Game.GameLogic
 {
@@ -10,13 +7,13 @@ namespace OOP_Game.GameLogic
     {
         public Map Map { get; }
         public int GemCount { get; set; }
-        public List<PurchaseObject> availableHeroes { get; }      
+        public List<PurchaseObject> AvailableHeroes { get; }      
 
         public Level(Map map, List<PurchaseObject> availableHeroes)
         {
-            GemCount = 100;
+            GemCount = 100000;
             Map = map;
-            this.availableHeroes = availableHeroes;
+            AvailableHeroes = availableHeroes;
         }
     }
 }

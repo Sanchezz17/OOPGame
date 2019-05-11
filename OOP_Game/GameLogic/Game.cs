@@ -18,10 +18,11 @@ namespace OOP_Game.GameLogic
         
         public void MakeGameIteration()
         {
-            MakeMove();
+            ResetStates();
             MakeAttacks();
             CheckStrikes();
             UpdateGameObjects();
+            MakeMove();
             GameIsOver = CheckGameOver();
         }
 
@@ -39,28 +40,24 @@ namespace OOP_Game.GameLogic
                 var malefactors = (HashSet<IMalefactor>) CurrentLevel.Map.GetMalefactorFromLine(i);
                 foreach (var hero in CurrentLevel.Map.GetHeroesFromLine(i))
                 {
-                    if (malefactors.Count != 0)
-                    {
-                        if (hero.IsAttackAvailable())
-                            objectsForAdd.Add(hero.Attack());
-                        hero.State = State.Attacks;
-                    }
-                    else
-                    {
-                        hero.State = State.Idle;
-                    }
-                       
                     foreach (var malefactor in malefactors)
                     {
-                        malefactor.State = State.Moves;
+                        if (malefactor.Position.X > hero.Position.X)
+                        {
+                            if (hero.IsAttackAvailable())
+                                objectsForAdd.Add(hero.Attack());
+                            hero.State = State.Attacks;
+                        }
+                    }
+                    
+                    foreach (var malefactor in malefactors)
+                    {
                         if ((malefactor.Position - hero.Position).Length < 0.8)
                         {
                             if (malefactor.IsAttackAvailable())
                                 hero.Trigger(malefactor.Attack());
                             malefactor.State = State.Attacks;
                         }
-                        else
-                            malefactor.State = State.Moves;
                     }
                 }
             }
@@ -99,6 +96,14 @@ namespace OOP_Game.GameLogic
             }
             foreach (var gameObject in objectsForDelete)
                 CurrentLevel.Map.Delete(gameObject);
+        }
+
+        private void ResetStates()
+        {
+            foreach (var hero in CurrentLevel.Map.ForEachHeroes())
+                hero.State = State.Idle;
+            foreach (var malefactor in CurrentLevel.Map.ForEachMalefactors())
+                malefactor.State = State.Moves;
         }
     }
 }
