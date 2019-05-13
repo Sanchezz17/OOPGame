@@ -15,12 +15,14 @@ namespace OOP_Game
     {
         public Game Game { get; set; }
         private readonly Form mainMenu;
+        private TableLayoutPanel gamePanel;
         private TableLayoutPanel fieldPanel;
+        private TableLayoutPanel gameOverPanel;
         private Label currentLevelLabel;
         private Label scoreLabel;
         private TableLayoutPanel purchasePanel;
         private readonly Image gemImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\gem.jpg");
-        private readonly ResourceManager resourceManager = new ResourceManager();
+        private ResourceManager resourceManager = new ResourceManager();
         private PurchaseObject currentObjectToPurchase = null;
         
         public GameWindow()
@@ -136,7 +138,7 @@ namespace OOP_Game
 
         private TableLayoutPanel GetGamePanel()
         {
-            var gamePanel = FormUtils.InitializeTableLayoutPanel(1, 2);
+            gamePanel = FormUtils.InitializeTableLayoutPanel(1, 2);
             gamePanel.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 20F);
             gamePanel.ColumnStyles[1] = new ColumnStyle(SizeType.Percent, 80F);
 
@@ -161,9 +163,33 @@ namespace OOP_Game
             // Именно внутри fieldControl и будут происходить основные события игры           
             
             gamePanel.Controls.Add(fieldPanel, 1, 0);
+            
+            InitializeGameOverPanel();
             return gamePanel;
         }
-        
+
+        private void InitializeGameOverPanel()
+        {
+            gameOverPanel = FormUtils.InitializeTableLayoutPanel(5, 3);
+            gameOverPanel.BackgroundImage = Image.FromFile(
+                Environment.CurrentDirectory + @"\Resources\gameover.jpg");
+            gameOverPanel.BackgroundImageLayout = ImageLayout.Stretch;
+            gameOverPanel.Margin = Padding.Empty;
+            var restartGameButton = FormUtils.GetButtonWithTextAndFontColor(
+                "Начать заново", Color.Red, 20);
+            restartGameButton.Click += Restart;
+            gameOverPanel.Controls.Add(restartGameButton, 1, 3);
+        }
+
+        private void Restart(object sender, EventArgs e)
+        {
+            resourceManager = new ResourceManager();
+            Game = GameFactory.GetStandardGame();
+            Game.Start();
+            gamePanel.Controls.Remove(gameOverPanel);
+            gamePanel.Controls.Add(fieldPanel, 1, 0);
+        }
+
         private void SwitchToMenu(object sender, EventArgs e)
         {
             Game.Pause();
@@ -221,7 +247,14 @@ namespace OOP_Game
         private void DrawMap(object sender, PaintEventArgs e)
         {
             if (Game.GameIsOver)
-               return; 
+            {
+                if (!gamePanel.Contains(gameOverPanel))
+                {
+                    gamePanel.Controls.Remove(fieldPanel);
+                    gamePanel.Controls.Add(gameOverPanel, 1, 0);
+                }
+                return;
+            }
             foreach (var gameObject in Game.CurrentLevel.Map.ForEachGameObject())
             {
                 var visualObject = resourceManager.VisualObjects[gameObject.GetType().Name];

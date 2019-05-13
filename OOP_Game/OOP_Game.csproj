@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\field.jpg" />
+    <Content Include="Resources\gameover.jpg" />
     <Content Include="Resources\gem.jpg" />
     <Content Include="Resources\headquarters.jpg" />
     <Content Include="Resources\Heroes\IronMan\attack.gif" />
