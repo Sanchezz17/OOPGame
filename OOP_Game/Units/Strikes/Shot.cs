@@ -14,6 +14,7 @@ namespace OOP_Game.Units
         public bool IsDead { get; set; }
         public int Damage { get; set; }
         public State State { get; set; }
+        public double Speed => 0.5;
 
         public virtual int ToDamage(UnitParameters parameters)
         {
@@ -25,7 +26,7 @@ namespace OOP_Game.Units
 
         public void Move()
         {
-            Position += Direction.ToVector() * 0.5;
+            Position += Direction.ToVector() * Speed;
         }
     }
 }

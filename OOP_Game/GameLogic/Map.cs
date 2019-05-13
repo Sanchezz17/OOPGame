@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using System.Windows;
 using OOP_Game.Units;
 
 namespace OOP_Game.GameLogic
@@ -11,6 +12,8 @@ namespace OOP_Game.GameLogic
         private List<HashSet<IMalefactor>> linesMalefactors;
         private List<HashSet<IHero>> linesHeroes;
         private List<HashSet<IStrike>> linesStrikes;
+        private List<Gem> gems;
+        public IEnumerable<Gem> Gems => gems;
         public int Height { get; }
         public int Width { get; }
 
@@ -21,6 +24,7 @@ namespace OOP_Game.GameLogic
             linesMalefactors = CreateLines<IMalefactor>(Height);
             linesHeroes = CreateLines<IHero>(Height);
             linesStrikes = CreateLines<IStrike>(Height);
+            gems = new List<Gem>();
         }
 
         private static List<HashSet<T>> CreateLines<T>(int count)
@@ -28,6 +32,14 @@ namespace OOP_Game.GameLogic
             return Enumerable.Range(0, count)
                 .Select(i => new HashSet<T>())
                 .ToList();
+        }
+
+        public bool Contains(Vector vector)
+        {
+            return vector.X >= 0
+                   && vector.X <= Width
+                   && vector.Y >= 0
+                   && vector.Y <= Height;
         }
 
         public IEnumerable<IHero> GetHeroesFromLine(int numberLine)
@@ -48,6 +60,8 @@ namespace OOP_Game.GameLogic
                 yield return malefactor;
             foreach (var strike in ForEachStrikes())
                 yield return strike;
+            foreach (var gem in Gems)
+                yield return gem;
         }
 
         public IEnumerable<IHero> ForEachHeroes()
@@ -79,6 +93,9 @@ namespace OOP_Game.GameLogic
                 case IStrike strike:
                     linesStrikes[numberLine].Add(strike);
                     break;
+                case Gem gem:
+                    gems.Add(gem);
+                    break;
                 default:
                     throw new ArgumentException();
             }
@@ -97,6 +114,9 @@ namespace OOP_Game.GameLogic
                     break;
                 case IStrike strike:
                     linesStrikes[numberLine].Remove(strike);
+                    break;
+                case Gem gem:
+                    gems.Remove(gem);
                     break;
                 default:
                     throw new ArgumentException();

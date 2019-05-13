@@ -6,24 +6,39 @@ namespace OOP_Game.GameLogic
 {
     public class Game
     {
+        public bool Started { get; private set; }
         public int CurrentLevelNumber { get; private set; }
         private readonly List<Level> Levels;
         public Level CurrentLevel => Levels[CurrentLevelNumber];
         public bool GameIsOver { get; private set; }
+        private GemFactory gemFactory;
         public Game(List<Level> levels)
         {
+            Started = false;
             CurrentLevelNumber = 0;
             Levels = levels;
+            gemFactory = new GemFactory();
         }
+
+        public void Start() => Started = true;
+
+        public void Pause() => Started = false;
         
         public void MakeGameIteration()
         {
+            MakeGem();
             ResetStates();
             MakeAttacks();
             CheckStrikes();
             UpdateGameObjects();
             MakeMove();
             GameIsOver = CheckGameOver();
+        }
+
+        public void MakeGem()
+        {
+            if (gemFactory.IsAvailable())
+                CurrentLevel.Map.Add(gemFactory.GetGem());
         }
 
         private bool CheckGameOver()
@@ -91,7 +106,7 @@ namespace OOP_Game.GameLogic
             var objectsForDelete = new HashSet<IGameObject>();
             foreach (var gameObject in CurrentLevel.Map.ForEachGameObject())
             {
-                if (gameObject.IsDead || gameObject.Position.X > 10)
+                if (gameObject.IsDead || (!CurrentLevel.Map.Contains(gameObject.Position) && !(gameObject is IMalefactor)))
                     objectsForDelete.Add(gameObject);
             }
             foreach (var gameObject in objectsForDelete)

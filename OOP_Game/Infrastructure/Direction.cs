@@ -7,7 +7,9 @@ namespace OOP_Game.Infrastructure
     public enum Direction
     {
         Left,
-        Right
+        Right,
+        Down, 
+        Up
     }
 
     public static class DirectionExtension
@@ -20,6 +22,10 @@ namespace OOP_Game.Infrastructure
                     return new Vector(-1, 0);
                 case Direction.Right:
                     return new Vector(1, 0);
+                case Direction.Down:
+                    return new Vector(0, 1);
+                case Direction.Up:
+                    return new Vector(0, -1);
                 default:
                     throw new ArgumentException();
             }

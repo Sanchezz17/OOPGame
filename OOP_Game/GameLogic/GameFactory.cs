@@ -17,10 +17,10 @@ namespace OOP_Game.GameLogic
                 levelMaker
                     .AddHero(new IronMan(3000, new Vector(2, 2)))
                     .AddHero(new IronMan(3000, new Vector(3, 4)))
-                    .AddMalefactor(new Thanos(100000, new Vector(8, 2)))
-                    .AddMalefactor(new Thanos(100000, new Vector(8, 0)))
-                    .AddMalefactor(new Thanos(100000, new Vector(7, 1)))
-                    .AddMalefactor(new Thanos(100000, new Vector(7, 3)))
+                    .AddMalefactor(new Thanos(1000, new Vector(8, 2)))
+                    .AddMalefactor(new Thanos(1000, new Vector(8, 0)))
+                    .AddMalefactor(new Thanos(1000, new Vector(7, 1)))
+                    .AddMalefactor(new Thanos(1000, new Vector(7, 3)))
                     .AddMalefactor(new Octavius(100, new Vector(8, 4)))
                     .MakeLevel()
             };

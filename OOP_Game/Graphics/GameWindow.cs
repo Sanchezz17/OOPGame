@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows;
@@ -12,7 +13,7 @@ namespace OOP_Game
 {
     public partial class GameWindow : Form
     {
-        private Game Game = GameFactory.GetStandardGame();
+        public Game Game { get; set; }
         private readonly Form mainMenu;
         private TableLayoutPanel fieldPanel;
         private Label currentLevelLabel;
@@ -30,6 +31,7 @@ namespace OOP_Game
             UpdateStyles();
             Name = "GameForm";
             Text = "OOPGame";
+            Game = GameFactory.GetStandardGame();
             var timer = new Timer();
             timer.Interval = 40;
             timer.Tick += OnTimer;
@@ -70,7 +72,7 @@ namespace OOP_Game
             InitializePurchasePanel();
             topPanel.Controls.Add(purchasePanel, 2, 0);
             
-            var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor("Главное меню", Color.Blue, 15);
+            var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor("Пауза", Color.Blue, 15);
             exitToMenuButton.Margin = Padding.Empty;
             exitToMenuButton.Click += SwitchToMenu;
             topPanel.Controls.Add(exitToMenuButton, 3, 0);
@@ -99,7 +101,7 @@ namespace OOP_Game
             }
         }       
         
-        private void AddHeroToField(object sender, MouseEventArgs e)
+        private void ProcessMouseClick(object sender, MouseEventArgs e)
         {
             var coordinatesInMap = CoordinatesInLayoutToMap(new Vector(e.X, e.Y));
             if (currentObjectToPurchase != null 
@@ -113,6 +115,22 @@ namespace OOP_Game
                 Game.CurrentLevel.Map.Add(heroToAdd);
                 Game.CurrentLevel.GemCount -= currentObjectToPurchase.Price;
                 currentObjectToPurchase = null;
+            }
+
+            var gemToDelete = new List<Gem>();
+            foreach (var gem in Game.CurrentLevel.Map.Gems)
+            {
+                
+                if ((gem.Position - coordinatesInMap).Length < 0.9)
+                {
+                    Game.CurrentLevel.GemCount += 25;
+                    gemToDelete.Add(gem);
+                }
+            }
+
+            foreach (var gem in gemToDelete)
+            {
+                Game.CurrentLevel.Map.Delete(gem);
             }
         }      
 
@@ -135,10 +153,10 @@ namespace OOP_Game
             fieldPanel.Margin = Padding.Empty;
             // фейковый label для размеров клетки
             var fakeLabel = FormUtils.GetTransparentLabel();
-            fakeLabel.MouseClick += AddHeroToField;
+            fakeLabel.MouseClick += ProcessMouseClick;
             fieldPanel.Controls.Add(fakeLabel, 0, 0);
             fieldPanel.Paint += OnPaint;
-            fieldPanel.MouseClick += AddHeroToField;
+            fieldPanel.MouseClick += ProcessMouseClick;
             
             // Именно внутри fieldControl и будут происходить основные события игры           
             
@@ -148,6 +166,7 @@ namespace OOP_Game
         
         private void SwitchToMenu(object sender, EventArgs e)
         {
+            Game.Pause();
             Hide();
             mainMenu.Location = Location;
             mainMenu.Size = Size;
@@ -156,8 +175,11 @@ namespace OOP_Game
 
         private void OnTimer(object sender, EventArgs e)
         {
-            Game.MakeGameIteration();
-            fieldPanel.Invalidate();
+            if (Game.Started)
+            {
+                Game.MakeGameIteration();
+                fieldPanel.Invalidate();
+            }
         }
 
         private void OnPaint(object sender, PaintEventArgs e)

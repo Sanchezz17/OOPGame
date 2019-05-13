@@ -44,6 +44,7 @@ namespace OOP_Game
             var gemVisual = new VisualObject();
             VisualObjects["Gem"] = gemVisual;
             gemVisual.PassiveImage = new Bitmap(Environment.CurrentDirectory + @"\Resources\gem.jpg");
+            gemVisual.MoveImage = gemVisual.PassiveImage;
         }
         
     }

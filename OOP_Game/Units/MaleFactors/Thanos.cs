@@ -12,6 +12,7 @@ namespace OOP_Game.Units
             public Vector Position { get; private set; }
             public State State { get;  set; }
             public bool IsDead { get; private set; }
+            public double Speed { get; }
             public Direction Direction => Direction.Left;
             private int rechargeTimeInTicks;
             private int baseRechargeTimeInTicks;
@@ -24,6 +25,7 @@ namespace OOP_Game.Units
                 State = State.Moves;
                 rechargeTimeInTicks = 15;
                 baseRechargeTimeInTicks = 15;
+                Speed = 0.0125;
             }
             
             public bool IsAttackAvailable()
@@ -44,7 +46,7 @@ namespace OOP_Game.Units
 
             public void Move()
             {
-                Position += Direction.ToVector() * 0.0125;
+                Position += Direction.ToVector() * Speed;
             }
 
             public void Trigger(IStrike strike)

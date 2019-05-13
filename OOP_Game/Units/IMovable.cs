@@ -6,6 +6,7 @@ namespace OOP_Game.Units
     public interface IMovable
     {
         Direction Direction { get; }
+        double Speed { get; }
         void Move();
     }
 }
