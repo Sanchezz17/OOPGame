@@ -106,7 +106,7 @@ namespace OOP_Game
             var coordinatesInMap = CoordinatesInLayoutToMap(new Vector(e.X, e.Y));
             if (currentObjectToPurchase != null 
                 && Game.CurrentLevel.GemCount >= currentObjectToPurchase.Price
-                && !Game.CurrentLevel.Map.ForEachHeroes().Any(hero => (coordinatesInMap - hero.Position).Length < 0.1))
+                && !Game.CurrentLevel.Map.Heroes().Any(hero => (coordinatesInMap - hero.Position).Length < 0.1))
             {
                 var ctor = currentObjectToPurchase.Type.GetConstructors()[0];
                 var heroToAdd = (IHero)ctor.Invoke(
@@ -259,13 +259,13 @@ namespace OOP_Game
                 return;
             }
             
-            foreach (var gameObject in Game.CurrentLevel.Map.ForEachGameObject())
+            foreach (var gameObject in Game.CurrentLevel.Map.GameObjects())
             {
                 var visualObject = resourceManager.VisualObjects[gameObject.GetType().Name];
                 var currentAnimation = visualObject.PassiveImage;
                 if (gameObject.State != State.Idle)
                 {
-                    currentAnimation = gameObject.State == State.Attacks
+                    currentAnimation = gameObject.State == State.Attacks || gameObject.State == State.Produce
                         ? visualObject.AttackImage
                         : visualObject.MoveImage;
                     if (!visualObject.Animations.ContainsKey(gameObject))
