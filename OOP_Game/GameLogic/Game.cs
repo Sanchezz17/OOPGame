@@ -11,6 +11,8 @@ namespace OOP_Game.GameLogic
         private readonly List<Level> Levels;
         public Level CurrentLevel => Levels[CurrentLevelNumber];
         public bool GameIsOver { get; private set; }
+        public bool GameIsWin { get; private set; }
+        private int passedWaves;
         public Game(List<Level> levels)
         {
             Started = false;
@@ -24,6 +26,7 @@ namespace OOP_Game.GameLogic
         
         public void MakeGameIteration()
         {
+            MakeWave();
             MakeGem();
             ResetStates();
             MakeAttacks();
@@ -31,6 +34,25 @@ namespace OOP_Game.GameLogic
             UpdateGameObjects();
             MakeMove();
             GameIsOver = CheckGameOver();
+        }
+
+        public void MakeWave()
+        {
+            foreach (var wave in CurrentLevel.Waves)
+            {
+                if (wave.IsReadyToStart() && !wave.IsPassed)
+                {
+                    foreach (var malefactors in wave.malefactors)
+                    {
+                        CurrentLevel.Map.Add(malefactors);
+                    }
+
+                    wave.IsPassed = true;
+                    passedWaves++;
+                }
+                if (passedWaves == CurrentLevel.Waves.Count)
+                    GameIsWin = true;
+            }
         }
 
         public void MakeGem()

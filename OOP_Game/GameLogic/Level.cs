@@ -8,6 +8,7 @@ namespace OOP_Game.GameLogic
     {
         public Map Map { get; }
         public int GemCount { get; set; }
+        public List<Wave> Waves { get; }
 
         public bool IsWin => !Map.Malefactors.Any();
         
@@ -18,6 +19,7 @@ namespace OOP_Game.GameLogic
             GemCount = 100;
             Map = map;
             AvailableHeroes = availableHeroes;
+            Waves = new List<Wave>();
         }
     }
 }

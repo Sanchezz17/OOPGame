@@ -27,7 +27,7 @@ namespace OOP_Game.Infrastructure
         public LevelMaker()
         {
             level = new Level(
-                new Map(5, 9),
+                new Map(5, 11),
                 new List<PurchaseObject>
                 {
                     new PurchaseObject(typeof(Vision), 50, 1000),
@@ -47,11 +47,21 @@ namespace OOP_Game.Infrastructure
             return this;
         }
 
+        public LevelMaker AddWave(Wave wave)
+        {
+            level.Waves.Add(wave);
+            return this;
+        }
+
+        public LevelMaker AddWaves(IEnumerable<Wave> waves)
+        {
+            level.Waves.AddRange(waves);
+            return this;
+        }
+
         public Level MakeLevel()
         {
             return level;
         }
-        
-
     }
 }
