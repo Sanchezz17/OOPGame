@@ -37,13 +37,16 @@ namespace OOP_Game.GameLogic
 
         public void MakeGem()
         {
-            if (gemFactory.IsAvailable())
-                CurrentLevel.Map.Add(gemFactory.GetGem());
+            foreach (var gemManufacturer in CurrentLevel.Map.GemManufacturers())
+            {
+                if (gemManufacturer.IsAvailable())
+                    CurrentLevel.Map.Add(gemManufacturer.GetGem());
+            }
         }
 
         private bool CheckGameOver()
         {
-            return CurrentLevel.Map.ForEachMalefactors()
+            return CurrentLevel.Map.Malefactors()
                 .Any(malefactor => malefactor.Position.X < -1);
         }
 
@@ -57,21 +60,24 @@ namespace OOP_Game.GameLogic
                 {
                     foreach (var malefactor in malefactors)
                     {
-                        if (malefactor.Position.X > hero.Position.X)
-                        {
-                            if (hero.IsAttackAvailable())
-                                objectsForAdd.Add(hero.Attack());
-                            hero.State = State.Attacks;
-                        }
-                    }
-                    
-                    foreach (var malefactor in malefactors)
-                    {
                         if ((malefactor.Position - hero.Position).Length < 0.8)
                         {
                             if (malefactor.IsAttackAvailable())
                                 hero.Trigger(malefactor.Attack());
                             malefactor.State = State.Attacks;
+                        }
+                    }
+                    
+                    if (!(hero is IAttacking))
+                        continue;
+                    var attackingHero = hero as IAttacking;
+                    foreach (var malefactor in malefactors)
+                    {
+                        if (malefactor.Position.X > hero.Position.X)
+                        {
+                            if (attackingHero.IsAttackAvailable())
+                                objectsForAdd.Add(attackingHero.Attack());
+                            hero.State = State.Attacks;
                         }
                     }
                 }
@@ -85,7 +91,7 @@ namespace OOP_Game.GameLogic
             for (var i = 0; i < CurrentLevel.Map.Height; i++)
             {
                 var malefactors = (HashSet<IMalefactor>) CurrentLevel.Map.GetMalefactorFromLine(i);
-                foreach (var strike in CurrentLevel.Map.ForEachStrikes())
+                foreach (var strike in CurrentLevel.Map.Strikes())
                 {
                     foreach (var malefactor in malefactors)
                         if ((malefactor.Position - strike.Position).Length < 0.3)
@@ -96,7 +102,7 @@ namespace OOP_Game.GameLogic
 
         private void MakeMove()
         {
-            foreach (var gameObject in CurrentLevel.Map.ForEachGameObject())
+            foreach (var gameObject in CurrentLevel.Map.GameObjects())
                 if (gameObject is IMovable movable && gameObject.State == State.Moves)
                     movable.Move();
         }
@@ -104,7 +110,7 @@ namespace OOP_Game.GameLogic
         private void UpdateGameObjects()
         {
             var objectsForDelete = new HashSet<IGameObject>();
-            foreach (var gameObject in CurrentLevel.Map.ForEachGameObject())
+            foreach (var gameObject in CurrentLevel.Map.GameObjects())
             {
                 if (gameObject.IsDead || (!CurrentLevel.Map.Contains(gameObject.Position) && !(gameObject is IMalefactor)))
                     objectsForDelete.Add(gameObject);
@@ -115,9 +121,9 @@ namespace OOP_Game.GameLogic
 
         private void ResetStates()
         {
-            foreach (var hero in CurrentLevel.Map.ForEachHeroes())
-                hero.State = State.Idle;
-            foreach (var malefactor in CurrentLevel.Map.ForEachMalefactors())
+            foreach (var hero in CurrentLevel.Map.Heroes())
+                hero.State = hero is IGemManufacturer ? State.Produce : State.Idle;
+            foreach (var malefactor in CurrentLevel.Map.Malefactors())
                 malefactor.State = State.Moves;
         }
     }

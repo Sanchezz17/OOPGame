@@ -4,7 +4,7 @@ using OOP_Game.Units.Strikes;
 
 namespace OOP_Game.Units.Heroes
 {
-    public class IronMan : IHero
+    public class IronMan : IHero, IAttacking
     {
         public UnitParameters parametres { get; private set; }
         public int Health { get; private set; }

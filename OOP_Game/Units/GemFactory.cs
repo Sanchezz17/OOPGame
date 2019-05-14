@@ -1,10 +1,9 @@
 using System;
 using System.Windows;
-using OOP_Game.Infrastructure;
 
 namespace OOP_Game.Units
 {
-    public class GemFactory
+    public class GemFactory : IGemManufacturer
     {
         private int rechargeTimeInTicks;
         private int baseRechargeTimeInTicks;
@@ -12,8 +11,8 @@ namespace OOP_Game.Units
 
         public GemFactory()
         {
-            rechargeTimeInTicks = 100;
-            baseRechargeTimeInTicks = 100;
+            baseRechargeTimeInTicks = 200;
+            rechargeTimeInTicks = baseRechargeTimeInTicks;
             random = new Random();
         }
 

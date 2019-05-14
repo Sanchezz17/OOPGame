@@ -11,12 +11,13 @@ namespace OOP_Game.Units
         public bool IsDead { get; private set; }
         public Direction Direction => Direction.Down;
 
-        public double Speed => 0.0125;
+        public double Speed { get; private set; }
 
-        public Gem(Vector position)
+        public Gem(Vector position, double speed = 0.0125)
         {
             Position = position;
             State = State.Moves;
+            Speed = speed;
         }
         
         public void Move()

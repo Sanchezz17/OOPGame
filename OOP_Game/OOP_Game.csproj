@@ -71,8 +71,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\GemFactory.cs" />
     <Compile Include="Units\Heroes\IronMan.cs" />
+    <Compile Include="Units\Heroes\Vision.cs" />
     <Compile Include="Units\IAttacking.cs" />
     <Compile Include="Units\ICollectable.cs" />
+    <Compile Include="Units\IGemManufacturer.cs" />
     <Compile Include="Units\IMalefactor.cs" />
     <Compile Include="Units\IGameObject.cs" />
     <Compile Include="Units\Gem.cs" />

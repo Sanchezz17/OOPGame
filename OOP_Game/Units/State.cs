@@ -4,6 +4,7 @@ namespace OOP_Game.Units
     {
         Attacks,
         Moves,
+        Produce,
         Idle
     }
 }

@@ -13,6 +13,7 @@ namespace OOP_Game.GameLogic
         private List<HashSet<IHero>> linesHeroes;
         private List<HashSet<IStrike>> linesStrikes;
         private List<Gem> gems;
+        private List<IGemManufacturer> gemManufacturers;
         public IEnumerable<Gem> Gems => gems;
         public int Height { get; }
         public int Width { get; }
@@ -24,6 +25,7 @@ namespace OOP_Game.GameLogic
             linesMalefactors = CreateLines<IMalefactor>(Height);
             linesHeroes = CreateLines<IHero>(Height);
             linesStrikes = CreateLines<IStrike>(Height);
+            gemManufacturers = new List<IGemManufacturer> {new GemFactory()};
             gems = new List<Gem>();
         }
 
@@ -52,31 +54,36 @@ namespace OOP_Game.GameLogic
             return linesMalefactors[numberLine];
         }
 
-        public IEnumerable<IGameObject> ForEachGameObject()
+        public IEnumerable<IGameObject> GameObjects()
         {
-            foreach (var hero in ForEachHeroes())
+            foreach (var hero in Heroes())
                 yield return hero;
-            foreach (var malefactor in ForEachMalefactors())
+            foreach (var malefactor in Malefactors())
                 yield return malefactor;
-            foreach (var strike in ForEachStrikes())
+            foreach (var strike in Strikes())
                 yield return strike;
             foreach (var gem in Gems)
                 yield return gem;
         }
 
-        public IEnumerable<IHero> ForEachHeroes()
+        public IEnumerable<IHero> Heroes()
         {
             return linesHeroes.SelectMany(line => line);
         }
 
-        public IEnumerable<IMalefactor> ForEachMalefactors()
+        public IEnumerable<IMalefactor> Malefactors()
         {
             return linesMalefactors.SelectMany(line => line);
         }
 
-        public IEnumerable<IStrike> ForEachStrikes()
+        public IEnumerable<IStrike> Strikes()
         {
             return linesStrikes.SelectMany(strike => strike);
+        }
+
+        public IEnumerable<IGemManufacturer> GemManufacturers()
+        {
+            return gemManufacturers;
         }
 
         public void Add(IGameObject gameObject)
@@ -84,6 +91,10 @@ namespace OOP_Game.GameLogic
             var numberLine = (int)gameObject.Position.Y;
             switch (gameObject)
             {
+                case IGemManufacturer gemManufacturer:
+                    linesHeroes[numberLine].Add((IHero)gemManufacturer);
+                    gemManufacturers.Add(gemManufacturer);
+                    break;
                 case IHero hero:
                     linesHeroes[numberLine].Add(hero);
                     break;
@@ -93,6 +104,7 @@ namespace OOP_Game.GameLogic
                 case IStrike strike:
                     linesStrikes[numberLine].Add(strike);
                     break;
+                
                 case Gem gem:
                     gems.Add(gem);
                     break;
@@ -106,6 +118,10 @@ namespace OOP_Game.GameLogic
             var numberLine = (int)gameObject.Position.Y;
             switch (gameObject)
             {
+                case IGemManufacturer gemManufacturer:
+                    linesHeroes[numberLine].Remove((IHero)gemManufacturer);
+                    gemManufacturers.Remove(gemManufacturer);
+                    break;
                 case IHero hero:
                     linesHeroes[numberLine].Remove(hero);
                     break;

@@ -17,6 +17,7 @@ namespace OOP_Game.GameLogic
                 levelMaker
                     .AddHero(new IronMan(3000, new Vector(2, 2)))
                     .AddHero(new IronMan(3000, new Vector(3, 4)))
+                    .AddHero(new Vision(1000, new Vector(1, 1)))
                     .AddMalefactor(new Thanos(1000, new Vector(8, 2)))
                     .AddMalefactor(new Thanos(1000, new Vector(8, 0)))
                     .AddMalefactor(new Thanos(1000, new Vector(7, 1)))

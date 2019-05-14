@@ -30,7 +30,8 @@ namespace OOP_Game.Infrastructure
                 new Map(5, 9),
                 new List<PurchaseObject>
                 {
-                    new PurchaseObject(typeof(IronMan), 50, 3000)
+                    new PurchaseObject(typeof(Vision), 50, 1000),
+                    new PurchaseObject(typeof(IronMan), 100, 3000)
                 });
         }
 
