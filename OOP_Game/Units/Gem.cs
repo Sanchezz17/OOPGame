@@ -13,7 +13,7 @@ namespace OOP_Game.Units
 
         public double Speed { get; private set; }
 
-        public Gem(Vector position, double speed = 0.0125)
+        public Gem(Vector position, double speed)
         {
             Position = position;
             State = State.Moves;

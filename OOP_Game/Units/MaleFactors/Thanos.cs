@@ -14,8 +14,7 @@ namespace OOP_Game.Units
             public bool IsDead { get; private set; }
             public double Speed { get; }
             public Direction Direction => Direction.Left;
-            private int rechargeTimeInTicks;
-            private int baseRechargeTimeInTicks;
+            private TickСontroller tickСontroller;
 
             public Thanos(Vector position) : this(500, position) { }
 
@@ -25,21 +24,11 @@ namespace OOP_Game.Units
                 Position = position;
                 IsDead = false;
                 State = State.Moves;
-                rechargeTimeInTicks = 15;
-                baseRechargeTimeInTicks = 15;
+                tickСontroller = new TickСontroller(15);
                 Speed = 0.0125;
             }
-            
-            public bool IsAttackAvailable()
-            {
-                if (rechargeTimeInTicks == 0)
-                {
-                    rechargeTimeInTicks = baseRechargeTimeInTicks;
-                    return true;
-                }
-                rechargeTimeInTicks--;
-                return false;
-            }
+
+            public bool IsAttackAvailable() => tickСontroller.Check();
 
             public IStrike Attack()
             {
@@ -53,7 +42,7 @@ namespace OOP_Game.Units
 
             public void Trigger(IStrike strike)
             {
-                var parametres = new UnitParameters(Health, Position, State, IsDead, baseRechargeTimeInTicks);
+                var parametres = new UnitParameters(Health, Position, State, IsDead);
                 Health -= strike.ToDamage(parametres);
                 if (Health <= 0)
                     IsDead = true;

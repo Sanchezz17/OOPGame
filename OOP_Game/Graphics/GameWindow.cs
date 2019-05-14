@@ -106,7 +106,7 @@ namespace OOP_Game
             var coordinatesInMap = CoordinatesInLayoutToMap(new Vector(e.X, e.Y));
             if (currentObjectToPurchase != null 
                 && Game.CurrentLevel.GemCount >= currentObjectToPurchase.Price
-                && !Game.CurrentLevel.Map.Heroes().Any(hero => (coordinatesInMap - hero.Position).Length < 0.1))
+                && !Game.CurrentLevel.Map.Heroes.Any(hero => (coordinatesInMap - hero.Position).Length < 0.1))
             {
                 var ctor = currentObjectToPurchase.Type.GetConstructors()[0];
                 var heroToAdd = (IHero)ctor.Invoke(

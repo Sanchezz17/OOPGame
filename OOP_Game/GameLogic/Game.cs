@@ -11,13 +11,11 @@ namespace OOP_Game.GameLogic
         private readonly List<Level> Levels;
         public Level CurrentLevel => Levels[CurrentLevelNumber];
         public bool GameIsOver { get; private set; }
-        private GemFactory gemFactory;
         public Game(List<Level> levels)
         {
             Started = false;
             CurrentLevelNumber = 0;
             Levels = levels;
-            gemFactory = new GemFactory();
         }
 
         public void Start() => Started = true;
@@ -37,16 +35,16 @@ namespace OOP_Game.GameLogic
 
         public void MakeGem()
         {
-            foreach (var gemManufacturer in CurrentLevel.Map.GemManufacturers())
+            foreach (var gemManufacturer in CurrentLevel.Map.GemManufacturers)
             {
-                if (gemManufacturer.IsAvailable())
+                if (gemManufacturer.IsAvailableGem())
                     CurrentLevel.Map.Add(gemManufacturer.GetGem());
             }
         }
 
         private bool CheckGameOver()
         {
-            return CurrentLevel.Map.Malefactors()
+            return CurrentLevel.Map.Malefactors
                 .Any(malefactor => malefactor.Position.X < -1);
         }
 
@@ -121,9 +119,9 @@ namespace OOP_Game.GameLogic
 
         private void ResetStates()
         {
-            foreach (var hero in CurrentLevel.Map.Heroes())
+            foreach (var hero in CurrentLevel.Map.Heroes)
                 hero.State = hero is IGemManufacturer ? State.Produce : State.Idle;
-            foreach (var malefactor in CurrentLevel.Map.Malefactors())
+            foreach (var malefactor in CurrentLevel.Map.Malefactors)
                 malefactor.State = State.Moves;
         }
     }

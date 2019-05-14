@@ -1,7 +1,5 @@
 using System.Windows;
 using OOP_Game.Infrastructure;
-using Point = System.Drawing.Point;
-using Size = System.Drawing.Size;
 
 
 namespace OOP_Game.Units

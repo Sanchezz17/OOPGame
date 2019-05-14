@@ -18,13 +18,12 @@ namespace OOP_Game.Infrastructure
         public int baseRechargeTimeInTicks { get; private set; }
         public Direction Direction { get; private set; }
 
-        public UnitParameters(int health, Vector position, State state, bool isDead, int baseRechargeTimeInTicks)
+        public UnitParameters(int health, Vector position, State state, bool isDead)
         {
             Health = health;
             Position = position;
             State = state;
             IsDead = isDead;
-            this.baseRechargeTimeInTicks = baseRechargeTimeInTicks;
         }
     }
 }

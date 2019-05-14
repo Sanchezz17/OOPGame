@@ -12,9 +12,8 @@ namespace OOP_Game.Units
         public bool IsDead { get; private set; }
         public Direction Direction { get; }
         public double Speed { get; }
-        
-        private int rechargeTimeInTicks;
-        private int baseRechargeTimeInTicks;
+
+        private TickСontroller tickСontroller;
 
         public Octavius(Vector position) : this(100, position){}
 
@@ -24,8 +23,7 @@ namespace OOP_Game.Units
             Position = position;
             IsDead = false;
             State = State.Moves;
-            rechargeTimeInTicks = 15;
-            baseRechargeTimeInTicks = 15;
+            tickСontroller = new TickСontroller(15);
             Speed = 0.025;
         }
         
@@ -39,20 +37,11 @@ namespace OOP_Game.Units
             return new IronManAttack(3, Position, Direction);
         }
 
-        public bool IsAttackAvailable()
-        {
-            if (rechargeTimeInTicks == 0)
-            {
-                rechargeTimeInTicks = baseRechargeTimeInTicks;
-                return true;
-            }
-            rechargeTimeInTicks--;
-            return false;
-        }
+        public bool IsAttackAvailable() => tickСontroller.Check();
 
         public void Trigger(IStrike strike)
         {
-            var parametres = new UnitParameters(Health, Position, State, IsDead, baseRechargeTimeInTicks);
+            var parametres = new UnitParameters(Health, Position, State, IsDead);
             Health -= strike.ToDamage(parametres);
             if (Health <= 0)
                 IsDead = true;

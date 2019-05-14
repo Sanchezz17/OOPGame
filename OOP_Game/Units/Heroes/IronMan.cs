@@ -11,21 +11,19 @@ namespace OOP_Game.Units.Heroes
         public Vector Position { get; private set; }
         public State State { get;  set; }
         public bool IsDead { get; private set; }
-        private int rechargeTimeInTicks;
-        private int baseRechargeTimeInTicks;
+        public TickСontroller tickСontroller;
 
         public IronMan(int health, Vector position)
         {
             Health = health;
             Position = position;
             State = State.Idle;
-            rechargeTimeInTicks = 15;
-            baseRechargeTimeInTicks = 15;
+            tickСontroller = new TickСontroller(15);
         }
         
         public void Trigger(IStrike strike)
         {
-            var parametres = new UnitParameters(Health, Position, State, IsDead, baseRechargeTimeInTicks);
+            var parametres = new UnitParameters(Health, Position, State, IsDead);
             Health -= strike.ToDamage(parametres);
             if (Health <= 0)
                 IsDead = true;
@@ -37,15 +35,6 @@ namespace OOP_Game.Units.Heroes
                 Direction.Right);
         }
 
-        public bool IsAttackAvailable()
-        {
-            if (rechargeTimeInTicks == 0)
-            {
-                rechargeTimeInTicks = baseRechargeTimeInTicks;
-                return true;
-            }
-            rechargeTimeInTicks--;
-            return false;
-        }
+        public bool IsAttackAvailable() => tickСontroller.Check();
     }
 }

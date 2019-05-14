@@ -2,7 +2,7 @@ namespace OOP_Game.Units
 {
     public interface IGemManufacturer
     {
-        bool IsAvailable();
+        bool IsAvailableGem();
         Gem GetGem();
     }
 }

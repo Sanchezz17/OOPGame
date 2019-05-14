@@ -14,6 +14,10 @@ namespace OOP_Game.GameLogic
         private List<HashSet<IStrike>> linesStrikes;
         private List<Gem> gems;
         private List<IGemManufacturer> gemManufacturers;
+        public IEnumerable<IHero> Heroes => linesHeroes.SelectMany(line => line);
+        public IEnumerable<IMalefactor> Malefactors => linesMalefactors.SelectMany(line => line);
+        public IEnumerable<IStrike> Strikes() => linesStrikes.SelectMany(strike => strike);
+        public IEnumerable<IGemManufacturer> GemManufacturers => gemManufacturers;
         public IEnumerable<Gem> Gems => gems;
         public int Height { get; }
         public int Width { get; }
@@ -56,34 +60,14 @@ namespace OOP_Game.GameLogic
 
         public IEnumerable<IGameObject> GameObjects()
         {
-            foreach (var hero in Heroes())
+            foreach (var hero in Heroes)
                 yield return hero;
-            foreach (var malefactor in Malefactors())
+            foreach (var malefactor in Malefactors)
                 yield return malefactor;
             foreach (var strike in Strikes())
                 yield return strike;
             foreach (var gem in Gems)
                 yield return gem;
-        }
-
-        public IEnumerable<IHero> Heroes()
-        {
-            return linesHeroes.SelectMany(line => line);
-        }
-
-        public IEnumerable<IMalefactor> Malefactors()
-        {
-            return linesMalefactors.SelectMany(line => line);
-        }
-
-        public IEnumerable<IStrike> Strikes()
-        {
-            return linesStrikes.SelectMany(strike => strike);
-        }
-
-        public IEnumerable<IGemManufacturer> GemManufacturers()
-        {
-            return gemManufacturers;
         }
 
         public void Add(IGameObject gameObject)
@@ -104,7 +88,6 @@ namespace OOP_Game.GameLogic
                 case IStrike strike:
                     linesStrikes[numberLine].Add(strike);
                     break;
-                
                 case Gem gem:
                     gems.Add(gem);
                     break;

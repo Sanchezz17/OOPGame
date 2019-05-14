@@ -9,9 +9,7 @@ namespace OOP_Game.Units.Heroes
         public Vector Position { get; }
         public State State { get; set; }
         public bool IsDead { get; private set; }
-        
-        private int rechargeTimeInTicks;
-        private int baseRechargeTimeInTicks;
+        private TickСontroller tickСontroller;
 
         public Vision(int health, Vector position)
         {
@@ -19,27 +17,17 @@ namespace OOP_Game.Units.Heroes
             Position = position;
             State = State.Produce;
             IsDead = false;
-            baseRechargeTimeInTicks = 150;
-            rechargeTimeInTicks = baseRechargeTimeInTicks;
+            tickСontroller = new TickСontroller(150);
         }
         public void Trigger(IStrike strike)
         {
-            var parametres = new UnitParameters(Health, Position, State, IsDead, baseRechargeTimeInTicks);
+            var parametres = new UnitParameters(Health, Position, State, IsDead);
             Health -= strike.ToDamage(parametres);
             if (Health <= 0)
                 IsDead = true;
         }
 
-        public bool IsAvailable()
-        {
-            if (rechargeTimeInTicks == 0)
-            {
-                rechargeTimeInTicks = baseRechargeTimeInTicks;
-                return true;
-            }
-            rechargeTimeInTicks--;
-            return false;
-        }
+        public bool IsAvailableGem() => tickСontroller.Check();
 
         public Gem GetGem()
         {
