@@ -16,6 +16,8 @@ namespace OOP_Game.Units
         private int rechargeTimeInTicks;
         private int baseRechargeTimeInTicks;
 
+        public Octavius(Vector position) : this(100, position){}
+
         public Octavius(int health, Vector position)
         {
             Health = health;

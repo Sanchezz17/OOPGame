@@ -17,6 +17,8 @@ namespace OOP_Game.Units
             private int rechargeTimeInTicks;
             private int baseRechargeTimeInTicks;
 
+            public Thanos(Vector position) : this(500, position) { }
+
             public Thanos(int health, Vector position)
             {
                 Health = health;
