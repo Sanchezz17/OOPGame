@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphics\Animation.cs" />
+    <Compile Include="Graphics\AnimationUtils.cs" />
     <Compile Include="Graphics\DBLayout.cs" />
     <Compile Include="Graphics\FormUtils.cs" />
     <Compile Include="Graphics\GameWindow.cs">
@@ -127,6 +128,7 @@
     <Content Include="Resources\Malefactors\Thanos\move.gif" />
     <Content Include="Resources\Malefactors\Thanos\passive.gif" />
     <Content Include="Resources\Strikes\IronManAttack\IronManAttack.gif" />
+    <Content Include="Resources\winlevel.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

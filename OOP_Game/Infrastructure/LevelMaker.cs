@@ -51,7 +51,5 @@ namespace OOP_Game.Infrastructure
         {
             return level;
         }
-        
-
     }
 }

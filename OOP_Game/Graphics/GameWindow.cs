@@ -19,6 +19,7 @@ namespace OOP_Game
         private TableLayoutPanel gamePanel;
         private TableLayoutPanel fieldPanel;
         private TableLayoutPanel gameOverPanel;
+        private TableLayoutPanel levelWinPanel;
         private Label currentLevelLabel;
         private Label scoreLabel;
         private TableLayoutPanel purchasePanel;
@@ -27,15 +28,13 @@ namespace OOP_Game
         
         public GameWindow()
         {
-            SetStyle(
-                ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
-                | ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
+                      | ControlStyles.UserPaint, true);
             UpdateStyles();
             Name = "GameForm";
             Text = "OOPGame";
             Game = GameFactory.GetStandardGame();
-            var timer = new Timer();
-            timer.Interval = 40;
+            var timer = new Timer {Interval = 40};
             timer.Tick += OnTimer;
             timer.Start();
             Size = new Size(950, 700);
@@ -69,7 +68,6 @@ namespace OOP_Game
             scoreLabel.TextAlign = ContentAlignment.BottomCenter;
             scoreLabel.Text = Game.CurrentLevel.GemCount.ToString();
             topPanel.Controls.Add(scoreLabel, 1, 0);
-
 
             InitializePurchasePanel();
             topPanel.Controls.Add(purchasePanel, 2, 0);
@@ -108,9 +106,8 @@ namespace OOP_Game
             var coordinatesInMap = CoordinatesInLayoutToMap(new Vector(e.X, e.Y));
             if (currentObjectToPurchase != null 
                 && Game.CurrentLevel.GemCount >= currentObjectToPurchase.Price
-                && !Game.CurrentLevel.Map.Heroes().Any(hero => (coordinatesInMap - hero.Position).Length < 0.1))
+                && !Game.CurrentLevel.Map.ForEachHeroes().Any(hero => (coordinatesInMap - hero.Position).Length < 0.1))
             {
-                
                 var ctor = currentObjectToPurchase.Type.GetConstructors()[0];
                 var heroToAdd = (IHero)ctor.Invoke(
                     new object[] {currentObjectToPurchase.Health, coordinatesInMap});
@@ -163,22 +160,24 @@ namespace OOP_Game
             // Именно внутри fieldControl и будут происходить основные события игры           
             
             gamePanel.Controls.Add(fieldPanel, 1, 0);
-            
-            InitializeGameOverPanel();
+
+            gameOverPanel = GetPanelEndGame("gameover", "Начать заново", Restart);
+            levelWinPanel = GetPanelEndGame("winlevel", "Следующий уровень", ToNextLevel);
             return gamePanel;
         }
-
-        private void InitializeGameOverPanel()
+        
+        private TableLayoutPanel GetPanelEndGame(string imageName, string buttonText, EventHandler buttonHandler)
         {
-            gameOverPanel = FormUtils.InitializeTableLayoutPanel(5, 3);
-            gameOverPanel.BackgroundImage = Image.FromFile(
-                Environment.CurrentDirectory + @"\Resources\gameover.jpg");
-            gameOverPanel.BackgroundImageLayout = ImageLayout.Stretch;
-            gameOverPanel.Margin = Padding.Empty;
-            var restartGameButton = FormUtils.GetButtonWithTextAndFontColor(
-                "Начать заново", Color.Red, 20);
-            restartGameButton.Click += Restart;
-            gameOverPanel.Controls.Add(restartGameButton, 1, 3);
+            var resultPanel = FormUtils.InitializeTableLayoutPanel(5, 3);
+            resultPanel.BackgroundImage = Image.FromFile(
+                Environment.CurrentDirectory + $@"\Resources\{imageName}.jpg");
+            resultPanel.BackgroundImageLayout = ImageLayout.Stretch;
+            resultPanel.Margin = Padding.Empty;
+            var button = FormUtils.GetButtonWithTextAndFontColor(
+                buttonText, Color.Red, 20);
+            button.Click += buttonHandler;
+            resultPanel.Controls.Add(button, 1, 3);
+            return resultPanel;
         }
 
         private void Restart(object sender, EventArgs e)
@@ -188,6 +187,11 @@ namespace OOP_Game
             Game.Start();
             mainPanel.Controls.Remove(gameOverPanel);  
             mainPanel.Controls.Add(gamePanel, 0, 1);
+        }
+
+        private void ToNextLevel(object sender, EventArgs e)
+        {
+            //переход на следующий уровень
         }
 
         private void SwitchToMenu(object sender, EventArgs e)
@@ -214,19 +218,7 @@ namespace OOP_Game
             DrawMap(sender, e);
         }
         
-        private void OnFrameChanged(object o, EventArgs e) => fieldPanel.Invalidate();
-        
-        private void AnimateImage(Animation animation, Bitmap currentAnimation)
-        {
-            if (animation.CurrentAnimation != currentAnimation)
-                animation.CurrentlyAnimating = false;
-            if (!animation.CurrentlyAnimating)
-            {
-                ImageAnimator.Animate(currentAnimation, new EventHandler(OnFrameChanged));
-                animation.CurrentlyAnimating = true;
-                animation.CurrentAnimation = currentAnimation;
-            }
-        }
+        private void OnFrameChanged(object sender, EventArgs e) => fieldPanel.Invalidate();
         
         private RectangleF GetCoordinatesInMapLayout(Vector location)
         {
@@ -244,24 +236,36 @@ namespace OOP_Game
             return new Vector(x, y);
         }
 
+        private void CheckPanelAlreadySet(TableLayoutPanel panel)
+        {
+            if (!mainPanel.Contains(panel))
+            {
+                mainPanel.Controls.Remove(gamePanel);
+                mainPanel.Controls.Add(panel, 0, 1);
+            }
+        }
+
         private void DrawMap(object sender, PaintEventArgs e)
         {
             if (Game.GameIsOver)
             {
-                if (!mainPanel.Contains(gameOverPanel))
-                {
-                    mainPanel.Controls.Remove(gamePanel);
-                    mainPanel.Controls.Add(gameOverPanel, 0, 1);
-                }
+                CheckPanelAlreadySet(gameOverPanel);
                 return;
             }
-            foreach (var gameObject in Game.CurrentLevel.Map.GameObjects())
+            
+            if (Game.CurrentLevel.IsWin)
+            {
+                CheckPanelAlreadySet(levelWinPanel);
+                return;
+            }
+            
+            foreach (var gameObject in Game.CurrentLevel.Map.ForEachGameObject())
             {
                 var visualObject = resourceManager.VisualObjects[gameObject.GetType().Name];
                 var currentAnimation = visualObject.PassiveImage;
                 if (gameObject.State != State.Idle)
                 {
-                    currentAnimation = gameObject.State == State.Attacks || gameObject.State == State.Produce
+                    currentAnimation = gameObject.State == State.Attacks
                         ? visualObject.AttackImage
                         : visualObject.MoveImage;
                     if (!visualObject.Animations.ContainsKey(gameObject))
@@ -269,7 +273,7 @@ namespace OOP_Game
                         visualObject.Animations[gameObject] = new Animation(
                             false, currentAnimation);
                     }
-                    AnimateImage(visualObject.Animations[gameObject], currentAnimation);
+                    AnimationUtils.AnimateImage(visualObject.Animations[gameObject], currentAnimation, OnFrameChanged);
                     ImageAnimator.UpdateFrames();               
                 }
                 var rectangleInMapLayout = GetCoordinatesInMapLayout(gameObject.Position);

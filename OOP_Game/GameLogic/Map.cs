@@ -48,7 +48,7 @@ namespace OOP_Game.GameLogic
         {
             return linesHeroes[numberLine];
         }
-        
+       
         public IEnumerable<IMalefactor> GetMalefactorFromLine(int numberLine)
         {
             return linesMalefactors[numberLine];
