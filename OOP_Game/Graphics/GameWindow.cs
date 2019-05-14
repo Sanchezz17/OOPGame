@@ -15,13 +15,13 @@ namespace OOP_Game
     {
         public Game Game { get; set; }
         private readonly Form mainMenu;
+        private TableLayoutPanel mainPanel;
         private TableLayoutPanel gamePanel;
         private TableLayoutPanel fieldPanel;
         private TableLayoutPanel gameOverPanel;
         private Label currentLevelLabel;
         private Label scoreLabel;
         private TableLayoutPanel purchasePanel;
-        private readonly Image gemImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\gem.jpg");
         private ResourceManager resourceManager = new ResourceManager();
         private PurchaseObject currentObjectToPurchase = null;
         
@@ -46,7 +46,7 @@ namespace OOP_Game
 
         private void InitializeGameWindow()
         {
-            var mainPanel = FormUtils.InitializeTableLayoutPanel(2, 1);
+            mainPanel = FormUtils.InitializeTableLayoutPanel(2, 1);
             mainPanel.Size = new Size(Size.Width - 15, Size.Height - 40);
             mainPanel.Location = Location;
             mainPanel.RowStyles[0] = new RowStyle(SizeType.Percent, 25F);
@@ -64,7 +64,7 @@ namespace OOP_Game
             topPanel.Controls.Add(currentLevelLabel, 0, 0);
 
             scoreLabel = FormUtils.GetLabelWithTextAndFontColor("", Color.Black, 15);
-            scoreLabel.BackgroundImage = gemImage;
+            scoreLabel.BackgroundImage = resourceManager.VisualObjects["Gem"].PassiveImage;
             scoreLabel.BackgroundImageLayout = ImageLayout.Zoom;
             scoreLabel.TextAlign = ContentAlignment.BottomCenter;
             scoreLabel.Text = Game.CurrentLevel.GemCount.ToString();
@@ -74,7 +74,7 @@ namespace OOP_Game
             InitializePurchasePanel();
             topPanel.Controls.Add(purchasePanel, 2, 0);
             
-            var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor("Пауза", Color.Blue, 15);
+            var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor("В главное меню", Color.Blue, 15);
             exitToMenuButton.Margin = Padding.Empty;
             exitToMenuButton.Click += SwitchToMenu;
             topPanel.Controls.Add(exitToMenuButton, 3, 0);
@@ -186,8 +186,8 @@ namespace OOP_Game
             resourceManager = new ResourceManager();
             Game = GameFactory.GetStandardGame();
             Game.Start();
-            gamePanel.Controls.Remove(gameOverPanel);
-            gamePanel.Controls.Add(fieldPanel, 1, 0);
+            mainPanel.Controls.Remove(gameOverPanel);  
+            mainPanel.Controls.Add(gamePanel, 0, 1);
         }
 
         private void SwitchToMenu(object sender, EventArgs e)
@@ -248,10 +248,10 @@ namespace OOP_Game
         {
             if (Game.GameIsOver)
             {
-                if (!gamePanel.Contains(gameOverPanel))
+                if (!mainPanel.Contains(gameOverPanel))
                 {
-                    gamePanel.Controls.Remove(fieldPanel);
-                    gamePanel.Controls.Add(gameOverPanel, 1, 0);
+                    mainPanel.Controls.Remove(gamePanel);
+                    mainPanel.Controls.Add(gameOverPanel, 0, 1);
                 }
                 return;
             }

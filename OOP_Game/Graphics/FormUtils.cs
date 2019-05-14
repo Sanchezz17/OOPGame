@@ -48,6 +48,7 @@ namespace OOP_Game
             var transparentLabel = new Label();
             FormUtils.SetAnchorForAllSides(transparentLabel);
             transparentLabel.BackColor = Color.Transparent;
+            transparentLabel.Margin = Padding.Empty;
             return transparentLabel;
         }
 
