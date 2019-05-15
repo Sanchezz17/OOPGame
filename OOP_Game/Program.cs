@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using OOP_Game.GameLogic;
 
 namespace OOP_Game
 {
@@ -16,7 +14,9 @@ namespace OOP_Game
         { 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GameWindow());
+            Application.Run(new GameWindow(GameFactory.GetStandardGame()));
         }
+        
+        
     }
 }

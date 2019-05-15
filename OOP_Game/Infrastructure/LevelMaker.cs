@@ -31,7 +31,8 @@ namespace OOP_Game.Infrastructure
                 new List<PurchaseObject>
                 {
                     new PurchaseObject(typeof(Vision), 50, 1000),
-                    new PurchaseObject(typeof(IronMan), 100, 3000)
+                    new PurchaseObject(typeof(IronMan), 100, 3000),
+                    new PurchaseObject(typeof(CaptainAmerica), 100, 10000)
                 });
         }
 

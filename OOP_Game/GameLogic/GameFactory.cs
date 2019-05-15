@@ -7,7 +7,7 @@ using OOP_Game.Units.OOP_Game.Units.MaleFactors;
 
 namespace OOP_Game.GameLogic
 {
-    public class GameFactory
+    public static class GameFactory
     {
         private static WaveMaker waveMaker = new WaveMaker();
 
@@ -21,13 +21,13 @@ namespace OOP_Game.GameLogic
                     .AddHero(new IronMan(3000, new Vector(3, 4)))
                     .AddHero(new Vision(1000, new Vector(1, 1)))
                     .AddMalefactor(new Octavius(new Vector(5, 2)))
-                    .AddWaves(GetFirstLevelwaves())
+                    .AddWaves(GetFirstLevelWaves())
                     .MakeLevel()
             };
             return new Game(levels);
         }
 
-        private static List<Wave> GetFirstLevelwaves()
+        private static List<Wave> GetFirstLevelWaves()
         {
             var wave1 = waveMaker
                 .AddMalefactorsOnRandomPositions(typeof(Octavius), 1)
@@ -40,7 +40,7 @@ namespace OOP_Game.GameLogic
                 .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
                 .AddMalefactorsOnRandomPositions(typeof(Thanos), 2)
                 .MakeWave(400);
-            return new List<Wave>() {wave1, wave2, wave3};
+            return new List<Wave> {wave1, wave2, wave3};
         }
     }
 }

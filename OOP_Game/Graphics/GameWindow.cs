@@ -26,14 +26,14 @@ namespace OOP_Game
         private ResourceManager resourceManager = new ResourceManager();
         private PurchaseObject currentObjectToPurchase = null;
         
-        public GameWindow()
+        public GameWindow(Game game)
         {
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
                       | ControlStyles.UserPaint, true);
             UpdateStyles();
             Name = "GameForm";
             Text = "OOPGame";
-            Game = GameFactory.GetStandardGame();
+            Game = game;// GameFactory.GetStandardGame();
             var timer = new Timer {Interval = 40};
             timer.Tick += OnTimer;
             timer.Start();
