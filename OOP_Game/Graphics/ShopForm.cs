@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using OOP_Game.Infrastructure;
 
 namespace OOP_Game
 {
@@ -11,8 +13,10 @@ namespace OOP_Game
         private ListBox heroesList;
         private ListBox heroParametersList;
         private Label heroLabel;
+        private Dictionary<string, DescribeObject> describeObjects;
         public ShopForm(GameWindow gameWindow)
         {
+            describeObjects = new Dictionary<string, DescribeObject>();
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
                                                 | ControlStyles.UserPaint, true);
             UpdateStyles();
@@ -43,13 +47,22 @@ namespace OOP_Game
 
         private TableLayoutPanel GetLeftPanel()
         {
-            var leftPanel = FormUtils.GetTableLayoutPanel(3, 1);
-            FormUtils.SplitRowsByPercentages(leftPanel.RowStyles, new float[]{10F, 80F, 10F});
+            var leftPanel = FormUtils.GetTableLayoutPanel(2, 1);
+            FormUtils.SplitRowsByPercentages(leftPanel.RowStyles, new float[]{10F, 90F});
 
             var label = FormUtils.GetLabelWithTextAndFontColor("Герои", Color.Blue, 30);
             leftPanel.Controls.Add(label);
 
             heroesList = new ListBox();
+            heroesList.Items.AddRange(
+                gameWindow.Game.Player.Heroes
+                    .Select(hero => hero.Type.Name)
+                    .Cast<object>()
+                    .ToArray());
+            describeObjects = gameWindow.Game.Player.Heroes
+                .ToDictionary(hero => hero.Type.Name, hero => hero);
+            heroesList.ForeColor = Color.Black;
+            heroesList.Font = new Font("Arial", 30);
             heroesList.Margin = Padding.Empty;
             FormUtils.SetAnchorForAllSides(heroesList);
             heroesList.SelectedIndexChanged += SelectedHeroChanged;
@@ -60,14 +73,17 @@ namespace OOP_Game
 
         private void SelectedHeroChanged(object sender, EventArgs e)
         {
-            
+            var describeObject = describeObjects[heroesList.SelectedItem.ToString()];
+            var visualObject = gameWindow.ResourceManager.VisualObjects[describeObject.Type.Name];
+            heroLabel.BackgroundImage = visualObject.PassiveImage;
+            heroLabel.BackgroundImageLayout = ImageLayout.Zoom;
         }
         
         private TableLayoutPanel GetCenterPanel()
         {
-            var centerPanel = FormUtils.GetTableLayoutPanel(4, 1);
+            var centerPanel = FormUtils.GetTableLayoutPanel(3, 1);
             FormUtils.SplitRowsByPercentages(
-                centerPanel.RowStyles, new float[]{40F, 40F, 10F, 10F});
+                centerPanel.RowStyles, new float[]{40F, 50F, 10F});
 
             heroLabel = FormUtils.GetTransparentLabel();
             centerPanel.Controls.Add(heroLabel, 0, 0);
