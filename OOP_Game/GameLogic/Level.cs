@@ -9,10 +9,11 @@ namespace OOP_Game.GameLogic
         public Map Map { get; }
         public int GemCount { get; set; }
         public List<Wave> Waves { get; }
-        public bool IsWin => !Map.Malefactors.Any();
-        public List<PurchaseObject> AvailableHeroes { get; }      
+        public bool IsWin => !Map.Malefactors.Any() && PassedWaves == Waves.Count;
+        public HashSet<DescribeObject> AvailableHeroes { get; }  
+        public int PassedWaves;
 
-        public Level(Map map, List<PurchaseObject> availableHeroes)
+        public Level(Map map, HashSet<DescribeObject> availableHeroes)
         {
             GemCount = 100;
             Map = map;

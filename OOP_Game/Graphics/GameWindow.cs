@@ -24,7 +24,7 @@ namespace OOP_Game
         private Label scoreLabel;
         private TableLayoutPanel purchasePanel;
         private ResourceManager resourceManager = new ResourceManager();
-        private PurchaseObject currentObjectToPurchase = null;
+        private DescribeObject currentObjectToPurchase = null;
         
         public GameWindow(Game game)
         {
@@ -110,7 +110,7 @@ namespace OOP_Game
             {
                 var ctor = currentObjectToPurchase.Type.GetConstructors()[0];
                 var heroToAdd = (IHero)ctor.Invoke(
-                    new object[] {currentObjectToPurchase.Health, coordinatesInMap});
+                    new object[] {currentObjectToPurchase.Parameters.Health, coordinatesInMap});
                 Game.CurrentLevel.Map.Add(heroToAdd);
                 Game.CurrentLevel.GemCount -= currentObjectToPurchase.Price;
                 currentObjectToPurchase = null;
