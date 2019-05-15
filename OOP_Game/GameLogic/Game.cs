@@ -89,9 +89,11 @@ namespace OOP_Game.GameLogic
                     var isAttackAvailable = attackingHero.IsAttackAvailable();
                     var needAttack = malefactors.Any(malefactor => malefactor.Position.X > hero.Position.X);
                     if (needAttack)
+                    {
                         hero.State = State.Attacks;
-                    if (needAttack && isAttackAvailable)
-                        objectsForAdd.Add(attackingHero.Attack());
+                        if (isAttackAvailable)
+                            objectsForAdd.Add(attackingHero.Attack());
+                    }
                     foreach (var gameObject in objectsForAdd)
                         CurrentLevel.Map.Add(gameObject);
                 }

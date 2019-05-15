@@ -24,7 +24,8 @@ namespace OOP_Game
             return panel;
         }
 
-        public static Button GetButtonWithTextAndFontColor(string text, Color fontColor, int fontSize)
+        public static Button GetButtonWithTextAndFontColor(
+            string text="", Color fontColor=default(Color), int fontSize=15)
         {
             var button = new Button();
             SetAnchorForAllSides(button);
@@ -32,7 +33,8 @@ namespace OOP_Game
             return button;
         }
 
-        public static Label GetLabelWithTextAndFontColor(string text, Color fontColor, int fontSize)
+        public static Label GetLabelWithTextAndFontColor(
+            string text="", Color fontColor=default(Color), int fontSize=15)
         {
             var label = new Label();
             SetAnchorForAllSides(label);
@@ -63,6 +65,20 @@ namespace OOP_Game
             control.ForeColor = fontColor;
             control.Text = text;
             control.Font = new Font("Arial", fontSize, FontStyle.Bold);
+        }
+
+        public static void SplitColumnsByPercentages(
+            TableLayoutColumnStyleCollection columnStyles, float[] percentages)
+        {
+            for (var i = 0; i < columnStyles.Count; i++)
+                columnStyles[i] = new ColumnStyle(SizeType.Percent, percentages[i]);
+        }
+        
+        public static void SplitRowsByPercentages(
+            TableLayoutRowStyleCollection rowStyles, float[] percentages)
+        {
+            for (var i = 0; i < rowStyles.Count; i++)
+                rowStyles[i] = new RowStyle(SizeType.Percent, percentages[i]);
         }
     }
 }

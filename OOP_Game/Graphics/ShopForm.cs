@@ -27,9 +27,8 @@ namespace OOP_Game
         {
             var mainPanel = FormUtils.GetTableLayoutPanel(1, 3);
             mainPanel.Size = new Size(Size.Width - 15, Size.Height - 40);
-            mainPanel.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 40F);
-            mainPanel.ColumnStyles[1] = new ColumnStyle(SizeType.Percent, 40F);
-            mainPanel.ColumnStyles[2] = new ColumnStyle(SizeType.Percent, 20F);
+            FormUtils.SplitColumnsByPercentages(
+                mainPanel.ColumnStyles, new float[] {40F, 40F, 20F});
             Controls.Add(mainPanel);
 
             var leftPanel = GetLeftPanel();
@@ -45,16 +44,14 @@ namespace OOP_Game
         private TableLayoutPanel GetLeftPanel()
         {
             var leftPanel = FormUtils.GetTableLayoutPanel(3, 1);
-            leftPanel.RowStyles[0] = new RowStyle(SizeType.Percent, 10F);
-            leftPanel.RowStyles[1] = new RowStyle(SizeType.Percent, 80F);
-            leftPanel.RowStyles[2] = new RowStyle(SizeType.Percent, 10F);
+            FormUtils.SplitRowsByPercentages(leftPanel.RowStyles, new float[]{10F, 80F, 10F});
 
             var label = FormUtils.GetLabelWithTextAndFontColor("Герои", Color.Blue, 30);
             leftPanel.Controls.Add(label);
 
             heroesList = new ListBox();
+            heroesList.Margin = Padding.Empty;
             FormUtils.SetAnchorForAllSides(heroesList);
-            heroesList.Text = "лол";
             heroesList.SelectedIndexChanged += SelectedHeroChanged;
             leftPanel.Controls.Add(heroesList, 0, 1);
             
@@ -69,10 +66,8 @@ namespace OOP_Game
         private TableLayoutPanel GetCenterPanel()
         {
             var centerPanel = FormUtils.GetTableLayoutPanel(4, 1);
-            centerPanel.RowStyles[0] = new RowStyle(SizeType.Percent, 40F);
-            centerPanel.RowStyles[1] = new RowStyle(SizeType.Percent, 40F);
-            centerPanel.RowStyles[2] = new RowStyle(SizeType.Percent, 10F);
-            centerPanel.RowStyles[3] = new RowStyle(SizeType.Percent, 10F);
+            FormUtils.SplitRowsByPercentages(
+                centerPanel.RowStyles, new float[]{40F, 40F, 10F, 10F});
 
             heroLabel = FormUtils.GetTransparentLabel();
             centerPanel.Controls.Add(heroLabel, 0, 0);
@@ -81,7 +76,8 @@ namespace OOP_Game
             FormUtils.SetAnchorForAllSides(heroParametersList);
             centerPanel.Controls.Add(heroParametersList, 0, 1);
 
-            var upgradeButton = FormUtils.GetButtonWithTextAndFontColor("Upgrade", Color.Red, 30);
+            var upgradeButton = FormUtils.GetButtonWithTextAndFontColor(
+                "Upgrade", Color.Red, 30);
             centerPanel.Controls.Add(upgradeButton, 0, 2);
             // upgradeButton.Click += событие улучшения
 
@@ -97,8 +93,7 @@ namespace OOP_Game
             rightPanel.Controls.Add(exitToMenuButton, 0, 0);
 
             var coinsTable = FormUtils.GetTableLayoutPanel(2, 1);
-            coinsTable.RowStyles[0] = new RowStyle(SizeType.Percent, 80F);
-            coinsTable.RowStyles[1] = new RowStyle(SizeType.Percent, 20F);
+            FormUtils.SplitRowsByPercentages(coinsTable.RowStyles, new float[]{80F, 20F});
             rightPanel.Controls.Add(coinsTable, 0, 3);
 
             var coinsImage = FormUtils.GetLabelWithTextAndFontColor("", Color.Transparent, 30);
@@ -107,8 +102,10 @@ namespace OOP_Game
             coinsImage.BorderStyle = BorderStyle.None;
             coinsTable.Controls.Add(coinsImage, 0, 0);
 
-            //var coinsLabel = FormUtils.GetLabelWithTextAndFontColor(gameWindow.Game.Player.Coins);
-            //coinsTable.Controls.Add(coinsLabel, 0, 1);
+            var coinsLabel = FormUtils.GetLabelWithTextAndFontColor(
+                gameWindow.Game.Player.Coins.ToString(), Color.Black, 15);
+            coinsLabel.BorderStyle = BorderStyle.None;
+            coinsTable.Controls.Add(coinsLabel, 0, 1);
             return rightPanel;
         }
 
