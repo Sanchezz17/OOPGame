@@ -3,7 +3,7 @@ using OOP_Game.Infrastructure;
 
 namespace OOP_Game.Units.Heroes
 {
-    public abstract class BaseHero :IHero
+    public abstract class BaseHero : IHero
     {
         public int Health { get; private set; }
         public Vector Position { get; }

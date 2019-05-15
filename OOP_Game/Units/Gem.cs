@@ -13,6 +13,11 @@ namespace OOP_Game.Units
 
         public double Speed { get; }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public Gem(Vector position, double speed)
         {
             Position = position;

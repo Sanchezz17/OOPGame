@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 using System.IO;
 
 namespace OOP_Game
@@ -43,7 +42,7 @@ namespace OOP_Game
             
             var gemVisual = new VisualObject();
             VisualObjects["Gem"] = gemVisual;
-            gemVisual.PassiveImage = new Bitmap(Environment.CurrentDirectory + @"\Resources\gem.jpg");
+            gemVisual.PassiveImage = new Bitmap(Environment.CurrentDirectory + @"\Resources\gem.gif");
             gemVisual.MoveImage = gemVisual.PassiveImage;    
         }
         
