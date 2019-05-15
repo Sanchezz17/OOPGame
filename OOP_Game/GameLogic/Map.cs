@@ -9,16 +9,16 @@ namespace OOP_Game.GameLogic
 {
     public class Map
     {
-        private List<HashSet<IMalefactor>> linesMalefactors;
-        private List<HashSet<IHero>> linesHeroes;
-        private List<HashSet<IStrike>> linesStrikes;
-        private List<Gem> gems;
-        private List<IGemManufacturer> gemManufacturers;
-        public IEnumerable<IHero> Heroes => linesHeroes.SelectMany(line => line);
-        public IEnumerable<IMalefactor> Malefactors => linesMalefactors.SelectMany(line => line);
-        public IEnumerable<IStrike> Strikes() => linesStrikes.SelectMany(strike => strike);
-        public IEnumerable<IGemManufacturer> GemManufacturers => gemManufacturers;
-        public IEnumerable<Gem> Gems => gems;
+        private readonly List<HashSet<IGameObject>> linesMalefactors;
+        private readonly List<HashSet<IGameObject>> linesHeroes;
+        private readonly List<HashSet<IGameObject>> linesStrikes;
+        private readonly HashSet<IGameObject> gems;
+        private readonly HashSet<IGameObject> gemManufacturers;
+        public IEnumerable<IHero> Heroes => linesHeroes.SelectMany(line => line).Cast<IHero>();
+        public IEnumerable<IMalefactor> Malefactors => linesMalefactors.SelectMany(line => line).Cast<IMalefactor>();
+        public IEnumerable<IStrike> Strikes => linesStrikes.SelectMany(strike => strike).Cast<IStrike>();
+        public IEnumerable<IGemManufacturer> GemManufacturers => gemManufacturers.Cast<IGemManufacturer>();
+        public IEnumerable<Gem> Gems => gems.Cast<Gem>();
         public int Height { get; }
         public int Width { get; }
 
@@ -26,11 +26,11 @@ namespace OOP_Game.GameLogic
         {
             Height = height;
             Width = width;
-            linesMalefactors = CreateLines<IMalefactor>(Height);
-            linesHeroes = CreateLines<IHero>(Height);
-            linesStrikes = CreateLines<IStrike>(Height);
-            gemManufacturers = new List<IGemManufacturer> {new GemFactory()};
-            gems = new List<Gem>();
+            linesMalefactors = CreateLines<IGameObject>(Height);
+            linesHeroes = CreateLines<IGameObject>(Height);
+            linesStrikes = CreateLines<IGameObject>(Height);
+            gemManufacturers = new HashSet<IGameObject> {new GemFactory()};
+            gems = new HashSet<IGameObject>();
         }
 
         private static List<HashSet<T>> CreateLines<T>(int count)
@@ -38,6 +38,32 @@ namespace OOP_Game.GameLogic
             return Enumerable.Range(0, count)
                 .Select(i => new HashSet<T>())
                 .ToList();
+        }
+        
+        private void ChangeMap(Action<HashSet<IGameObject>, IGameObject> changer, IGameObject gameObject)
+        {
+            var numberLine = (int)gameObject.Position.Y;
+            switch (gameObject)
+            {
+                case IGemManufacturer gemManufacturer:
+                    changer(linesHeroes[numberLine],(IHero)gemManufacturer);
+                    changer(gemManufacturers, gemManufacturer);
+                    break;
+                case IHero hero:
+                    changer(linesHeroes[numberLine], hero);
+                    break;
+                case IMalefactor malefactor:
+                    changer(linesMalefactors[numberLine] ,malefactor);
+                    break;
+                case IStrike strike:
+                    changer(linesStrikes[numberLine], strike);
+                    break;
+                case Gem gem:
+                    changer(gems, gem);
+                    break;
+                default:
+                    throw new ArgumentException();
+            }
         }
 
         public bool Contains(Vector vector)
@@ -50,21 +76,21 @@ namespace OOP_Game.GameLogic
 
         public IEnumerable<IHero> GetHeroesFromLine(int numberLine)
         {
-            return linesHeroes[numberLine];
+            return linesHeroes[numberLine].Cast<IHero>();
         }
        
         public IEnumerable<IMalefactor> GetMalefactorFromLine(int numberLine)
         {
-            return linesMalefactors[numberLine];
+            return linesMalefactors[numberLine].Cast<IMalefactor>();
         }
 
-        public IEnumerable<IGameObject> GameObjects()
+        public IEnumerable<IGameObject> GetGameObjects()
         {
             foreach (var hero in Heroes)
                 yield return hero;
             foreach (var malefactor in Malefactors)
                 yield return malefactor;
-            foreach (var strike in Strikes())
+            foreach (var strike in Strikes)
                 yield return strike;
             foreach (var gem in Gems)
                 yield return gem;
@@ -72,54 +98,12 @@ namespace OOP_Game.GameLogic
 
         public void Add(IGameObject gameObject)
         {
-            var numberLine = (int)gameObject.Position.Y;
-            switch (gameObject)
-            {
-                case IGemManufacturer gemManufacturer:
-                    linesHeroes[numberLine].Add((IHero)gemManufacturer);
-                    gemManufacturers.Add(gemManufacturer);
-                    break;
-                case IHero hero:
-                    linesHeroes[numberLine].Add(hero);
-                    break;
-                case IMalefactor malefactor:
-                    linesMalefactors[numberLine].Add(malefactor);
-                    break;
-                case IStrike strike:
-                    linesStrikes[numberLine].Add(strike);
-                    break;
-                case Gem gem:
-                    gems.Add(gem);
-                    break;
-                default:
-                    throw new ArgumentException();
-            }
+            ChangeMap((set, o) => set.Add(o), gameObject);
         }
         
         public void Delete(IGameObject gameObject)
         {
-            var numberLine = (int)gameObject.Position.Y;
-            switch (gameObject)
-            {
-                case IGemManufacturer gemManufacturer:
-                    linesHeroes[numberLine].Remove((IHero)gemManufacturer);
-                    gemManufacturers.Remove(gemManufacturer);
-                    break;
-                case IHero hero:
-                    linesHeroes[numberLine].Remove(hero);
-                    break;
-                case IMalefactor malefactor:
-                    linesMalefactors[numberLine].Remove(malefactor);
-                    break;
-                case IStrike strike:
-                    linesStrikes[numberLine].Remove(strike);
-                    break;
-                case Gem gem:
-                    gems.Remove(gem);
-                    break;
-                default:
-                    throw new ArgumentException();
-            }
+            ChangeMap((set, o) => set.Remove(o), gameObject);
         }
     }
 }

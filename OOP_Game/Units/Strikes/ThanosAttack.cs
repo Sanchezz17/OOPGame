@@ -5,13 +5,7 @@ namespace OOP_Game.Units.Strikes
 {
     class ThanosAttack : Shot
     {
-        public ThanosAttack(Vector position, Direction direction)
-        {
-            Health = 1;
-            Position = position;
-            Direction = direction;
-            State = State.Moves;
-        }
+        public ThanosAttack(Vector position, Direction direction) : base(direction, 1, position) {}
 
         public override int ToDamage(UnitParameters parameters)
         {           

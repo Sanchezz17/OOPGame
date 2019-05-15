@@ -36,17 +36,14 @@ namespace OOP_Game.GameLogic
             GameIsOver = CheckGameOver();
         }
 
-        public void MakeWave()
+        private void MakeWave()
         {
             foreach (var wave in CurrentLevel.Waves)
             {
                 if (wave.IsReadyToStart() && !wave.IsPassed)
                 {
-                    foreach (var malefactors in wave.malefactors)
-                    {
+                    foreach (var malefactors in wave.Malefactors)
                         CurrentLevel.Map.Add(malefactors);
-                    }
-
                     wave.IsPassed = true;
                     passedWaves++;
                 }
@@ -55,7 +52,7 @@ namespace OOP_Game.GameLogic
             }
         }
 
-        public void MakeGem()
+        private void MakeGem()
         {
             foreach (var gemManufacturer in CurrentLevel.Map.GemManufacturers)
             {
@@ -75,7 +72,7 @@ namespace OOP_Game.GameLogic
             var objectsForAdd = new HashSet<IGameObject>();
             for (var i = 0; i < CurrentLevel.Map.Height; i++)
             {
-                var malefactors = (HashSet<IMalefactor>) CurrentLevel.Map.GetMalefactorFromLine(i);
+                var malefactors = CurrentLevel.Map.GetMalefactorFromLine(i);
                 foreach (var hero in CurrentLevel.Map.GetHeroesFromLine(i))
                 {
                     foreach (var malefactor in malefactors)
@@ -87,7 +84,7 @@ namespace OOP_Game.GameLogic
                             malefactor.State = State.Attacks;
                         }
                     }
-                    
+
                     if (!(hero is IAttacking))
                         continue;
                     var attackingHero = hero as IAttacking;
@@ -95,34 +92,38 @@ namespace OOP_Game.GameLogic
                     {
                         if (malefactor.Position.X > hero.Position.X)
                         {
-                            if (attackingHero.IsAttackAvailable())
-                                objectsForAdd.Add(attackingHero.Attack());
                             hero.State = State.Attacks;
+                            if (attackingHero.IsAttackAvailable())
+                            {
+
+                                objectsForAdd.Add(attackingHero.Attack());
+                                break;
+                            }
                         }
                     }
+                    foreach (var gameObject in objectsForAdd)
+                        CurrentLevel.Map.Add(gameObject);
                 }
             }
-            foreach (var gameObject in objectsForAdd)
-                CurrentLevel.Map.Add(gameObject);
         }
 
         private void CheckStrikes()
         {
             for (var i = 0; i < CurrentLevel.Map.Height; i++)
             {
-                var malefactors = (HashSet<IMalefactor>) CurrentLevel.Map.GetMalefactorFromLine(i);
-                foreach (var strike in CurrentLevel.Map.Strikes())
+                var malefactors = CurrentLevel.Map.GetMalefactorFromLine(i);
+                foreach (var strike in CurrentLevel.Map.Strikes)
                 {
                     foreach (var malefactor in malefactors)
                         if ((malefactor.Position - strike.Position).Length < 0.3)
                             malefactor.Trigger(strike);
-                }              
+                }
             }
         }
 
         private void MakeMove()
         {
-            foreach (var gameObject in CurrentLevel.Map.GameObjects())
+            foreach (var gameObject in CurrentLevel.Map.GetGameObjects())
                 if (gameObject is IMovable movable && gameObject.State == State.Moves)
                     movable.Move();
         }
@@ -130,9 +131,9 @@ namespace OOP_Game.GameLogic
         private void UpdateGameObjects()
         {
             var objectsForDelete = new HashSet<IGameObject>();
-            foreach (var gameObject in CurrentLevel.Map.GameObjects())
+            foreach (var gameObject in CurrentLevel.Map.GetGameObjects())
             {
-                if (gameObject.IsDead || (!CurrentLevel.Map.Contains(gameObject.Position) && !(gameObject is IMalefactor)))
+                if (gameObject.IsDead || !CurrentLevel.Map.Contains(gameObject.Position) && !(gameObject is IMalefactor))
                     objectsForDelete.Add(gameObject);
             }
             foreach (var gameObject in objectsForDelete)

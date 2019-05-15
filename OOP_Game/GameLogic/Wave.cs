@@ -6,13 +6,13 @@ namespace OOP_Game.GameLogic
 {
     public class Wave
     {
-        public List<IMalefactor> malefactors { get; }
-        private TickСontroller tickСontroller;
+        public List<IMalefactor> Malefactors { get; }
+        private readonly TickСontroller tickСontroller;
         public bool IsPassed;
 
         public Wave(List<IMalefactor> malefactors, int timeToStart)
         {
-            this.malefactors = malefactors;
+            Malefactors = malefactors;
             tickСontroller = new TickСontroller(timeToStart);
         }
 

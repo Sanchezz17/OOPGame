@@ -8,6 +8,11 @@ namespace OOP_Game.Units
     {
         private TickСontroller tickСontroller;
         private Random random;
+        
+        public int Health { get; }
+        public Vector Position { get; }
+        public State State { get; set; }
+        public bool IsDead { get; }
         public GemFactory()
         {
             tickСontroller = new TickСontroller(150);
@@ -16,9 +21,6 @@ namespace OOP_Game.Units
 
         public bool IsAvailableGem() => tickСontroller.Check();
 
-        public Gem GetGem()
-        {
-            return new Gem(new Vector(random.NextDouble() * 9, 0), 0.0125);
-        }
+        public Gem GetGem() => new Gem(new Vector(random.NextDouble() * 9, 0), 0.0125);
     }
 }

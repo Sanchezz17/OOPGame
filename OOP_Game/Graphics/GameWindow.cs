@@ -259,7 +259,7 @@ namespace OOP_Game
                 return;
             }
             
-            foreach (var gameObject in Game.CurrentLevel.Map.GameObjects())
+            foreach (var gameObject in Game.CurrentLevel.Map.GetGameObjects())
             {
                 var visualObject = resourceManager.VisualObjects[gameObject.GetType().Name];
                 var currentAnimation = visualObject.PassiveImage;

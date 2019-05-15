@@ -5,14 +5,6 @@ namespace OOP_Game.Units.Strikes
 {
     class IronManAttack : Shot
     {
-        public IronManAttack(int damage, Vector position, Direction direction)
-        {
-            Health = 1;
-            Damage = damage;
-            Position = position;
-            Direction = direction;
-            State = State.Moves;
-        }
-
+        public IronManAttack(int damage, Vector position, Direction direction) : base(direction, 1, position, damage) {}
     }
 }

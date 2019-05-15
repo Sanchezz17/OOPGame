@@ -8,14 +8,14 @@ namespace OOP_Game.Infrastructure
 {
     public class WaveMaker
     {
-        private List<IMalefactor> malefactors { get; }
-        private readonly int XPrecision = 2;
-        private readonly int YPrecision = 4;
-        private Random random;
+        private List<IMalefactor> Malefactors { get; }
+        private readonly int xPrecision = 2;
+        private readonly int yPrecision = 4;
+        private readonly Random random;
 
         public WaveMaker()
         {
-            malefactors = new List<IMalefactor>();    
+            Malefactors = new List<IMalefactor>();    
             random = new Random();
         }
 
@@ -23,19 +23,19 @@ namespace OOP_Game.Infrastructure
         {
             for(var i = 0; i < count; i++)
             {
-                var x = random.NextDouble() * XPrecision + 9;
-                var y = random.Next(0, YPrecision);
+                var x = random.NextDouble() * xPrecision + 9;
+                var y = random.Next(0, yPrecision);
                 var ctor = malefactorType.GetConstructor(new Type[] { typeof(Vector) });
                 var malefactor = (IMalefactor)ctor.Invoke(new object[] { new Vector(x, y) });
-                malefactors.Add(malefactor);
+                Malefactors.Add(malefactor);
             }
             return this;
         }
 
         public Wave MakeWave(int timeToStart)
         {
-            var result = new Wave(new List<IMalefactor>(malefactors), timeToStart);
-            malefactors.Clear();
+            var result = new Wave(new List<IMalefactor>(Malefactors), timeToStart);
+            Malefactors.Clear();
             return result;
         }
     }

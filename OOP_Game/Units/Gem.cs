@@ -11,7 +11,7 @@ namespace OOP_Game.Units
         public bool IsDead { get; private set; }
         public Direction Direction => Direction.Down;
 
-        public double Speed { get; private set; }
+        public double Speed { get; }
 
         public Gem(Vector position, double speed)
         {
@@ -20,9 +20,6 @@ namespace OOP_Game.Units
             Speed = speed;
         }
         
-        public void Move()
-        {
-            Position += Direction.ToVector() * Speed;
-        }
+        public void Move() => Position += Direction.ToVector() * Speed;
     }
 }

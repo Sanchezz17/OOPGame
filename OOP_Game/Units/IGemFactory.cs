@@ -1,6 +1,6 @@
 namespace OOP_Game.Units
 {
-    public interface IGemManufacturer
+    public interface IGemManufacturer : IGameObject
     {
         bool IsAvailableGem();
         Gem GetGem();

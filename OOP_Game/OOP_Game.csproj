@@ -74,6 +74,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\GemFactory.cs" />
+    <Compile Include="Units\Heroes\BaseHero.cs" />
     <Compile Include="Units\Heroes\IronMan.cs" />
     <Compile Include="Units\Heroes\Vision.cs" />
     <Compile Include="Units\IAttacking.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Units\IMovable.cs" />
     <Compile Include="Units\IStrike.cs" />
     <Compile Include="Units\ITriggered.cs" />
+    <Compile Include="Units\MaleFactors\BaseMalefactor.cs" />
     <Compile Include="Units\MaleFactors\Octavius.cs" />
     <Compile Include="Units\MaleFactors\Thanos.cs" />
     <Compile Include="Units\State.cs" />
