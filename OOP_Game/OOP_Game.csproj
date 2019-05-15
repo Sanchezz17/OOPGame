@@ -122,6 +122,8 @@
     <Content Include="Resources\gameover.jpg" />
     <Content Include="Resources\gem.jpg" />
     <Content Include="Resources\headquarters.jpg" />
+    <Content Include="Resources\Heroes\CaptainAmerica\Attack.gif" />
+    <Content Include="Resources\Heroes\CaptainAmerica\Passive.gif" />
     <Content Include="Resources\Heroes\IronMan\attack.gif" />
     <Content Include="Resources\Heroes\IronMan\passive.gif" />
     <Content Include="Resources\Heroes\Vision\attack.gif" />
