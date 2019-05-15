@@ -43,7 +43,7 @@ namespace OOP_Game
             
             var gemVisual = new VisualObject();
             VisualObjects["Gem"] = gemVisual;
-            gemVisual.PassiveImage = new Bitmap(Environment.CurrentDirectory + @"\Resources\gem.jpg");
+            gemVisual.PassiveImage = new Bitmap(Environment.CurrentDirectory + @"\Resources\gem.gif");
             gemVisual.MoveImage = gemVisual.PassiveImage;  
             
             var coinsVisual = new VisualObject();
