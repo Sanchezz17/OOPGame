@@ -32,7 +32,7 @@ namespace OOP_Game.Units
 
         public void Trigger(IStrike strike)
         {
-            var parameters = new UnitParameters(Health, Position, State, IsDead);
+            var parameters = new UnitParameters().SetHealth(Health);
             Health -= strike.ToDamage(parameters);
             if (Health <= 0)
                 IsDead = true;

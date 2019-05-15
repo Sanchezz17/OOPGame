@@ -12,10 +12,10 @@ namespace OOP_Game.Units.Strikes
             Health -= 1;
             if (Health <= 0)
                 IsDead = true;
-            var enemyHeath = parameters.Health;
-            if (enemyHeath <= 100)
-                return enemyHeath;
-            return enemyHeath / 2;
+            var enemyHealth = (int)parameters.Health;
+            if (enemyHealth <= 100)
+                return enemyHealth;
+            return enemyHealth / 2;
         }
     }
 }
