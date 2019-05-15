@@ -65,6 +65,7 @@
     <Compile Include="GameLogic\Map.cs" />
     <Compile Include="GameLogic\Player.cs" />
     <Compile Include="Graphics\ResourceManager.cs" />
+    <Compile Include="Graphics\ShopForm.cs" />
     <Compile Include="Graphics\VisualObject.cs" />
     <Compile Include="Infrastructure\Direction.cs" />
     <Compile Include="Infrastructure\LevelMaker.cs" />

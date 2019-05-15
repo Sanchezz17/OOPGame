@@ -14,7 +14,7 @@ namespace OOP_Game
         { 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GameWindow(GameFactory.GetStandardGame()));
+            Application.Run(new GameWindow(GameFactory.GetStandardGame(), new ResourceManager()));
         }
         
         

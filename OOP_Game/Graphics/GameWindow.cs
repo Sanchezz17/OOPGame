@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -14,7 +14,11 @@ namespace OOP_Game
     public partial class GameWindow : Form
     {
         public Game Game { get; set; }
-        private readonly Form mainMenu;
+        public ResourceManager ResourceManager { get; private set; }
+        
+        public readonly Form MainMenu;
+        public readonly Form ShopForm;
+        
         private TableLayoutPanel mainPanel;
         private TableLayoutPanel gamePanel;
         private TableLayoutPanel fieldPanel;
@@ -23,35 +27,36 @@ namespace OOP_Game
         private Label currentLevelLabel;
         private Label scoreLabel;
         private TableLayoutPanel purchasePanel;
-        private ResourceManager resourceManager = new ResourceManager();
         private PurchaseObject currentObjectToPurchase = null;
         
-        public GameWindow(Game game)
+        public GameWindow(Game game, ResourceManager resourceManager)
         {
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
                       | ControlStyles.UserPaint, true);
             UpdateStyles();
             Name = "GameForm";
             Text = "OOPGame";
-            Game = game;// GameFactory.GetStandardGame();
+            Game = game;
+            ResourceManager = resourceManager;
             var timer = new Timer {Interval = 40};
             timer.Tick += OnTimer;
             timer.Start();
             Size = new Size(950, 700);
-            mainMenu = new MainMenu(this);
+            MainMenu = new MainMenu(this);
+            ShopForm = new ShopForm(this);
             Shown += SwitchToMenu;
             InitializeGameWindow();
         }
 
         private void InitializeGameWindow()
         {
-            mainPanel = FormUtils.InitializeTableLayoutPanel(2, 1);
+            mainPanel = FormUtils.GetTableLayoutPanel(2, 1);
             mainPanel.Size = new Size(Size.Width - 15, Size.Height - 40);
             mainPanel.Location = Location;
             mainPanel.RowStyles[0] = new RowStyle(SizeType.Percent, 25F);
             mainPanel.RowStyles[1] = new RowStyle(SizeType.Percent, 75F);
 
-            var topPanel = FormUtils.InitializeTableLayoutPanel(1, 4);
+            var topPanel = FormUtils.GetTableLayoutPanel(1, 4);
             topPanel.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 10F);
             topPanel.ColumnStyles[1] = new ColumnStyle(SizeType.Percent, 10F);
             topPanel.ColumnStyles[2] = new ColumnStyle(SizeType.Percent, 60F);
@@ -63,7 +68,7 @@ namespace OOP_Game
             topPanel.Controls.Add(currentLevelLabel, 0, 0);
 
             scoreLabel = FormUtils.GetLabelWithTextAndFontColor("", Color.Black, 15);
-            scoreLabel.BackgroundImage = resourceManager.VisualObjects["Gem"].PassiveImage;
+            scoreLabel.BackgroundImage = ResourceManager.VisualObjects["Gem"].PassiveImage;
             scoreLabel.BackgroundImageLayout = ImageLayout.Zoom;
             scoreLabel.TextAlign = ContentAlignment.BottomCenter;
             scoreLabel.Text = Game.CurrentLevel.GemCount.ToString();
@@ -72,7 +77,8 @@ namespace OOP_Game
             InitializePurchasePanel();
             topPanel.Controls.Add(purchasePanel, 2, 0);
             
-            var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor("В главное меню", Color.Blue, 15);
+            var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor(
+                "В главное меню", Color.Blue, 15);
             exitToMenuButton.Margin = Padding.Empty;
             exitToMenuButton.Click += SwitchToMenu;
             topPanel.Controls.Add(exitToMenuButton, 3, 0);
@@ -86,13 +92,13 @@ namespace OOP_Game
 
         private void InitializePurchasePanel()
         {
-            purchasePanel = FormUtils.InitializeTableLayoutPanel(1, 5);
+            purchasePanel = FormUtils.GetTableLayoutPanel(1, 5);
             var i = 0;
             foreach (var hero in Game.CurrentLevel.AvailableHeroes)
             {
                 var heroPurchase = FormUtils.GetButtonWithTextAndFontColor(
                     hero.Price.ToString(), Color.Black, 15);
-                heroPurchase.BackgroundImage = resourceManager.VisualObjects[hero.Type.Name].PassiveImage;
+                heroPurchase.BackgroundImage = ResourceManager.VisualObjects[hero.Type.Name].PassiveImage;
                 heroPurchase.BackgroundImageLayout = ImageLayout.Zoom;
                 heroPurchase.TextAlign = ContentAlignment.BottomCenter;
                 heroPurchase.Margin = Padding.Empty;
@@ -135,7 +141,7 @@ namespace OOP_Game
 
         private TableLayoutPanel GetGamePanel()
         {
-            gamePanel = FormUtils.InitializeTableLayoutPanel(1, 2);
+            gamePanel = FormUtils.GetTableLayoutPanel(1, 2);
             gamePanel.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 20F);
             gamePanel.ColumnStyles[1] = new ColumnStyle(SizeType.Percent, 80F);
 
@@ -146,7 +152,7 @@ namespace OOP_Game
             headquartersControl.Margin = Padding.Empty;
             gamePanel.Controls.Add(headquartersControl, 0, 0);
 
-            fieldPanel = FormUtils.InitializeTableLayoutPanel(5, 9);
+            fieldPanel = FormUtils.GetTableLayoutPanel(5, 9);
             fieldPanel.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\field.jpg");
             fieldPanel.BackgroundImageLayout = ImageLayout.Stretch;
             fieldPanel.Margin = Padding.Empty;
@@ -168,7 +174,7 @@ namespace OOP_Game
         
         private TableLayoutPanel GetPanelEndGame(string imageName, string buttonText, EventHandler buttonHandler)
         {
-            var resultPanel = FormUtils.InitializeTableLayoutPanel(5, 3);
+            var resultPanel = FormUtils.GetTableLayoutPanel(5, 3);
             resultPanel.BackgroundImage = Image.FromFile(
                 Environment.CurrentDirectory + $@"\Resources\{imageName}.jpg");
             resultPanel.BackgroundImageLayout = ImageLayout.Stretch;
@@ -182,7 +188,7 @@ namespace OOP_Game
 
         private void Restart(object sender, EventArgs e)
         {
-            resourceManager = new ResourceManager();
+            ResourceManager = new ResourceManager();
             Game = GameFactory.GetStandardGame();
             Game.Start();
             mainPanel.Controls.Remove(gameOverPanel);  
@@ -198,9 +204,9 @@ namespace OOP_Game
         {
             Game.Pause();
             Hide();
-            mainMenu.Location = Location;
-            mainMenu.Size = Size;
-            mainMenu.Show();
+            MainMenu.Size = Size;
+            MainMenu.Location = Location;
+            MainMenu.Show();
         }
 
         private void OnTimer(object sender, EventArgs e)
@@ -261,7 +267,7 @@ namespace OOP_Game
             
             foreach (var gameObject in Game.CurrentLevel.Map.GetGameObjects())
             {
-                var visualObject = resourceManager.VisualObjects[gameObject.GetType().Name];
+                var visualObject = ResourceManager.VisualObjects[gameObject.GetType().Name];
                 var currentAnimation = visualObject.PassiveImage;
                 if (gameObject.State != State.Idle)
                 {

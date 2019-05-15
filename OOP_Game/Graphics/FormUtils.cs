@@ -5,7 +5,7 @@ namespace OOP_Game
 {
     public class FormUtils
     {
-        public static DBLayoutPanel InitializeTableLayoutPanel(int rowsCount, int columnsCount)
+        public static DBLayoutPanel GetTableLayoutPanel(int rowsCount, int columnsCount)
         {
             var panel = new DBLayoutPanel();
             
@@ -62,7 +62,7 @@ namespace OOP_Game
         {
             control.ForeColor = fontColor;
             control.Text = text;
-            control.Font = new Font("Arial", fontSize);
+            control.Font = new Font("Arial", fontSize, FontStyle.Bold);
         }
     }
 }
