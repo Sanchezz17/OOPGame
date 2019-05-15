@@ -11,11 +11,13 @@ namespace OOP_Game.GameLogic
         private readonly List<Level> Levels;
         public Level CurrentLevel => Levels[CurrentLevelNumber];
         public bool GameIsOver { get; private set; }
+        public Player Player { get; }
         public Game(List<Level> levels)
         {
             Started = false;
             CurrentLevelNumber = 0;
             Levels = levels;
+            Player = Player.Instance;
         }
 
         public void Start() => Started = true;

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using System.Windows;
@@ -14,11 +13,11 @@ namespace OOP_Game.GameLogic
         private readonly List<HashSet<IGameObject>> linesStrikes;
         private readonly HashSet<IGameObject> gems;
         private readonly HashSet<IGameObject> gemManufacturers;
-        public IEnumerable<IHero> Heroes => linesHeroes.SelectMany(line => line).Cast<IHero>();
-        public IEnumerable<IMalefactor> Malefactors => linesMalefactors.SelectMany(line => line).Cast<IMalefactor>();
-        public IEnumerable<IStrike> Strikes => linesStrikes.SelectMany(strike => strike).Cast<IStrike>();
-        public IEnumerable<IGemManufacturer> GemManufacturers => gemManufacturers.Cast<IGemManufacturer>();
-        public IEnumerable<Gem> Gems => gems.Cast<Gem>();
+        public IEnumerable<IHero> Heroes => linesHeroes.SelectMany(line => line).Cast<IHero>().ToList();
+        public IEnumerable<IMalefactor> Malefactors => linesMalefactors.SelectMany(line => line).Cast<IMalefactor>().ToList();
+        public IEnumerable<IStrike> Strikes => linesStrikes.SelectMany(strike => strike).Cast<IStrike>().ToList();
+        public IEnumerable<IGemManufacturer> GemManufacturers => gemManufacturers.Cast<IGemManufacturer>().ToList();
+        public IEnumerable<Gem> Gems => gems.Cast<Gem>().ToList();
         public int Height { get; }
         public int Width { get; }
 
@@ -69,19 +68,19 @@ namespace OOP_Game.GameLogic
         public bool Contains(Vector vector)
         {
             return vector.X >= 0
-                   && vector.X <= Width
+                   && vector.X < Width
                    && vector.Y >= 0
-                   && vector.Y <= Height;
+                   && vector.Y < Height;
         }
 
         public IEnumerable<IHero> GetHeroesFromLine(int numberLine)
         {
-            return linesHeroes[numberLine].Cast<IHero>();
+            return linesHeroes[numberLine].Cast<IHero>().ToList();
         }
        
         public IEnumerable<IMalefactor> GetMalefactorFromLine(int numberLine)
         {
-            return linesMalefactors[numberLine].Cast<IMalefactor>();
+            return linesMalefactors[numberLine].Cast<IMalefactor>().ToList();
         }
 
         public IEnumerable<IGameObject> GetGameObjects()

@@ -13,7 +13,7 @@ namespace OOP_Game.GameLogic
 
         public static Game GetStandardGame()
         {
-            var levelMaker = new LevelMaker();
+            var levelMaker = new LevelMaker(Player.Instance.Heroes);
             var levels = new List<Level>
             {
                 levelMaker

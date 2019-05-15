@@ -3,7 +3,7 @@ using OOP_Game.Infrastructure;
 
 namespace OOP_Game.Units.Heroes
 {
-    public abstract class BaseHero :IHero
+    public abstract class BaseHero : IHero
     {
         public int Health { get; private set; }
         public Vector Position { get; }
@@ -22,7 +22,7 @@ namespace OOP_Game.Units.Heroes
 
         public void Trigger(IStrike strike)
         {
-            var parameters = new UnitParameters(Health, Position, State, IsDead);
+            var parameters = new UnitParameters().SetHealth(Health);
             Health -= strike.ToDamage(parameters);
             if (Health <= 0)
                 IsDead = true;
