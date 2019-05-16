@@ -1,116 +1,124 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{0EBEEE35-9471-4103-A66A-058BC8776ABE}</ProjectGuid>
-        <OutputType>Exe</OutputType>
-        <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>App</RootNamespace>
-        <AssemblyName>App</AssemblyName>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-        <FileAlignment>512</FileAlignment>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="System" />
-        <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.Drawing" />
-        <Reference Include="System.Windows.Forms" />
-        <Reference Include="System.Xml" />
-        <Reference Include="WindowsBase" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Graphics\Animation.cs" />
-        <Compile Include="Graphics\AnimationUtils.cs" />
-        <Compile Include="Graphics\DBLayout.cs" />
-        <Compile Include="Graphics\FormUtils.cs" />
-        <Compile Include="Graphics\GameWindow.cs" />
-        <Compile Include="Graphics\GameWindow.Designer.cs" />
-        <Compile Include="Graphics\MainMenu.cs" />
-        <Compile Include="Graphics\ResourceManager.cs" />
-        <Compile Include="Graphics\ShopForm.cs" />
-        <Compile Include="Graphics\VisualObject.cs" />
-        <Compile Include="Program.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <Content Include="Resources\coins.png" />
-      <Content Include="Resources\field.jpg" />
-      <Content Include="Resources\gameover.jpg" />
-      <Content Include="Resources\gem.gif" />
-      <Content Include="Resources\headquarters.jpg" />
-      <Content Include="Resources\Heroes\CaptainAmerica\Attack.gif" />
-      <Content Include="Resources\Heroes\CaptainAmerica\Passive.gif" />
-      <Content Include="Resources\Heroes\IronMan\attack.gif" />
-      <Content Include="Resources\Heroes\IronMan\passive.gif" />
-      <Content Include="Resources\Heroes\Vision\attack.gif" />
-      <Content Include="Resources\Heroes\Vision\passive.gif" />
-      <Content Include="Resources\main.jpg" />
-      <Content Include="Resources\Malefactors\Octavius\attack.gif" />
-      <Content Include="Resources\Malefactors\Octavius\move.gif" />
-      <Content Include="Resources\Malefactors\Octavius\passive.gif" />
-      <Content Include="Resources\Malefactors\Thanos\attack.gif" />
-      <Content Include="Resources\Malefactors\Thanos\move.gif" />
-      <Content Include="Resources\Malefactors\Thanos\passive.gif" />
-      <Content Include="Resources\Music\soundtrack.mp3" />
-      <Content Include="Resources\Strikes\IronManAttack\IronManAttack.gif" />
-      <Content Include="Resources\Strikes\IronManAttack\IronManAttack2.gif" />
-      <Content Include="Resources\winlevel.jpg" />
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\Domain\Domain.csproj">
-        <Project>{3c4bbdcc-8530-4af9-9eda-49854c3a3d03}</Project>
-        <Name>Domain</Name>
-      </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-      <COMReference Include="MediaPlayer">
-        <Guid>{22D6F304-B0F6-11D0-94AB-0080C74C7E95}</Guid>
-        <VersionMajor>1</VersionMajor>
-        <VersionMinor>0</VersionMinor>
-        <Lcid>0</Lcid>
-        <WrapperTool>tlbimp</WrapperTool>
-        <Isolated>False</Isolated>
-        <EmbedInteropTypes>True</EmbedInteropTypes>
-      </COMReference>
-      <COMReference Include="WMPLib">
-        <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
-        <VersionMajor>1</VersionMajor>
-        <VersionMinor>0</VersionMinor>
-        <Lcid>0</Lcid>
-        <WrapperTool>tlbimp</WrapperTool>
-        <Isolated>False</Isolated>
-        <EmbedInteropTypes>True</EmbedInteropTypes>
-      </COMReference>
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0EBEEE35-9471-4103-A66A-058BC8776ABE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>App</RootNamespace>
+    <AssemblyName>App</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Graphics\Animation.cs" />
+    <Compile Include="Graphics\AnimationUtils.cs" />
+    <Compile Include="Graphics\DBLayout.cs" />
+    <Compile Include="Graphics\FormUtils.cs" />
+    <Compile Include="Graphics\GameWindow.cs" />
+    <Compile Include="Graphics\GameWindow.Designer.cs" />
+    <Compile Include="Graphics\MainMenu.cs" />
+    <Compile Include="Graphics\ResourceManager.cs" />
+    <Compile Include="Graphics\ShopForm.cs" />
+    <Compile Include="Graphics\VisualObject.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\coins.png" />
+    <Content Include="Resources\field.jpg" />
+    <Content Include="Resources\gameover.jpg" />
+    <Content Include="Resources\gem.gif" />
+    <Content Include="Resources\headquarters.jpg" />
+    <Content Include="Resources\Heroes\CaptainAmerica\Attack.gif" />
+    <Content Include="Resources\Heroes\CaptainAmerica\Passive.gif" />
+    <Content Include="Resources\Heroes\IronMan\attack.gif" />
+    <Content Include="Resources\Heroes\IronMan\passive.gif" />
+    <Content Include="Resources\Heroes\Vision\attack.gif" />
+    <Content Include="Resources\Heroes\Vision\passive.gif" />
+    <Content Include="Resources\main.jpg" />
+    <Content Include="Resources\Malefactors\Octavius\attack.gif" />
+    <Content Include="Resources\Malefactors\Octavius\move.gif" />
+    <Content Include="Resources\Malefactors\Octavius\passive.gif" />
+    <Content Include="Resources\Malefactors\Thanos\attack.gif" />
+    <Content Include="Resources\Malefactors\Thanos\move.gif" />
+    <Content Include="Resources\Malefactors\Thanos\passive.gif" />
+    <Content Include="Resources\Music\soundtrack.mp3" />
+    <Content Include="Resources\Strikes\IronManAttack\IronManAttack.gif" />
+    <Content Include="Resources\Strikes\IronManAttack\IronManAttack2.gif" />
+    <Content Include="Resources\winlevel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{3c4bbdcc-8530-4af9-9eda-49854c3a3d03}</Project>
+      <Name>Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MediaPlayer">
+      <Guid>{22D6F304-B0F6-11D0-94AB-0080C74C7E95}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="System_Windows_Forms">
+      <Guid>{215D64D2-031C-33C7-96E3-61794CD1EE61}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>4</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">
     </Target>
     <Target Name="AfterBuild">
     </Target>
     -->
-
 </Project>

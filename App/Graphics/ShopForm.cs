@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Domain.GameLogic;
-using Domain.Infrastructure;
+using Domain;
 using Domain.Units;
 
 namespace App
@@ -15,6 +14,7 @@ namespace App
         private ListBox heroesList;
         private ListBox heroParametersList;
         private Label heroLabel;
+        private Button upgradeButton;
         private Dictionary<string, DescribeObject> describeObjects;
         private DescribeObject currentDescribeObject;
         private HashSet<Characteristic> currentParameters;
@@ -79,11 +79,13 @@ namespace App
 
         private void SelectedHeroChanged(object sender, EventArgs e)
         {
-            currentDescribeObject = describeObjects[heroesList.SelectedItem.ToString()];
-            var visualObject = gameWindow.ResourceManager.VisualObjects[currentDescribeObject.Type.Name];
-            heroLabel.BackgroundImage = visualObject.PassiveImage;
-            heroLabel.BackgroundImageLayout = ImageLayout.Zoom;
-
+            if (heroesList.SelectedItem != null)
+            {
+                currentDescribeObject = describeObjects[heroesList.SelectedItem.ToString()];
+                var visualObject = gameWindow.ResourceManager.VisualObjects[currentDescribeObject.Type.Name];
+                heroLabel.BackgroundImage = visualObject.PassiveImage;
+                heroLabel.BackgroundImageLayout = ImageLayout.Zoom;
+            }
             UpdateParametersList();
         }
 
@@ -117,7 +119,7 @@ namespace App
             heroParametersList.SelectedIndexChanged += SelectedParameterChanged;
             centerPanel.Controls.Add(heroParametersList, 0, 1);
 
-            var upgradeButton = FormUtils.GetButtonWithTextAndFontColor(
+            upgradeButton = FormUtils.GetButtonWithTextAndFontColor(
                 "Upgrade", Color.Red, 30);
             centerPanel.Controls.Add(upgradeButton, 0, 2);
             upgradeButton.Click += UpgradeParameter;
@@ -139,15 +141,24 @@ namespace App
                 currentParameter.Upgrade(upgradeValue);
             }
             UpdateParametersList();
+            OnUpgradePriceChange();
         }
         
         private void SelectedParameterChanged(object sender, EventArgs e)
         {
-            var parameterName = heroParametersList.SelectedItem.ToString().Split(':')[0];
-            currentParameter =
-                   currentParameters.
-                   Where(p => p.Name == parameterName)
-                   .First();
+            if (heroParametersList.SelectedItem != null)
+            {
+                var parameterName = heroParametersList.SelectedItem.ToString().Split(':')[0];
+                currentParameter =
+                    currentParameters
+                        .First(p => p.Name == parameterName);
+                OnUpgradePriceChange();
+            }
+        }
+
+        private void OnUpgradePriceChange()
+        {
+            upgradeButton.Text = $"Upgrade: {currentParameter.UpgradePrice}";
         }
 
         private TableLayoutPanel GetRightPanel()
