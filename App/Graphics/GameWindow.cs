@@ -137,6 +137,24 @@ namespace App
         private void ProcessMouseClick(object sender, MouseEventArgs e)
         {
             var coordinatesInMap = CoordinatesInLayoutToMap(new Vector(e.X, e.Y));
+            var gemToDelete = new List<Gem>();
+            foreach (var gem in Game.CurrentLevel.Map.Gems)
+            {                
+                if ((gem.Position - coordinatesInMap).Length < 0.9)
+                {
+                    Game.CurrentLevel.GemCount += 25;
+                    gemToDelete.Add(gem);
+                }
+            }
+
+            foreach (var gem in gemToDelete)
+            {
+                Game.CurrentLevel.Map.Delete(gem);
+            }
+            
+            if (gemToDelete.Count > 0)
+                return;
+            
             if (IsDelete)
             {
                 foreach (var hero in Game.CurrentLevel.Map.GetHeroesFromLine((int)coordinatesInMap.Y))
@@ -160,21 +178,6 @@ namespace App
                     Game.CurrentLevel.Map.Add(heroToAdd);
                     Game.CurrentLevel.GemCount -= currentObjectToPurchase.Price;
                 }
-            }
-
-            var gemToDelete = new List<Gem>();
-            foreach (var gem in Game.CurrentLevel.Map.Gems)
-            {                
-                if ((gem.Position - coordinatesInMap).Length < 0.9)
-                {
-                    Game.CurrentLevel.GemCount += 25;
-                    gemToDelete.Add(gem);
-                }
-            }
-
-            foreach (var gem in gemToDelete)
-            {
-                Game.CurrentLevel.Map.Delete(gem);
             }
         }      
 
