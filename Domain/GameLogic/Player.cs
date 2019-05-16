@@ -14,7 +14,7 @@ namespace Domain.GameLogic
         private static Player instance = null;
         private Player()
         {
-            Coins = 100000;
+            Coins = 5000;
             Heroes = new HashSet<DescribeObject>
             {
                 new DescribeObject(typeof(IronMan), 100,new UnitParameters()

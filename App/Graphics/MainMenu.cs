@@ -67,7 +67,7 @@ namespace App
 
         private void NewGameClick(object sender, EventArgs e)
         {
-            gameForm.Game = GameFactory.GetStandardGame();
+            gameForm.Restart(sender, e);
             PlayClick(sender,  e);
             continueButton.Click += PlayClick;
         }
