@@ -34,13 +34,12 @@ namespace Domain.GameLogic
                 .AddMalefactorsOnRandomPositions(typeof(Octavius), 1)
                 .MakeWave(100);
             var wave2 = waveMaker
-                .AddMalefactorsOnRandomPositions(typeof(Octavius), 2)
-                .AddMalefactorsOnRandomPositions(typeof(Thanos), 1)
-                .MakeWave(200);
+                .AddMalefactorsOnRandomPositions(typeof(Octavius), 3)
+                .MakeWave(300);
             var wave3 = waveMaker
                 .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
-                .AddMalefactorsOnRandomPositions(typeof(Thanos), 2)
-                .MakeWave(400);
+                .AddMalefactorsOnRandomPositions(typeof(Thanos), 1)
+                .MakeWave(500);
             return new List<Wave> {wave1, wave2, wave3};
         }
     }
