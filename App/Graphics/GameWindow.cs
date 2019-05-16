@@ -156,7 +156,7 @@ namespace App
                 {
                     var ctor = currentObjectToPurchase.Type.GetConstructors()[0];
                     var heroToAdd = (IHero) ctor.Invoke(
-                        new object[] {currentObjectToPurchase.Parameters.Health, coordinatesInMap});
+                        new object[] {currentObjectToPurchase.Parameters, coordinatesInMap});
                     Game.CurrentLevel.Map.Add(heroToAdd);
                     Game.CurrentLevel.GemCount -= currentObjectToPurchase.Price;
                 }

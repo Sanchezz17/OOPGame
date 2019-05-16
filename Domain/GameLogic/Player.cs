@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Domain.Infrastructure;
 using Domain.Units;
 using Domain.Units.Heroes;
@@ -25,6 +26,13 @@ namespace Domain.GameLogic
                 new DescribeObject(typeof(CaptainAmerica), 50,
                 new UnitParameters().SetHealth(10000))
             };
+        }
+
+        public DescribeObject GetHeroParametres(Type heroType)
+        {
+            return Heroes
+                    .Where(c => c.Type == heroType)
+                    .First();
         }
 
         public static Player Instance

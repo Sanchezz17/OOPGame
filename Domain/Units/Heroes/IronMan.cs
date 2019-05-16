@@ -6,12 +6,16 @@ namespace Domain.Units.Heroes
 {
     public class IronMan : BaseHero, IAttacking
     {
-        public IronMan(int health, Vector position) :base(health, position, State.Idle, 15) {}
-        
+        public int Damage { get; private set; }
+        public IronMan(UnitParameters parametres, Vector position) : base(parametres, position, State.Idle, 15)
+        {
+            Damage = parametres.Damage;
+        }
+
         public bool IsAttackAvailable() => tickСontroller.Check();
         public IStrike Attack()
         {
-            return new IronManAttack(10, Position + Direction.Right.ToVector() / 2,
+            return new IronManAttack(Damage, Position + Direction.Right.ToVector() / 2,
                 Direction.Right);
         }
     }

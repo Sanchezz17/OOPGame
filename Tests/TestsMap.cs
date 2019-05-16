@@ -60,8 +60,9 @@ namespace Tests
         [TestCase(3, 1)]
         public void TestHeroOnLine(int x, int y)
         {
+            var player = Player.Instance;
             var map = new Map(5, 10);
-            var hero = new IronMan(1, new Vector(x, y));
+            var hero = new IronMan(player.GetHeroParametres(typeof(IronMan)).Parameters, new Vector(x, y));
             map.Add(hero);
             Assert.True(map.GetHeroesFromLine(y).Contains(hero));
             for (var i = 0; i < map.Height; i++)

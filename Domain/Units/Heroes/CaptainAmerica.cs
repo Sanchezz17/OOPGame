@@ -4,6 +4,6 @@ namespace Domain.Units.Heroes
 {
     public class CaptainAmerica : BaseHero
     {
-        public CaptainAmerica(int health, Vector position) : base(health, position, State.Idle, 0) {}
+        public CaptainAmerica(UnitParameters parametres, Vector position) : base(parametres, position, State.Idle, 0) { }
     }
 }

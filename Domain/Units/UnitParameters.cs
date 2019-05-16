@@ -78,7 +78,7 @@ namespace Domain.Units
             get
             {
                 return characteristics
-                    .Where(c => c.Name == " Damage")
+                    .Where(c => c.Name == "Damage")
                     .Select(c => c.Value)
                     .First();
             }
