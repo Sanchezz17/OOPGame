@@ -13,13 +13,14 @@ namespace Domain.GameLogic
 
         public static Game GetStandardGame()
         {
+            var player = Player.Instance;
             var levelMaker = new LevelMaker(Player.Instance.Heroes);
             var levels = new List<Level>
             {
                 levelMaker
-                    .AddHero(new IronMan(3000, new Vector(2, 2)))
-                    .AddHero(new IronMan(3000, new Vector(3, 4)))
-                    .AddHero(new Vision(1000, new Vector(1, 1)))
+                    .AddHero(new IronMan(player.GetHeroParametres(typeof(IronMan)).Parameters, new Vector(2, 2)))
+                    .AddHero(new IronMan(player.GetHeroParametres(typeof(IronMan)).Parameters, new Vector(3, 4)))
+                    .AddHero(new Vision(player.GetHeroParametres(typeof(Vision)).Parameters, new Vector(1, 1)))
                     .AddMalefactor(new Octavius(new Vector(5, 2)))
                     .AddWaves(GetFirstLevelWaves())
                     .MakeLevel()
