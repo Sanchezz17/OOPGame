@@ -226,12 +226,12 @@ namespace App
             return resultPanel;
         }
 
-        private void Restart(object sender, EventArgs e)
+        public void Restart(object sender, EventArgs e)
         {
             ResourceManager = new ResourceManager();
             Game = GameFactory.GetStandardGame();
             Game.Start();
-            mainPanel.Controls.Remove(gameOverPanel);  
+            mainPanel.Controls.RemoveAt(1); 
             mainPanel.Controls.Add(gamePanel, 0, 1);
         }
 
