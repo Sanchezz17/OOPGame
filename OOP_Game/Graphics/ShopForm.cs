@@ -16,8 +16,9 @@ namespace OOP_Game
         private Label heroLabel;
         private Dictionary<string, DescribeObject> describeObjects;
         private DescribeObject currentDescribeObject;
-        private Dictionary<string, int> currentParametersDictionary;
-        private string currentParameter;
+        private HashSet<Characteristic> currentParameters;
+        private Characteristic currentParameter;
+        private Label coinsLabel;
         public ShopForm(GameWindow gameWindow)
         {
             describeObjects = new Dictionary<string, DescribeObject>();
@@ -88,12 +89,15 @@ namespace OOP_Game
         private void UpdateParametersList()
         {
             heroParametersList.Items.Clear();
-            currentParametersDictionary = currentDescribeObject.Parameters.GetParametersDict();
-            heroParametersList.Items.AddRange(
-                currentParametersDictionary
-                    .Select((pair) => $"{pair.Key}: {pair.Value}")
-                    .Cast<object>()
-                    .ToArray());
+            if (currentDescribeObject != null)
+            {
+                currentParameters = currentDescribeObject.Parameters.characteristics;
+                heroParametersList.Items.AddRange(
+                    currentParameters
+                        .Select((characteristic) => $"{characteristic.Name}: {characteristic.Value}")
+                        .Cast<object>()
+                        .ToArray());
+            }
         }
 
         private TableLayoutPanel GetCenterPanel()
@@ -122,17 +126,27 @@ namespace OOP_Game
 
         private void UpgradeParameter(object sender, EventArgs e)
         {
-            //if (gameWindow.Game.Player.Coins > )
-            if (heroParametersList.SelectedItem != null)
-                currentParameter = heroParametersList.SelectedItem.ToString().Split(':')[0];
-            currentParametersDictionary[currentParameter] =
-                (int)(currentParametersDictionary[currentParameter] * 1.1);
+            if (currentDescribeObject != null &&
+                currentParameter != null && 
+                gameWindow.Game.Player.Coins >= currentParameter.UpgradePrice)
+            {
+                gameWindow.Game.Player.Coins -= currentParameter.UpgradePrice;
+                coinsLabel.Text = gameWindow.Game.Player.Coins.ToString();
+                var upgradeValue = (int)(currentParameter.Value * 0.1);
+                if (currentParameter.Name == "Reload")
+                    upgradeValue *= -1;
+                currentParameter.Upgrade(upgradeValue);
+            }
             UpdateParametersList();
         }
         
         private void SelectedParameterChanged(object sender, EventArgs e)
         {
-            
+            var parameterName = heroParametersList.SelectedItem.ToString().Split(':')[0];
+            currentParameter =
+                   currentParameters.
+                   Where(p => p.Name == parameterName)
+                   .First();
         }
 
         private TableLayoutPanel GetRightPanel()
@@ -154,7 +168,7 @@ namespace OOP_Game
             coinsImage.BorderStyle = BorderStyle.None;
             coinsTable.Controls.Add(coinsImage, 0, 0);
 
-            var coinsLabel = FormUtils.GetLabelWithTextAndFontColor(
+            coinsLabel = FormUtils.GetLabelWithTextAndFontColor(
                 gameWindow.Game.Player.Coins.ToString(), Color.Black, 15);
             coinsLabel.BorderStyle = BorderStyle.None;
             coinsTable.Controls.Add(coinsLabel, 0, 1);

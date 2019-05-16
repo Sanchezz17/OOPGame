@@ -12,6 +12,7 @@ namespace OOP_Game.GameLogic
         private static Player instance = null;
         private Player()
         {
+            Coins = 100000;
             Heroes = new HashSet<DescribeObject>
             {
                 new DescribeObject(typeof(IronMan), 100,new UnitParameters()

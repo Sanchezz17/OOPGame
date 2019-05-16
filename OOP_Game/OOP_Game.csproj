@@ -55,7 +55,9 @@
     <Compile Include="GameLogic\Wave.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\AnimationUtils.cs" />
-    <Compile Include="Graphics\DBLayout.cs" />
+    <Compile Include="Graphics\DBLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Graphics\FormUtils.cs" />
     <Compile Include="Graphics\GameWindow.cs">
       <SubType>Form</SubType>
@@ -63,14 +65,18 @@
     <Compile Include="Graphics\GameWindow.Designer.cs">
       <DependentUpon>GameWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Graphics\MainMenu.cs" />
+    <Compile Include="Graphics\MainMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GameLogic\Game.cs" />
     <Compile Include="GameLogic\GameFactory.cs" />
     <Compile Include="GameLogic\Level.cs" />
     <Compile Include="GameLogic\Map.cs" />
     <Compile Include="GameLogic\Player.cs" />
     <Compile Include="Graphics\ResourceManager.cs" />
-    <Compile Include="Graphics\ShopForm.cs" />
+    <Compile Include="Graphics\ShopForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Graphics\VisualObject.cs" />
     <Compile Include="Infrastructure\DescribeObject.cs" />
     <Compile Include="Infrastructure\Direction.cs" />
@@ -148,6 +154,9 @@
     <Content Include="Resources\Malefactors\Thanos\passive.gif" />
     <Content Include="Resources\Strikes\IronManAttack\IronManAttack.gif" />
     <Content Include="Resources\winlevel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
