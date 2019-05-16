@@ -138,6 +138,7 @@
     <Content Include="Resources\coins.png" />
     <Content Include="Resources\field.jpg" />
     <Content Include="Resources\gameover.jpg" />
+    <Content Include="Resources\gem.gif" />
     <Content Include="Resources\headquarters.jpg" />
     <Content Include="Resources\Heroes\CaptainAmerica\Attack.gif" />
     <Content Include="Resources\Heroes\CaptainAmerica\Passive.gif" />
@@ -152,11 +153,20 @@
     <Content Include="Resources\Malefactors\Thanos\attack.gif" />
     <Content Include="Resources\Malefactors\Thanos\move.gif" />
     <Content Include="Resources\Malefactors\Thanos\passive.gif" />
+    <Content Include="Resources\Music\soundtrack.mp3" />
     <Content Include="Resources\Strikes\IronManAttack\IronManAttack.gif" />
     <Content Include="Resources\winlevel.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

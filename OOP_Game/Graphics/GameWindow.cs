@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using OOP_Game.GameLogic;
 using OOP_Game.Infrastructure;
 using OOP_Game.Units;
+using WMPLib;
 using Size = System.Drawing.Size;
 
 namespace OOP_Game
@@ -26,8 +27,10 @@ namespace OOP_Game
         private Label currentLevelLabel;
         private Label scoreLabel;
         private TableLayoutPanel purchasePanel;
-        private DescribeObject currentObjectToPurchase = null;
+        private DescribeObject currentObjectToPurchase;
+        private Button currentPurchaseButton;
         private bool IsDelete;
+        private WindowsMediaPlayer audioPlayer;
         
         public GameWindow(Game game, ResourceManager resourceManager)
         {
@@ -46,6 +49,16 @@ namespace OOP_Game
             ShopForm = new ShopForm(this);
             Shown += SwitchToMenu;
             InitializeGameWindow();
+            audioPlayer = new WindowsMediaPlayer();
+            audioPlayer.URL = Environment.CurrentDirectory + @"\Resources\Music\soundtrack.mp3";
+        }
+
+        public void PlaySoundrack()
+        {
+            audioPlayer.settings.volume = 100; // меняя значение можно регулировать громкость
+            audioPlayer.controls.play(); // Старт
+            //audioPlayer.controls.stop(); // Стоп
+            //audioPlayer.close();
         }
 
         private void InitializeGameWindow()
@@ -65,7 +78,7 @@ namespace OOP_Game
                 Color.Black, 13);
             topPanel.Controls.Add(currentLevelLabel, 0, 0);
 
-            scoreLabel = FormUtils.GetLabelWithTextAndFontColor();
+            scoreLabel = FormUtils.GetLabelWithTextAndFontColor("", Color.Black);
             scoreLabel.BackgroundImage = ResourceManager.VisualObjects["Gem"].PassiveImage;
             scoreLabel.BackgroundImageLayout = ImageLayout.Zoom;
             scoreLabel.TextAlign = ContentAlignment.BottomCenter;
@@ -76,7 +89,7 @@ namespace OOP_Game
             topPanel.Controls.Add(purchasePanel, 2, 0);
 
             var deleteHeroButton = FormUtils.GetButtonWithTextAndFontColor(
-                "Удалить героя", Color.Gold, 13);
+                "Удалить героя", Color.Teal, 13);
             deleteHeroButton.Margin = Padding.Empty;
             deleteHeroButton.Click += DeleteHero;
             topPanel.Controls.Add(deleteHeroButton, 3, 0);
@@ -106,7 +119,17 @@ namespace OOP_Game
                 heroPurchase.BackgroundImageLayout = ImageLayout.Zoom;
                 heroPurchase.TextAlign = ContentAlignment.BottomCenter;
                 heroPurchase.Margin = Padding.Empty;
-                heroPurchase.Click += (sender, e) => currentObjectToPurchase = hero;
+                heroPurchase.FlatStyle = FlatStyle.Flat;
+                heroPurchase.FlatAppearance.BorderColor = Color.Blue;
+                heroPurchase.FlatAppearance.BorderSize = 3;
+                heroPurchase.Click += (sender, e) =>
+                {
+                    if (currentPurchaseButton != null)
+                        currentPurchaseButton.FlatAppearance.BorderColor = Color.Blue;
+                    currentPurchaseButton = heroPurchase;
+                    currentPurchaseButton.FlatAppearance.BorderColor = Color.Green;
+                    currentObjectToPurchase = hero;
+                };
                 purchasePanel.Controls.Add(heroPurchase, i++, 0);
             }
         }       
@@ -124,17 +147,19 @@ namespace OOP_Game
                 IsDelete = false;
                 return;
             }
-            
-            if (currentObjectToPurchase != null 
-                && Game.CurrentLevel.GemCount >= currentObjectToPurchase.Price
-                && !Game.CurrentLevel.Map.Heroes.Any(hero => (coordinatesInMap - hero.Position).Length < 0.1))
+
+            if (currentObjectToPurchase != null)
             {
-                var ctor = currentObjectToPurchase.Type.GetConstructors()[0];
-                var heroToAdd = (IHero)ctor.Invoke(
-                    new object[] {currentObjectToPurchase.Parameters.Health, coordinatesInMap});
-                Game.CurrentLevel.Map.Add(heroToAdd);
-                Game.CurrentLevel.GemCount -= currentObjectToPurchase.Price;
-                currentObjectToPurchase = null;
+                if (Game.CurrentLevel.GemCount >= currentObjectToPurchase.Price
+                    && !Game.CurrentLevel.Map.Heroes
+                        .Any(hero => (coordinatesInMap - hero.Position).Length < 0.1))
+                {
+                    var ctor = currentObjectToPurchase.Type.GetConstructors()[0];
+                    var heroToAdd = (IHero) ctor.Invoke(
+                        new object[] {currentObjectToPurchase.Parameters.Health, coordinatesInMap});
+                    Game.CurrentLevel.Map.Add(heroToAdd);
+                    Game.CurrentLevel.GemCount -= currentObjectToPurchase.Price;
+                }
             }
 
             var gemToDelete = new List<Gem>();
@@ -214,6 +239,7 @@ namespace OOP_Game
 
         private void SwitchToMenu(object sender, EventArgs e)
         {
+            audioPlayer.controls.stop();
             Game.Pause();
             Hide();
             MainMenu.Location = Location;
