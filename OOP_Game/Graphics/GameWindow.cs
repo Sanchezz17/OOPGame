@@ -65,7 +65,7 @@ namespace OOP_Game
                 Color.Black, 13);
             topPanel.Controls.Add(currentLevelLabel, 0, 0);
 
-            scoreLabel = FormUtils.GetLabelWithTextAndFontColor("", Color.Black, 15);
+            scoreLabel = FormUtils.GetLabelWithTextAndFontColor();
             scoreLabel.BackgroundImage = ResourceManager.VisualObjects["Gem"].PassiveImage;
             scoreLabel.BackgroundImageLayout = ImageLayout.Zoom;
             scoreLabel.TextAlign = ContentAlignment.BottomCenter;

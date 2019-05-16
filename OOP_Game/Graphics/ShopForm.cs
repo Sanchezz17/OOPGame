@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using OOP_Game.GameLogic;
 using OOP_Game.Infrastructure;
 
 namespace OOP_Game
@@ -14,6 +15,9 @@ namespace OOP_Game
         private ListBox heroParametersList;
         private Label heroLabel;
         private Dictionary<string, DescribeObject> describeObjects;
+        private DescribeObject currentDescribeObject;
+        private Dictionary<string, int> currentParametersDictionary;
+        private string currentParameter;
         public ShopForm(GameWindow gameWindow)
         {
             describeObjects = new Dictionary<string, DescribeObject>();
@@ -73,12 +77,25 @@ namespace OOP_Game
 
         private void SelectedHeroChanged(object sender, EventArgs e)
         {
-            var describeObject = describeObjects[heroesList.SelectedItem.ToString()];
-            var visualObject = gameWindow.ResourceManager.VisualObjects[describeObject.Type.Name];
+            currentDescribeObject = describeObjects[heroesList.SelectedItem.ToString()];
+            var visualObject = gameWindow.ResourceManager.VisualObjects[currentDescribeObject.Type.Name];
             heroLabel.BackgroundImage = visualObject.PassiveImage;
             heroLabel.BackgroundImageLayout = ImageLayout.Zoom;
+
+            UpdateParametersList();
         }
-        
+
+        private void UpdateParametersList()
+        {
+            heroParametersList.Items.Clear();
+            currentParametersDictionary = currentDescribeObject.Parameters.GetParametersDict();
+            heroParametersList.Items.AddRange(
+                currentParametersDictionary
+                    .Select((pair) => $"{pair.Key}: {pair.Value}")
+                    .Cast<object>()
+                    .ToArray());
+        }
+
         private TableLayoutPanel GetCenterPanel()
         {
             var centerPanel = FormUtils.GetTableLayoutPanel(3, 1);
@@ -89,22 +106,41 @@ namespace OOP_Game
             centerPanel.Controls.Add(heroLabel, 0, 0);
             
             heroParametersList = new ListBox();
+            heroParametersList.ForeColor = Color.Black;
+            heroParametersList.Font = new Font("Arial", 30);
             FormUtils.SetAnchorForAllSides(heroParametersList);
+            heroParametersList.SelectedIndexChanged += SelectedParameterChanged;
             centerPanel.Controls.Add(heroParametersList, 0, 1);
 
             var upgradeButton = FormUtils.GetButtonWithTextAndFontColor(
                 "Upgrade", Color.Red, 30);
             centerPanel.Controls.Add(upgradeButton, 0, 2);
-            // upgradeButton.Click += событие улучшения
+            upgradeButton.Click += UpgradeParameter;
 
             return centerPanel;
         }
+
+        private void UpgradeParameter(object sender, EventArgs e)
+        {
+            //if (gameWindow.Game.Player.Coins > )
+            if (heroParametersList.SelectedItem != null)
+                currentParameter = heroParametersList.SelectedItem.ToString().Split(':')[0];
+            currentParametersDictionary[currentParameter] =
+                (int)(currentParametersDictionary[currentParameter] * 1.1);
+            UpdateParametersList();
+        }
         
+        private void SelectedParameterChanged(object sender, EventArgs e)
+        {
+            
+        }
+
         private TableLayoutPanel GetRightPanel()
         {
             var rightPanel = FormUtils.GetTableLayoutPanel(4, 1);
 
-            var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor("В главное меню", Color.Blue, 20);
+            var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor(
+                "В главное меню", Color.Blue, 20);
             exitToMenuButton.Click += SwitchToMenu;
             rightPanel.Controls.Add(exitToMenuButton, 0, 0);
 
@@ -112,7 +148,7 @@ namespace OOP_Game
             FormUtils.SplitRowsByPercentages(coinsTable.RowStyles, new float[]{80F, 20F});
             rightPanel.Controls.Add(coinsTable, 0, 3);
 
-            var coinsImage = FormUtils.GetLabelWithTextAndFontColor("", Color.Transparent, 30);
+            var coinsImage = FormUtils.GetLabelWithTextAndFontColor();
             coinsImage.BackgroundImage = gameWindow.ResourceManager.VisualObjects["Coins"].PassiveImage;
             coinsImage.BackgroundImageLayout = ImageLayout.Zoom;
             coinsImage.BorderStyle = BorderStyle.None;

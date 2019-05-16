@@ -1,6 +1,7 @@
 ﻿using OOP_Game.Units;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Windows;
 
 namespace OOP_Game.Infrastructure
@@ -33,8 +34,7 @@ namespace OOP_Game.Infrastructure
             {
                 if (parametres.ContainsKey("Health"))
                     return parametres["Health"];
-                else
-                    return null;
+                return null;
             }
         }
 
@@ -44,8 +44,7 @@ namespace OOP_Game.Infrastructure
             {
                 if (parametres.ContainsKey("Damage"))
                     return parametres["Damage"];
-                else
-                    return null;
+                return null;
             }
         }
 
@@ -55,9 +54,13 @@ namespace OOP_Game.Infrastructure
             {
                 if (parametres.ContainsKey("Reload"))
                     return parametres["Reload"];
-                else
-                    return null;
+                return null;
             }
+        }
+
+        public Dictionary<string, int> GetParametersDict()
+        {
+            return parametres;
         }
     }
 }
