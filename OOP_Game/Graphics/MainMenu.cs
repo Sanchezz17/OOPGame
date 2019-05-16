@@ -1,8 +1,6 @@
 using System;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Net;
-using System.Net.Mime;
 using OOP_Game.GameLogic;
 
 namespace OOP_Game
@@ -55,6 +53,7 @@ namespace OOP_Game
             gameForm.Size = Size;
             gameForm.Show();
             gameForm.Game.Start();
+            gameForm.PlaySoundrack();
             Hide();
         }
 
