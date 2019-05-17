@@ -30,6 +30,7 @@ namespace App
             Text = "Shop";
             Size = gameWindow.Size;
             Location = gameWindow.Location;
+            Closed += OnExit;
             InitializeShopForm();
         }
 
@@ -130,18 +131,24 @@ namespace App
         private void UpgradeParameter(object sender, EventArgs e)
         {
             if (currentDescribeObject != null &&
-                currentParameter != null && 
-                gameWindow.Game.Player.Coins >= currentParameter.UpgradePrice)
+                currentParameter != null)
             {
-                gameWindow.Game.Player.Coins -= currentParameter.UpgradePrice;
-                coinsLabel.Text = gameWindow.Game.Player.Coins.ToString();
-                var upgradeValue = (int)(currentParameter.Value * 0.1);
-                if (currentParameter.Name == "Reload")
-                    upgradeValue *= -1;
-                currentParameter.Upgrade(upgradeValue);
+                if (gameWindow.Game.Player.Coins >= currentParameter.UpgradePrice)
+                {
+                    gameWindow.Game.Player.Coins -= currentParameter.UpgradePrice;
+                    coinsLabel.Text = gameWindow.Game.Player.Coins.ToString();
+                    var upgradeValue = (int) (currentParameter.Value * 0.1);
+                    if (currentParameter.Name == "Reload")
+                        upgradeValue *= -1;
+                    currentParameter.Upgrade(upgradeValue);
+                    UpdateParametersList();
+                    OnUpgradePriceChange();
+                }
+                else
+                {
+                    MessageBox.Show("Недостаточно монет");
+                }
             }
-            UpdateParametersList();
-            OnUpgradePriceChange();
         }
         
         private void SelectedParameterChanged(object sender, EventArgs e)
@@ -193,6 +200,11 @@ namespace App
             gameWindow.MainMenu.Size = Size;
             gameWindow.MainMenu.Location = Location;
             gameWindow.MainMenu.Show();
+        }
+        
+        private void OnExit(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
