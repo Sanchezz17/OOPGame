@@ -11,6 +11,7 @@ namespace Domain.GameLogic
         private readonly List<Level> Levels;
         public Level CurrentLevel => Levels[CurrentLevelNumber];
         public bool GameIsOver { get; private set; }
+        public bool GameIsWin { get; private set; }
         public Player Player { get; }
         public Game(List<Level> levels)
         {
@@ -130,7 +131,11 @@ namespace Domain.GameLogic
                     objectsForDelete.Add(gameObject);
             }
             foreach (var gameObject in objectsForDelete)
+            {
+                if (gameObject is BaseMalefactor malefactor)
+                    Player.Coins += malefactor.Cost;
                 CurrentLevel.Map.Delete(gameObject);
+            }
         }
 
         private void ResetStates()
@@ -139,6 +144,16 @@ namespace Domain.GameLogic
                 hero.State = hero is IGemManufacturer ? State.Produce : State.Idle;
             foreach (var malefactor in CurrentLevel.Map.Malefactors)
                 malefactor.State = State.Moves;
+        }
+
+        public void ToNextLevel()
+        {
+            if (CurrentLevelNumber == Levels.Count - 1)
+            {
+                GameIsWin = true;
+                return;
+            }
+            CurrentLevelNumber++;
         }
     }
 }

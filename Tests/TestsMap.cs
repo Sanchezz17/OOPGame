@@ -62,7 +62,7 @@ namespace Tests
         {
             var player = Player.Instance;
             var map = new Map(5, 10);
-            var hero = new IronMan(player.GetHeroParametres(typeof(IronMan)).Parameters, new Vector(x, y));
+            var hero = new IronMan(player.GetHeroParameters(typeof(IronMan)).Parameters, new Vector(x, y));
             map.Add(hero);
             Assert.True(map.GetHeroesFromLine(y).Contains(hero));
             for (var i = 0; i < map.Height; i++)

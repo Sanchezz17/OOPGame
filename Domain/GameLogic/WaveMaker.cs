@@ -10,7 +10,7 @@ namespace Domain.Infrastructure
     {
         private List<IMalefactor> Malefactors { get; }
         private readonly int xPrecision = 2;
-        private readonly int yPrecision = 4;
+        private readonly int yPrecision = 5;
         private readonly Random random;
 
         public WaveMaker()
@@ -24,7 +24,7 @@ namespace Domain.Infrastructure
             for(var i = 0; i < count; i++)
             {
                 var x = random.NextDouble() * xPrecision + 9;
-                var y = random.Next(0, yPrecision);
+                var y = (int)(random.NextDouble() * yPrecision);
                 var ctor = malefactorType.GetConstructor(new Type[] { typeof(Vector) });
                 var malefactor = (IMalefactor)ctor.Invoke(new object[] { new Vector(x, y) });
                 Malefactors.Add(malefactor);

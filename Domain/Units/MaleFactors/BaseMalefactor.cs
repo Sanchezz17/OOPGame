@@ -11,9 +11,10 @@ namespace Domain.Units
         public bool IsDead { get; private set; }
         public Direction Direction { get; }
         public double Speed { get; }
+        public int Cost { get; }
         private TickСontroller tickСontroller;
 
-        protected BaseMalefactor(int health, Vector position, State state, double speed, int countTick)
+        protected BaseMalefactor(int health, Vector position, State state, double speed, int countTick, int cost)
         {
             Health = health;
             Position = position;
@@ -21,6 +22,7 @@ namespace Domain.Units
             IsDead = false;
             Direction = Direction.Left;
             Speed = speed;
+            Cost = cost;
             tickСontroller = new TickСontroller(countTick);
         }
         

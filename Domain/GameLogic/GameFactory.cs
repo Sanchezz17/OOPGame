@@ -18,11 +18,13 @@ namespace Domain.GameLogic
             var levels = new List<Level>
             {
                 levelMaker
-                    .AddHero(new IronMan(player.GetHeroParametres(typeof(IronMan)).Parameters, new Vector(2, 2)))
-                    .AddHero(new IronMan(player.GetHeroParametres(typeof(IronMan)).Parameters, new Vector(3, 4)))
-                    .AddHero(new Vision(player.GetHeroParametres(typeof(Vision)).Parameters, new Vector(1, 1)))
-                    .AddMalefactor(new Octavius(new Vector(5, 2)))
                     .AddWaves(GetFirstLevelWaves())
+                    .MakeLevel(),
+                levelMaker
+                    .AddWaves(GetSecondLevelWaves())
+                    .MakeLevel(),
+                levelMaker
+                    .AddWaves(GetThirdLevelWaves())
                     .MakeLevel()
             };
             return new Game(levels);
@@ -32,15 +34,50 @@ namespace Domain.GameLogic
         {
             var wave1 = waveMaker
                 .AddMalefactorsOnRandomPositions(typeof(Octavius), 1)
-                .MakeWave(100);
+                .MakeWave(200);
             var wave2 = waveMaker
                 .AddMalefactorsOnRandomPositions(typeof(Octavius), 3)
-                .MakeWave(300);
+                .MakeWave(600);
             var wave3 = waveMaker
                 .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
                 .AddMalefactorsOnRandomPositions(typeof(Thanos), 1)
-                .MakeWave(500);
+                .MakeWave(1000);
             return new List<Wave> {wave1, wave2, wave3};
+        }
+        
+        private static List<Wave> GetSecondLevelWaves()
+        {
+            return new List<Wave>()
+            {
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 1)
+                    .MakeWave(200),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 3)
+                    .MakeWave(400),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
+                    .AddMalefactorsOnRandomPositions(typeof(Thanos), 1)
+                    .MakeWave(900)
+            };
+        }
+        
+        private static List<Wave> GetThirdLevelWaves()
+        {
+            return new List<Wave>()
+            {
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 3)
+                    .MakeWave(200),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 2)
+                    .AddMalefactorsOnRandomPositions(typeof(Thanos), 1)
+                    .MakeWave(400),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
+                    .AddMalefactorsOnRandomPositions(typeof(Thanos), 2)
+                    .MakeWave(1000)
+            };
         }
     }
 }

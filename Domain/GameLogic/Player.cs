@@ -14,7 +14,7 @@ namespace Domain.GameLogic
         private static Player instance = null;
         private Player()
         {
-            Coins = 5000;
+            Coins = 100;
             Heroes = new HashSet<DescribeObject>
             {
                 new DescribeObject(typeof(IronMan), 100,new UnitParameters()
@@ -28,23 +28,12 @@ namespace Domain.GameLogic
             };
         }
 
-        public DescribeObject GetHeroParametres(Type heroType)
+        public DescribeObject GetHeroParameters(Type heroType)
         {
             return Heroes
-                    .Where(c => c.Type == heroType)
-                    .First();
+                    .First(c => c.Type == heroType);
         }
 
-        public static Player Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new Player();
-                }
-                return instance;
-            }
-        }
+        public static Player Instance => instance ?? (instance = new Player());
     }
 }

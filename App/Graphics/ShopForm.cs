@@ -128,6 +128,11 @@ namespace App
             return centerPanel;
         }
 
+        public void UpdateCoinsLabel()
+        {
+            coinsLabel.Text = gameWindow.Game.Player.Coins.ToString();
+        }
+
         private void UpgradeParameter(object sender, EventArgs e)
         {
             if (currentDescribeObject != null &&
@@ -136,7 +141,7 @@ namespace App
                 if (gameWindow.Game.Player.Coins >= currentParameter.UpgradePrice)
                 {
                     gameWindow.Game.Player.Coins -= currentParameter.UpgradePrice;
-                    coinsLabel.Text = gameWindow.Game.Player.Coins.ToString();
+                    UpdateCoinsLabel();
                     var upgradeValue = (int) (currentParameter.Value * 0.1);
                     if (currentParameter.Name == "Reload")
                         upgradeValue *= -1;

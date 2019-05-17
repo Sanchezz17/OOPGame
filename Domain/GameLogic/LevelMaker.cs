@@ -10,8 +10,15 @@ namespace Domain.Infrastructure
     public class LevelMaker
     {
         private Level level;
+        private HashSet<DescribeObject> availableHeroes;
 
         public LevelMaker(HashSet<DescribeObject> availableHeroes)
+        {
+            this.availableHeroes = availableHeroes;
+            ResetLevel();
+        }
+
+        private void ResetLevel()
         {
             level = new Level(
                 new Map(5, 11), availableHeroes);
@@ -43,7 +50,9 @@ namespace Domain.Infrastructure
 
         public Level MakeLevel()
         {
-            return level;
+            var copy = level;
+            ResetLevel();
+            return copy;
         }
     }
 }

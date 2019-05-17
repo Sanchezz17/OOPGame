@@ -17,13 +17,14 @@ namespace App
         public Game Game { get; set; }
         public ResourceManager ResourceManager { get; set; }
         public readonly Form MainMenu;
-        public readonly Form ShopForm;
+        public readonly ShopForm ShopForm;
         
         private TableLayoutPanel mainPanel;
         private TableLayoutPanel gamePanel;
         private TableLayoutPanel fieldPanel;
         private TableLayoutPanel gameOverPanel;
         private TableLayoutPanel levelWinPanel;
+        private TableLayoutPanel gameWinPanel;
         private Label currentLevelLabel;
         private Label scoreLabel;
         private TableLayoutPanel purchasePanel;
@@ -55,10 +56,8 @@ namespace App
 
         public void PlaySoundrack()
         {
-            audioPlayer.settings.volume = 100; // меняя значение можно регулировать громкость
-            audioPlayer.controls.play(); // Старт
-            //audioPlayer.controls.stop(); // Стоп
-            //audioPlayer.close();
+            audioPlayer.settings.volume = 100; 
+            audioPlayer.controls.play();
         }
 
         private void InitializeGameWindow()
@@ -207,8 +206,12 @@ namespace App
             
             gamePanel.Controls.Add(fieldPanel, 1, 0);
 
-            gameOverPanel = GetPanelEndGame("gameover", "Начать заново", Restart);
-            levelWinPanel = GetPanelEndGame("winlevel", "Следующий уровень", ToNextLevel);
+            gameOverPanel = GetPanelEndGame("gameover.jpg", "Начать заново", Restart);
+            levelWinPanel = GetPanelEndGame("winlevel.jpg", "Следующий уровень", ToNextLevel);
+            gameWinPanel = GetPanelEndGame("wingame.png", "Начать заново", Restart);
+            var gameWinLabel = FormUtils.GetLabelWithTextAndFontColor("Победа!", Color.DarkBlue, 30);
+            gameWinLabel.BorderStyle = BorderStyle.None;
+            gameWinPanel.Controls.Add(gameWinLabel, 1, 1);
             return gamePanel;
         }
         
@@ -216,7 +219,7 @@ namespace App
         {
             var resultPanel = FormUtils.GetTableLayoutPanel(5, 3);
             resultPanel.BackgroundImage = Image.FromFile(
-                Environment.CurrentDirectory + $@"\Resources\{imageName}.jpg");
+                Environment.CurrentDirectory + $@"\Resources\{imageName}");
             resultPanel.BackgroundImageLayout = ImageLayout.Stretch;
             resultPanel.Margin = Padding.Empty;
             var button = FormUtils.GetButtonWithTextAndFontColor(
@@ -237,7 +240,10 @@ namespace App
 
         private void ToNextLevel(object sender, EventArgs e)
         {
-            //переход на следующий уровень
+            Game.ToNextLevel();
+            mainPanel.Controls.RemoveAt(1); 
+            mainPanel.Controls.Add(gamePanel, 0, 1);
+            currentLevelLabel.Text = "Уровень " + (Game.CurrentLevelNumber + 1).ToString();
         }
 
         private void SwitchToMenu(object sender, EventArgs e)
@@ -299,6 +305,12 @@ namespace App
 
         private void DrawMap(object sender, PaintEventArgs e)
         {
+            if (Game.GameIsWin)
+            {
+                CheckPanelAlreadySet(gameWinPanel);
+                return;
+            }
+            
             if (Game.GameIsOver)
             {
                 CheckPanelAlreadySet(gameOverPanel);
@@ -307,6 +319,7 @@ namespace App
             
             if (Game.CurrentLevel.IsWin)
             {
+                ShopForm.UpdateCoinsLabel();
                 CheckPanelAlreadySet(levelWinPanel);
                 return;
             }
