@@ -76,7 +76,7 @@
     <Content Include="Resources\Music\soundtrack.mp3" />
     <Content Include="Resources\Strikes\IronManAttack\IronManAttack.gif" />
     <Content Include="Resources\Strikes\IronManAttack\IronManAttack2.gif" />
-    <Content Include="Resources\wingame.png" />
+    <Content Include="Resources\wingame.jpg" />
     <Content Include="Resources\winlevel.jpg" />
   </ItemGroup>
   <ItemGroup>
