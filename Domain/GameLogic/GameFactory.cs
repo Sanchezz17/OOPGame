@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Windows;
 using Domain.Infrastructure;
 using Domain.Units;
-using Domain.Units.Heroes;
 using Domain.Units.OOP_Game.Units.MaleFactors;
 
 namespace Domain.GameLogic
@@ -25,6 +23,12 @@ namespace Domain.GameLogic
                     .MakeLevel(),
                 levelMaker
                     .AddWaves(GetThirdLevelWaves())
+                    .MakeLevel(),
+                levelMaker
+                    .AddWaves(GetFourthLevelWaves())
+                    .MakeLevel(),
+                levelMaker
+                    .AddWaves(GetFifthLevelWaves())
                     .MakeLevel()
             };
             return new Game(levels);
@@ -32,17 +36,19 @@ namespace Domain.GameLogic
 
         private static List<Wave> GetFirstLevelWaves()
         {
-            var wave1 = waveMaker
-                .AddMalefactorsOnRandomPositions(typeof(Octavius), 1)
-                .MakeWave(200);
-            var wave2 = waveMaker
-                .AddMalefactorsOnRandomPositions(typeof(Octavius), 3)
-                .MakeWave(600);
-            var wave3 = waveMaker
-                .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
-                .AddMalefactorsOnRandomPositions(typeof(Thanos), 1)
-                .MakeWave(1000);
-            return new List<Wave> {wave1, wave2, wave3};
+            return new List<Wave>()
+            {
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 1)
+                    .MakeWave(200),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 3)
+                    .MakeWave(600),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
+                    .AddMalefactorsOnRandomPositions(typeof(Thanos), 1)
+                    .MakeWave(1000)
+            };
         }
         
         private static List<Wave> GetSecondLevelWaves()
@@ -77,6 +83,50 @@ namespace Domain.GameLogic
                     .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
                     .AddMalefactorsOnRandomPositions(typeof(Thanos), 2)
                     .MakeWave(1000)
+            };
+        }
+        
+        private static List<Wave> GetFourthLevelWaves()
+        {
+            return new List<Wave>()
+            {
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
+                    .MakeWave(300),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 2)
+                    .AddMalefactorsOnRandomPositions(typeof(Thanos), 1)
+                    .MakeWave(500),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
+                    .AddMalefactorsOnRandomPositions(typeof(Thanos), 2)
+                    .MakeWave(900),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
+                    .AddMalefactorsOnRandomPositions(typeof(Thanos), 5)
+                    .MakeWave(1400)
+            };
+        }
+        
+        private static List<Wave> GetFifthLevelWaves()
+        {
+            return new List<Wave>()
+            {
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 7)
+                    .MakeWave(350),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 5)
+                    .AddMalefactorsOnRandomPositions(typeof(Thanos), 2)
+                    .MakeWave(500),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 7)
+                    .AddMalefactorsOnRandomPositions(typeof(Thanos), 3)
+                    .MakeWave(900),
+                waveMaker
+                    .AddMalefactorsOnRandomPositions(typeof(Octavius), 9)
+                    .AddMalefactorsOnRandomPositions(typeof(Thanos), 5)
+                    .MakeWave(1400)
             };
         }
     }

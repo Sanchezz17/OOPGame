@@ -209,7 +209,7 @@ namespace App
             gameOverPanel = GetPanelEndGame("gameover.jpg", "Начать заново", Restart);
             levelWinPanel = GetPanelEndGame("winlevel.jpg", "Следующий уровень", ToNextLevel);
             gameWinPanel = GetPanelEndGame("wingame.png", "Начать заново", Restart);
-            var gameWinLabel = FormUtils.GetLabelWithTextAndFontColor("Победа!", Color.DarkBlue, 30);
+            var gameWinLabel = FormUtils.GetLabelWithTextAndFontColor();
             gameWinLabel.BorderStyle = BorderStyle.None;
             gameWinPanel.Controls.Add(gameWinLabel, 1, 1);
             return gamePanel;
