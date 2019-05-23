@@ -19,5 +19,5 @@ https://github.com/Sanchezz17/OOPGame/tree/master/Domain
  - удобное API для создания уровней (WaveMaker, LevelMaker)
  
  
-Скачать рабочую версию играы (в формате .exe):
+Скачать рабочую версию игры (в формате .exe):
 https://www.dropbox.com/s/1ajx53hptlgfmeg/Plants%20VS%20Zombies%20Marvel%20Edition.exe?dl=0
