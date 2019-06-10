@@ -24,4 +24,4 @@ https://github.com/Sanchezz17/OOPGame/blob/master/App/Program.cs
 
 
 Скачать рабочую версию игры (в формате .exe):
-bit.ly/PvZ_MarvelEdition
+https://bit.ly/PvZ_MarvelEdition
