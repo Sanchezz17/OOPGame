@@ -24,7 +24,6 @@ namespace Domain.Infrastructure
             for(var i = 0; i < count; i++)
             {
                 var nextPosition = GetNextPosition(precision);
-                Console.WriteLine(nextPosition);
                 var ctor = malefactorType.GetConstructor(new [] { typeof(Vector) });
                 var malefactor = (IMalefactor)ctor.Invoke(new object[] { new Vector(nextPosition.X, nextPosition.Y) });
                 Malefactors.Add(malefactor);
