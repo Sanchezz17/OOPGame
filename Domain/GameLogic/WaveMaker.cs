@@ -9,24 +9,24 @@ namespace Domain.Infrastructure
     public class WaveMaker
     {
         private List<IMalefactor> Malefactors { get; }
-        private readonly int xPrecision = 2;
-        private readonly int yPrecision = 5;
-        private readonly Random random;
+        private readonly Vector precision = new Vector(2, 5);
 
-        public WaveMaker()
+        private Func<Vector, Vector> GetNextPosition;
+        
+        public WaveMaker(Func<Vector, Vector> getNextPosition)
         {
-            Malefactors = new List<IMalefactor>();    
-            random = new Random();
+            Malefactors = new List<IMalefactor>();
+            GetNextPosition = getNextPosition;
         }
 
-        public WaveMaker AddMalefactorsOnRandomPositions(Type malefactorType, int count)
+        public WaveMaker AddMalefactors(Type malefactorType, int count)
         {
             for(var i = 0; i < count; i++)
             {
-                var x = random.NextDouble() * xPrecision + 9;
-                var y = (int)(random.NextDouble() * yPrecision);
-                var ctor = malefactorType.GetConstructor(new Type[] { typeof(Vector) });
-                var malefactor = (IMalefactor)ctor.Invoke(new object[] { new Vector(x, y) });
+                var nextPosition = GetNextPosition(precision);
+                Console.WriteLine(nextPosition);
+                var ctor = malefactorType.GetConstructor(new [] { typeof(Vector) });
+                var malefactor = (IMalefactor)ctor.Invoke(new object[] { new Vector(nextPosition.X, nextPosition.Y) });
                 Malefactors.Add(malefactor);
             }
             return this;

@@ -4,12 +4,12 @@ using System.Windows.Forms;
 
 namespace App.Graphics
 {
-    public class MainMenu : Form
+    public class MainMenuForm : Form
     {
-        private readonly GameWindow gameForm;
+        private readonly GameForm gameForm;
         private Button continueButton;
         
-        public MainMenu(GameWindow gameForm)
+        public MainMenuForm(GameForm gameForm)
         {
             this.gameForm = gameForm;
             Name = "MainMenu";

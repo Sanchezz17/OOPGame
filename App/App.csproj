@@ -49,9 +49,9 @@
     <Compile Include="Graphics\AnimationUtils.cs" />
     <Compile Include="Graphics\DBLayout.cs" />
     <Compile Include="Graphics\FormUtils.cs" />
-    <Compile Include="Graphics\GameWindow.cs" />
-    <Compile Include="Graphics\GameWindow.Designer.cs" />
-    <Compile Include="Graphics\MainMenu.cs" />
+    <Compile Include="Graphics\GameForm.cs" />
+    <Compile Include="Graphics\GameForm.Designer.cs" />
+    <Compile Include="Graphics\MainMenuForm.cs" />
     <Compile Include="Graphics\ResourceManager.cs" />
     <Compile Include="Graphics\ShopForm.cs" />
     <Compile Include="Graphics\VisualObject.cs" />

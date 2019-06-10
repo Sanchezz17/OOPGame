@@ -12,7 +12,7 @@ namespace App
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             var container = CreateContainer();
-            Application.Run(container.Get<GameWindow>());
+            Application.Run(container.Get<GameForm>());
         }
 
         public static StandardKernel CreateContainer()
@@ -20,7 +20,7 @@ namespace App
             var container = new StandardKernel();
             var player = new Player();
             container.Bind<Player>().ToConstant(player).InSingletonScope();
-            container.Bind<GameWindow>().ToSelf().InSingletonScope();
+            container.Bind<GameForm>().ToSelf().InSingletonScope();
             container.Bind<ResourceManager>().ToSelf().InSingletonScope();
             container.Bind<Game>().ToConstant(GameFactory.GetStandardGame(player)).InSingletonScope();
             return container;

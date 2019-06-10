@@ -9,7 +9,7 @@ namespace App.Graphics
 {
     public class ShopForm : Form
     {
-        private readonly GameWindow gameWindow;
+        private readonly GameForm gameForm;
         private ListBox heroesList;
         private ListBox heroParametersList;
         private Label heroLabel;
@@ -19,16 +19,16 @@ namespace App.Graphics
         private HashSet<Characteristic> currentParameters;
         private Characteristic currentParameter;
         private Label coinsLabel;
-        public ShopForm(GameWindow gameWindow)
+        public ShopForm(GameForm gameForm)
         {
             describeObjects = new Dictionary<string, DescribeObject>();
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
                                                 | ControlStyles.UserPaint, true);
             UpdateStyles();
-            this.gameWindow = gameWindow;
+            this.gameForm = gameForm;
             Text = "Shop";
-            Size = gameWindow.Size;
-            Location = gameWindow.Location;
+            Size = gameForm.Size;
+            Location = gameForm.Location;
             Closed += OnExit;
             InitializeShopForm();
         }
@@ -61,11 +61,11 @@ namespace App.Graphics
 
             heroesList = new ListBox();
             heroesList.Items.AddRange(
-                gameWindow.Game.Player.Heroes
+                gameForm.Game.Player.Heroes
                     .Select(hero => hero.Type.Name)
                     .Cast<object>()
                     .ToArray());
-            describeObjects = gameWindow.Game.Player.Heroes
+            describeObjects = gameForm.Game.Player.Heroes
                 .ToDictionary(hero => hero.Type.Name, hero => hero);
             heroesList.ForeColor = Color.Black;
             heroesList.Font = new Font("Arial", 30);
@@ -82,7 +82,7 @@ namespace App.Graphics
             if (heroesList.SelectedItem != null)
             {
                 currentDescribeObject = describeObjects[heroesList.SelectedItem.ToString()];
-                var visualObject = gameWindow.ResourceManager.VisualObjects[currentDescribeObject.Type.Name];
+                var visualObject = gameForm.ResourceManager.VisualObjects[currentDescribeObject.Type.Name];
                 heroLabel.BackgroundImage = visualObject.PassiveImage;
                 heroLabel.BackgroundImageLayout = ImageLayout.Zoom;
             }
@@ -131,7 +131,7 @@ namespace App.Graphics
 
         public void UpdateCoinsLabel()
         {
-            coinsLabel.Text = gameWindow.Game.Player.Coins.ToString();
+            coinsLabel.Text = gameForm.Game.Player.Coins.ToString();
         }
 
         private void UpgradeParameter(object sender, EventArgs e)
@@ -139,9 +139,9 @@ namespace App.Graphics
             if (currentDescribeObject != null &&
                 currentParameter != null)
             {
-                if (gameWindow.Game.Player.Coins >= currentParameter.UpgradePrice)
+                if (gameForm.Game.Player.Coins >= currentParameter.UpgradePrice)
                 {
-                    gameWindow.Game.Player.Coins -= currentParameter.UpgradePrice;
+                    gameForm.Game.Player.Coins -= currentParameter.UpgradePrice;
                     UpdateCoinsLabel();
                     var upgradeValue = (int) (currentParameter.Value * 0.1);
                     if (currentParameter.Name == "Reload")
@@ -188,13 +188,13 @@ namespace App.Graphics
             rightPanel.Controls.Add(coinsTable, 0, 3);
 
             var coinsImage = FormUtils.GetLabelWithTextAndFontColor();
-            coinsImage.BackgroundImage = gameWindow.ResourceManager.VisualObjects["Coins"].PassiveImage;
+            coinsImage.BackgroundImage = gameForm.ResourceManager.VisualObjects["Coins"].PassiveImage;
             coinsImage.BackgroundImageLayout = ImageLayout.Zoom;
             coinsImage.BorderStyle = BorderStyle.None;
             coinsTable.Controls.Add(coinsImage, 0, 0);
 
             coinsLabel = FormUtils.GetLabelWithTextAndFontColor(
-                gameWindow.Game.Player.Coins.ToString(), Color.Black, 15);
+                gameForm.Game.Player.Coins.ToString(), Color.Black, 15);
             coinsLabel.BorderStyle = BorderStyle.None;
             coinsTable.Controls.Add(coinsLabel, 0, 1);
             return rightPanel;
@@ -203,9 +203,9 @@ namespace App.Graphics
         private void SwitchToMenu(object sender, EventArgs e)
         {
             Hide();
-            gameWindow.MainMenu.Size = Size;
-            gameWindow.MainMenu.Location = Location;
-            gameWindow.MainMenu.Show();
+            gameForm.MainMenuForm.Size = Size;
+            gameForm.MainMenuForm.Location = Location;
+            gameForm.MainMenuForm.Show();
         }
         
         private void OnExit(object sender, EventArgs e)

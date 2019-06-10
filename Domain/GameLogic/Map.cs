@@ -13,11 +13,11 @@ namespace Domain.GameLogic
         private readonly List<HashSet<IGameObject>> linesStrikes;
         private readonly HashSet<IGameObject> gems;
         private readonly HashSet<IGameObject> gemManufacturers;
-        public IEnumerable<IHero> Heroes => linesHeroes.SelectMany(line => line).Cast<IHero>().ToList();
-        public IEnumerable<IMalefactor> Malefactors => linesMalefactors.SelectMany(line => line).Cast<IMalefactor>().ToList();
-        public IEnumerable<IStrike> Strikes => linesStrikes.SelectMany(strike => strike).Cast<IStrike>().ToList();
-        public IEnumerable<IGemManufacturer> GemManufacturers => gemManufacturers.Cast<IGemManufacturer>().ToList();
-        public IEnumerable<Gem> Gems => gems.Cast<Gem>().ToList();
+        public IEnumerable<IHero> Heroes => linesHeroes.SelectMany(line => line).Cast<IHero>();
+        public IEnumerable<IMalefactor> Malefactors => linesMalefactors.SelectMany(line => line).Cast<IMalefactor>();
+        public IEnumerable<IStrike> Strikes => linesStrikes.SelectMany(strike => strike).Cast<IStrike>();
+        public IEnumerable<IGemManufacturer> GemManufacturers => gemManufacturers.Cast<IGemManufacturer>();
+        public IEnumerable<Gem> Gems => gems.Cast<Gem>();
         public int Height { get; }
         public int Width { get; }
 
