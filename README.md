@@ -18,6 +18,10 @@ https://github.com/Sanchezz17/OOPGame/tree/master/Domain
  - улучшения персонажей
  - удобное API для создания уровней (WaveMaker, LevelMaker)
  
- 
+
+Точка сборки зависимостей:
+https://github.com/Sanchezz17/OOPGame/blob/master/App/Program.cs
+
+
 Скачать рабочую версию игры (в формате .exe):
 https://www.dropbox.com/s/1ajx53hptlgfmeg/Plants%20VS%20Zombies%20Marvel%20Edition.exe?dl=0
