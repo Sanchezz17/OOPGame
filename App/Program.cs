@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Ninject;
 using App.Graphics;
 using Domain.GameLogic;
 
@@ -10,7 +11,19 @@ namespace App
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GameWindow(GameFactory.GetStandardGame(), new ResourceManager()));
+            var container = CreateContainer();
+            Application.Run(container.Get<GameWindow>());
+        }
+
+        public static StandardKernel CreateContainer()
+        {
+            var container = new StandardKernel();
+            var player = new Player();
+            container.Bind<Player>().ToConstant(player).InSingletonScope();
+            container.Bind<GameWindow>().ToSelf().InSingletonScope();
+            container.Bind<ResourceManager>().ToSelf().InSingletonScope();
+            container.Bind<Game>().ToConstant(GameFactory.GetStandardGame(player)).InSingletonScope();
+            return container;
         }
     }
 }

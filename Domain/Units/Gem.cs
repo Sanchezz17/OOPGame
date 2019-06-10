@@ -3,7 +3,7 @@ using Domain.Infrastructure;
 
 namespace Domain.Units
 {
-    public class Gem : IGameObject, ICollectable, IMovable
+    public class Gem : IGameObject, IMovable
     {
         public int Health { get; private set; }
         public Vector Position { get; private set; }
@@ -12,11 +12,6 @@ namespace Domain.Units
         public Direction Direction => Direction.Down;
 
         public double Speed { get; }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
 
         public Gem(Vector position, double speed)
         {

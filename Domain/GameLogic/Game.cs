@@ -13,12 +13,12 @@ namespace Domain.GameLogic
         public bool GameIsOver { get; private set; }
         public bool GameIsWin { get; private set; }
         public Player Player { get; }
-        public Game(List<Level> levels)
+        public Game(List<Level> levels, Player player)
         {
             Started = false;
             CurrentLevelNumber = 0;
             Levels = levels;
-            Player = Player.Instance;
+            Player = player;
         }
 
         public void Start() => Started = true;

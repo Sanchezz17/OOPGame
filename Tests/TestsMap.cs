@@ -60,7 +60,7 @@ namespace Tests
         [TestCase(3, 1)]
         public void TestHeroOnLine(int x, int y)
         {
-            var player = Player.Instance;
+            var player = new Player();
             var map = new Map(5, 10);
             var hero = new IronMan(player.GetHeroParameters(typeof(IronMan)).Parameters, new Vector(x, y));
             map.Add(hero);

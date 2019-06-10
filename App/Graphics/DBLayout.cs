@@ -3,9 +3,6 @@ using System.Windows.Forms;
 
 namespace App.Graphics
 {
-    /// <summary>
-    /// Double Buffered layout panel - removes flicker during resize operations.
-    /// </summary>
     public sealed class DBLayoutPanel : TableLayoutPanel
     {
         public DBLayoutPanel()

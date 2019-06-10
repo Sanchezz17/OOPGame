@@ -9,10 +9,9 @@ namespace Domain.GameLogic
     {
         private static WaveMaker waveMaker = new WaveMaker();
 
-        public static Game GetStandardGame()
+        public static Game GetStandardGame(Player player)
         {
-            var player = Player.Instance;
-            var levelMaker = new LevelMaker(Player.Instance.Heroes);
+            var levelMaker = new LevelMaker(player.Heroes);
             var levels = new List<Level>
             {
                 levelMaker
@@ -31,12 +30,12 @@ namespace Domain.GameLogic
                     .AddWaves(GetFifthLevelWaves())
                     .MakeLevel()
             };
-            return new Game(levels);
+            return new Game(levels, player);
         }
 
         private static List<Wave> GetFirstLevelWaves()
         {
-            return new List<Wave>()
+            return new List<Wave>
             {
                 waveMaker
                     .AddMalefactorsOnRandomPositions(typeof(Octavius), 1)

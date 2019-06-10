@@ -31,12 +31,14 @@ namespace App.Graphics
         private Button currentPurchaseButton;
         private bool isDelete;
         private readonly WindowsMediaPlayer audioPlayer;
+        private readonly Player player;
         
-        public GameWindow(Game game, ResourceManager resourceManager)
+        public GameWindow(Game game, ResourceManager resourceManager, Player player)
         {
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
                       | ControlStyles.UserPaint, true);
             UpdateStyles();
+            this.player = player;
             Name = "GameForm";
             Text = "OOPGame";
             Game = game;
@@ -67,14 +69,14 @@ namespace App.Graphics
             mainPanel.Size = new Size(Size.Width - 15, Size.Height - 40);
             mainPanel.Location = Location;
             FormUtils.SplitRowsByPercentages(mainPanel.RowStyles,
-                new float[] {25F, 75F});
+                new [] {25F, 75F});
 
             var topPanel = FormUtils.GetTableLayoutPanel(1, 5);
             FormUtils.SplitColumnsByPercentages(
-                topPanel.ColumnStyles, new float[]{10F, 10F, 60F, 10F, 10F});
+                topPanel.ColumnStyles, new []{10F, 10F, 60F, 10F, 10F});
 
             currentLevelLabel = FormUtils.GetLabelWithTextAndFontColor(
-                "Уровень " + (Game.CurrentLevelNumber + 1).ToString(),
+                "Уровень " + (Game.CurrentLevelNumber + 1),
                 Color.Black, 13);
             topPanel.Controls.Add(currentLevelLabel, 0, 0);
 
@@ -114,7 +116,7 @@ namespace App.Graphics
             foreach (var hero in Game.CurrentLevel.AvailableHeroes)
             {
                 var heroPurchase = FormUtils.GetButtonWithTextAndFontColor(
-                    hero.Price.ToString(), Color.Black, 15);
+                    hero.Price.ToString(), Color.Black);
                 heroPurchase.BackgroundImage = ResourceManager.VisualObjects[hero.Type.Name].PassiveImage;
                 heroPurchase.BackgroundImageLayout = ImageLayout.Zoom;
                 heroPurchase.TextAlign = ContentAlignment.BottomCenter;
@@ -235,7 +237,7 @@ namespace App.Graphics
         public void Restart(object sender, EventArgs e)
         {
             ResourceManager = new ResourceManager();
-            Game = GameFactory.GetStandardGame();
+            Game = GameFactory.GetStandardGame(player);
             Game.Start();
             mainPanel.Controls.RemoveAt(1); 
             mainPanel.Controls.Add(gamePanel, 0, 1);

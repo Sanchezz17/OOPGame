@@ -10,8 +10,7 @@ namespace Domain.GameLogic
     {
         public int Coins { get; set; }
         public HashSet<DescribeObject> Heroes { get; }
-        private static Player instance = null;
-        private Player()
+        public Player()
         {
             Coins = 100;
             Heroes = new HashSet<DescribeObject>
@@ -32,7 +31,5 @@ namespace Domain.GameLogic
             return Heroes
                     .First(c => c.Type == heroType);
         }
-
-        public static Player Instance => instance ?? (instance = new Player());
     }
 }

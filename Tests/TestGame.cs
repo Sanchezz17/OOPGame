@@ -11,7 +11,8 @@ namespace Tests
         [Test]
         public void TestStrikes()
         {
-            var game = GameFactory.GetStandardGame();
+            var player = new Player();
+            var game = GameFactory.GetStandardGame(player);
             var countStrikes = game.CurrentLevel.Map.Strikes.Count();
             for (var i = 0; i < 16; i++)
                 game.MakeGameIteration();
@@ -21,7 +22,8 @@ namespace Tests
         [Test]
         public void TestMove()
         {
-            var game = GameFactory.GetStandardGame();
+            var player = new Player();
+            var game = GameFactory.GetStandardGame(player);
             var positions = game.CurrentLevel.Map.Malefactors.Select(malefactor => malefactor.Position);
             game.MakeGameIteration();
             var newPositions = game.CurrentLevel.Map.Malefactors.Select(malefactor => malefactor.Position);
@@ -32,7 +34,8 @@ namespace Tests
         [Test]
         public void TestMalefactorDead()
         {
-            var game = GameFactory.GetStandardGame();
+            var player = new Player();
+            var game = GameFactory.GetStandardGame(player);
             var malefactor = game.CurrentLevel.Map.GetMalefactorFromLine(2).First();
             for (var i = 0; i < 1000; i++)
                 game.MakeGameIteration();
@@ -42,7 +45,8 @@ namespace Tests
         [Test]
         public void TestCreationGems()
         {
-            var game = GameFactory.GetStandardGame();
+            var player = new Player();
+            var game = GameFactory.GetStandardGame(player);
             var countGems = game.CurrentLevel.Map.Gems.Count();
             for (var i = 0; i < 1000; i++)
                 game.MakeGameIteration();
@@ -52,7 +56,8 @@ namespace Tests
         [Test]
         public void TestAddingMalefactors()
         {
-            var game = GameFactory.GetStandardGame();
+            var player = new Player();
+            var game = GameFactory.GetStandardGame(player);
             var countMalefactors = game.CurrentLevel.Map.Malefactors.Count();
             for (var i = 0; i < 10000; i++)
                 game.MakeGameIteration();

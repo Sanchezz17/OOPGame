@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace App.Graphics
@@ -48,7 +50,7 @@ namespace App.Graphics
         public static Label GetTransparentLabel()
         {
             var transparentLabel = new Label();
-            FormUtils.SetAnchorForAllSides(transparentLabel);
+            SetAnchorForAllSides(transparentLabel);
             transparentLabel.BackColor = Color.Transparent;
             transparentLabel.Margin = Padding.Empty;
             return transparentLabel;
@@ -56,8 +58,8 @@ namespace App.Graphics
 
         public static void SetAnchorForAllSides(Control control)
         {
-            control.Anchor = (AnchorStyles.Left | AnchorStyles.Right |
-                              AnchorStyles.Top | AnchorStyles.Bottom);
+            control.Anchor = AnchorStyles.Left | AnchorStyles.Right |
+                              AnchorStyles.Top | AnchorStyles.Bottom;
         }
 
         private static void SetTextAndFont(Control control, string text, Color fontColor, int fontSize)

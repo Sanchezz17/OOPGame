@@ -54,7 +54,7 @@ namespace App.Graphics
         private TableLayoutPanel GetLeftPanel()
         {
             var leftPanel = FormUtils.GetTableLayoutPanel(2, 1);
-            FormUtils.SplitRowsByPercentages(leftPanel.RowStyles, new float[]{10F, 90F});
+            FormUtils.SplitRowsByPercentages(leftPanel.RowStyles, new []{10F, 90F});
 
             var label = FormUtils.GetLabelWithTextAndFontColor("Герои", Color.Blue, 30);
             leftPanel.Controls.Add(label);
