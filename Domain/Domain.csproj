@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
       <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -52,15 +56,16 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameLogic\MalefactorPositionGenerator.cs" />
-    <Compile Include="GameLogic\LevelMaker.cs" />
     <Compile Include="GameLogic\Wave.cs" />
     <Compile Include="GameLogic\Game.cs" />
-    <Compile Include="GameLogic\GameFactory.cs" />
     <Compile Include="GameLogic\Level.cs" />
     <Compile Include="GameLogic\Map.cs" />
     <Compile Include="GameLogic\Player.cs" />
-    <Compile Include="GameLogic\WaveMaker.cs" />
+    <Compile Include="GameMaker\FactoryViaAPI.cs" />
+    <Compile Include="GameMaker\IGameFactory.cs" />
+    <Compile Include="GameMaker\LevelMaker.cs" />
+    <Compile Include="GameMaker\MalefactorPositionGenerator.cs" />
+    <Compile Include="GameMaker\WaveMaker.cs" />
     <Compile Include="Infrastructure\Direction.cs" />
     <Compile Include="Infrastructure\TickСontroller.cs" />
     <Compile Include="Program.cs" />

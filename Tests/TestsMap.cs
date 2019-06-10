@@ -28,21 +28,19 @@ namespace Tests
         }
 
         [TestCase(typeof(IronMan))]
-        [TestCase(typeof(Thanos))]
         [TestCase(typeof(Vision))]
         [TestCase(typeof(CaptainAmerica))]
         [TestCase(typeof(Thanos))]
         public void TestAdd(Type type)
         {
             var map = new Map(5, 10);
-            var ctor = type.GetConstructor(new[] {typeof(int), typeof(Vector)});
-            var gameObject = (IGameObject) ctor.Invoke(new object [] {1, new Vector(1, 1)});
+            var ctor = type.GetConstructor(new[] {typeof(UnitParameters), typeof(Vector)});
+            var gameObject = (IGameObject) ctor.Invoke(new object [] {new UnitParameters(), new Vector(1, 1)});
             map.Add(gameObject);
             Assert.True(map.GetGameObjects().Contains(gameObject));
         }
 
         [TestCase(typeof(IronMan))]
-        [TestCase(typeof(Thanos))]
         [TestCase(typeof(Vision))]
         [TestCase(typeof(CaptainAmerica))]
         [TestCase(typeof(Thanos))]

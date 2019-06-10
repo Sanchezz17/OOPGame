@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Forms;
 using Domain.GameLogic;
 using Domain.Units;
+using OOP_Game.GameLogic;
 using WMPLib;
 using Size = System.Drawing.Size;
 
@@ -14,6 +15,7 @@ namespace App.Graphics
     public partial class GameForm : Form
     {
         public Game Game { get; private set; }
+        private IGameFactory gameFactory;
         public ResourceManager ResourceManager { get; private set; }
         public readonly Form MainMenuForm;
         public readonly ShopForm ShopForm;
@@ -34,9 +36,10 @@ namespace App.Graphics
         private readonly WindowsMediaPlayer audioPlayer;
         private readonly Player player;
         
-        public GameForm(Game game, ResourceManager resourceManager, Player player)
+        public GameForm(IGameFactory _gameFactory, ResourceManager resourceManager, Player player)
         {
-            Game = game;
+            gameFactory = _gameFactory;
+            Game = gameFactory.Create(player);
             ResourceManager = resourceManager;
             this.player = player;
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
@@ -242,7 +245,7 @@ namespace App.Graphics
         public void Restart(object sender, EventArgs e)
         {
             ResourceManager = new ResourceManager();
-            Game = GameFactory.GetStandardGame(player);
+            Game = gameFactory.Create(player);
             Game.Start();
             mainPanel.Controls.RemoveAt(1); 
             mainPanel.Controls.Add(gamePanel, 0, 1);

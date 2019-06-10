@@ -6,11 +6,11 @@ using OOP_Game.GameLogic;
 
 namespace Domain.GameLogic
 {
-    public static class GameFactory
+    public class FactoryViaApi : IGameFactory
     {
         private static WaveMaker waveMaker = new WaveMaker(Generation.Random);
 
-        public static Game GetStandardGame(Player player)
+        public Game Create(Player player)
         {
             var levelMaker = new LevelMaker(player.Heroes);
             var levels = new List<Level>
