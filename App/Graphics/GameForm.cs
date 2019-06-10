@@ -11,11 +11,11 @@ using Size = System.Drawing.Size;
 
 namespace App.Graphics
 {
-    public partial class GameWindow : Form
+    public partial class GameForm : Form
     {
         public Game Game { get; private set; }
         public ResourceManager ResourceManager { get; private set; }
-        public readonly Form MainMenu;
+        public readonly Form MainMenuForm;
         public readonly ShopForm ShopForm;
         
         private TableLayoutPanel mainPanel;
@@ -34,7 +34,7 @@ namespace App.Graphics
         private readonly WindowsMediaPlayer audioPlayer;
         private readonly Player player;
         
-        public GameWindow(Game game, ResourceManager resourceManager, Player player)
+        public GameForm(Game game, ResourceManager resourceManager, Player player)
         {
             Game = game;
             ResourceManager = resourceManager;
@@ -46,7 +46,7 @@ namespace App.Graphics
             timer.Tick += OnTimer;
             timer.Start();
             Size = new Size(950, 700);
-            MainMenu = new MainMenu(this);
+            MainMenuForm = new MainMenuForm(this);
             ShopForm = new ShopForm(this);
             Shown += SwitchToMenu;
             InitializeGameWindow();
@@ -261,9 +261,9 @@ namespace App.Graphics
             audioPlayer.controls.stop();
             Game.Pause();
             Hide();
-            MainMenu.Location = Location;
-            MainMenu.Size = Size;
-            MainMenu.Show();
+            MainMenuForm.Location = Location;
+            MainMenuForm.Size = Size;
+            MainMenuForm.Show();
         }
 
         private void DeleteHero(object sender, EventArgs e)

@@ -52,6 +52,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameLogic\MalefactorPositionGenerator.cs" />
     <Compile Include="GameLogic\LevelMaker.cs" />
     <Compile Include="GameLogic\Wave.cs" />
     <Compile Include="GameLogic\Game.cs" />

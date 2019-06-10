@@ -1,6 +1,6 @@
 ﻿namespace App.Graphics
 {
-    partial class GameWindow
+    partial class GameForm
     {
         /// <summary>
         /// Обязательная переменная конструктора.
