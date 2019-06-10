@@ -50,6 +50,5 @@ namespace App.Graphics
             coinsVisual.PassiveImage = new Bitmap(Environment.CurrentDirectory + @"\Resources\coins.png");
             coinsVisual.MoveImage = coinsVisual.PassiveImage;
         }
-        
     }
 }

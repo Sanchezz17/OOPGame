@@ -20,7 +20,8 @@ namespace App.Graphics
         
         private TableLayoutPanel mainPanel;
         private TableLayoutPanel gamePanel;
-        private TableLayoutPanel fieldPanel;
+        private Label field;
+        private Size cellSize;        
         private TableLayoutPanel gameOverPanel;
         private TableLayoutPanel levelWinPanel;
         private TableLayoutPanel gameWinPanel;
@@ -29,20 +30,18 @@ namespace App.Graphics
         private TableLayoutPanel purchasePanel;
         private DescribeObject currentObjectToPurchase;
         private Button currentPurchaseButton;
-        private bool isDelete;
+        private bool isDeleteSelected;
         private readonly WindowsMediaPlayer audioPlayer;
         private readonly Player player;
         
         public GameWindow(Game game, ResourceManager resourceManager, Player player)
         {
+            Game = game;
+            ResourceManager = resourceManager;
+            this.player = player;
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
                       | ControlStyles.UserPaint, true);
             UpdateStyles();
-            this.player = player;
-            Name = "GameForm";
-            Text = "OOPGame";
-            Game = game;
-            ResourceManager = resourceManager;
             var timer = new Timer {Interval = 40};
             timer.Tick += OnTimer;
             timer.Start();
@@ -73,7 +72,7 @@ namespace App.Graphics
 
             var topPanel = FormUtils.GetTableLayoutPanel(1, 5);
             FormUtils.SplitColumnsByPercentages(
-                topPanel.ColumnStyles, new []{10F, 10F, 60F, 10F, 10F});
+                topPanel.ColumnStyles, new [] {10F, 10F, 60F, 10F, 10F});
 
             currentLevelLabel = FormUtils.GetLabelWithTextAndFontColor(
                 "Уровень " + (Game.CurrentLevelNumber + 1),
@@ -138,7 +137,7 @@ namespace App.Graphics
         
         private void ProcessMouseClick(object sender, MouseEventArgs e)
         {
-            var coordinatesInMap = CoordinatesInLayoutToMap(new Vector(e.X, e.Y));
+            var coordinatesInMap = CoordinatesInLabelToMap(new Vector(e.X, e.Y), cellSize);
             var gemToDelete = new List<Gem>();
             foreach (var gem in Game.CurrentLevel.Map.Gems)
             {                
@@ -157,14 +156,14 @@ namespace App.Graphics
             if (gemToDelete.Count > 0)
                 return;
             
-            if (isDelete)
+            if (isDeleteSelected)
             {
                 foreach (var hero in Game.CurrentLevel.Map.GetHeroesFromLine((int)coordinatesInMap.Y))
                 {
                     if (Math.Abs(hero.Position.X - coordinatesInMap.X) < double.Epsilon)
                         Game.CurrentLevel.Map.Delete(hero);
                 }
-                isDelete = false;
+                isDeleteSelected = false;
                 return;
             }
 
@@ -181,7 +180,15 @@ namespace App.Graphics
                     Game.CurrentLevel.GemCount -= currentObjectToPurchase.Price;
                 }
             }
-        }      
+        }
+
+        private void UpdateCellSize()
+        {
+            cellSize = new Size(field.Width / (Game.CurrentLevel.Map.Width - 2),
+                field.Height / Game.CurrentLevel.Map.Height);
+        }
+
+        private void UpdateCellSize(object sender, EventArgs e) => UpdateCellSize();
 
         private TableLayoutPanel GetGamePanel()
         {
@@ -198,18 +205,16 @@ namespace App.Graphics
             FormUtils.SetAnchorForAllSides(headquartersControl);
             gamePanel.Controls.Add(headquartersControl, 0, 0);
 
-            fieldPanel = FormUtils.GetTableLayoutPanel(5, 9);
-            fieldPanel.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\field.jpg");
-            fieldPanel.BackgroundImageLayout = ImageLayout.Stretch;
-            fieldPanel.Margin = Padding.Empty;
-            // фейковый label для размеров клетки
-            var fakeLabel = FormUtils.GetTransparentLabel();
-            fakeLabel.MouseClick += ProcessMouseClick;
-            fieldPanel.Controls.Add(fakeLabel, 0, 0);
-            fieldPanel.Paint += OnPaint;
-            fieldPanel.MouseClick += ProcessMouseClick;          
+            field = FormUtils.GetTransparentLabel();
+            field.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\field.jpg");
+            field.BackgroundImageLayout = ImageLayout.Stretch;
+            field.Margin = Padding.Empty;
+            UpdateCellSize();
+            field.SizeChanged += UpdateCellSize;
+            field.Paint += OnPaint;
+            field.MouseClick += ProcessMouseClick;          
             
-            gamePanel.Controls.Add(fieldPanel, 1, 0);
+            gamePanel.Controls.Add(field, 1, 0);
 
             gameOverPanel = GetPanelEndGame("gameover.jpg", "Начать заново", Restart);
             levelWinPanel = GetPanelEndGame("winlevel.jpg", "Следующий уровень", ToNextLevel);
@@ -263,7 +268,7 @@ namespace App.Graphics
 
         private void DeleteHero(object sender, EventArgs e)
         {
-            isDelete = true;
+            isDeleteSelected = true;
         }
 
         private void OnTimer(object sender, EventArgs e)
@@ -271,7 +276,7 @@ namespace App.Graphics
             if (Game.Started)
             {
                 Game.MakeGameIteration();
-                fieldPanel.Invalidate();
+                field.Invalidate();
             }
         }
 
@@ -281,21 +286,19 @@ namespace App.Graphics
             DrawMap(sender, e);
         }
         
-        private void OnFrameChanged(object sender, EventArgs e) => fieldPanel.Invalidate();
+        private void OnFrameChanged(object sender, EventArgs e) => field.Invalidate();
         
-        private RectangleF GetCoordinatesInMapLayout(Vector location)
+        private RectangleF GetCoordinatesInMapLabel(Vector location, Size cell)
         {
-            var cell = fieldPanel.GetControlFromPosition(0, 0);
-            var x = (float)(location.X * cell.Size.Width);
-            var y = (float)(location.Y * cell.Size.Height);
+            var x = (float)(location.X * cell.Width);
+            var y = (float)(location.Y * cell.Height);
             return new RectangleF(x, y, cell.Width, cell.Height);
         }
 
-        private Vector CoordinatesInLayoutToMap(Vector coordinatesInLayout)
+        private Vector CoordinatesInLabelToMap(Vector coordinatesInLayout, Size cell)
         {
-            var cell = fieldPanel.GetControlFromPosition(0, 0);
-            var x = Math.Truncate(coordinatesInLayout.X / cell.Size.Width);
-            var y = Math.Truncate(coordinatesInLayout.Y / cell.Size.Height);
+            var x = Math.Truncate(coordinatesInLayout.X / cell.Width);
+            var y = Math.Truncate(coordinatesInLayout.Y / cell.Height);
             return new Vector(x, y);
         }
 
@@ -346,7 +349,7 @@ namespace App.Graphics
                     AnimationUtils.AnimateImage(visualObject.Animations[gameObject], currentAnimation, OnFrameChanged);
                     ImageAnimator.UpdateFrames();               
                 }
-                var rectangleInMapLayout = GetCoordinatesInMapLayout(gameObject.Position);
+                var rectangleInMapLayout = GetCoordinatesInMapLabel(gameObject.Position, cellSize);
                 if (gameObject is IStrike)
                 {
                     rectangleInMapLayout.Height /= 3;
