@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Domain.GameLogic;
 using Domain.Units;
-using Domain.Units.Heroes;
 
 namespace Domain.Infrastructure
 {

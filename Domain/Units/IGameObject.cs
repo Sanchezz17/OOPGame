@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.Windows;
 
 namespace Domain.Units

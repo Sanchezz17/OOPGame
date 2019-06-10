@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using Domain.Units.Strikes;
-using Domain.Infrastructure;
 
 namespace Domain.Units
 {

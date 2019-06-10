@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Domain.Units;
 
-namespace App
+namespace App.Graphics
 {
     public class VisualObject
     {

@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Domain;
 using Domain.Units;
 
-namespace App
+namespace App.Graphics
 {
     public class ShopForm : Form
     {
-        private GameWindow gameWindow;
+        private readonly GameWindow gameWindow;
         private ListBox heroesList;
         private ListBox heroParametersList;
         private Label heroLabel;
@@ -95,7 +94,7 @@ namespace App
             heroParametersList.Items.Clear();
             if (currentDescribeObject != null)
             {
-                currentParameters = currentDescribeObject.Parameters.characteristics;
+                currentParameters = currentDescribeObject.Parameters.Characteristics;
                 heroParametersList.Items.AddRange(
                     currentParameters
                         .Select((characteristic) => $"{characteristic.Name}: {characteristic.Value}")
@@ -112,10 +111,12 @@ namespace App
 
             heroLabel = FormUtils.GetTransparentLabel();
             centerPanel.Controls.Add(heroLabel, 0, 0);
-            
-            heroParametersList = new ListBox();
-            heroParametersList.ForeColor = Color.Black;
-            heroParametersList.Font = new Font("Arial", 30);
+
+            heroParametersList = new ListBox
+            {
+                ForeColor = Color.Black,
+                Font = new Font("Arial", 30)
+            };
             FormUtils.SetAnchorForAllSides(heroParametersList);
             heroParametersList.SelectedIndexChanged += SelectedParameterChanged;
             centerPanel.Controls.Add(heroParametersList, 0, 1);

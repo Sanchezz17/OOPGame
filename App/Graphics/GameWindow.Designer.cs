@@ -1,4 +1,4 @@
-﻿namespace App
+﻿namespace App.Graphics
 {
     partial class GameWindow
     {

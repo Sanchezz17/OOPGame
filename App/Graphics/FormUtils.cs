@@ -1,9 +1,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace App
+namespace App.Graphics
 {
-    public class FormUtils
+    public static class FormUtils
     {
         public static DBLayoutPanel GetTableLayoutPanel(int rowsCount, int columnsCount)
         {
@@ -60,7 +60,7 @@ namespace App
                               AnchorStyles.Top | AnchorStyles.Bottom);
         }
 
-        public static void SetTextAndFont(Control control, string text, Color fontColor, int fontSize)
+        private static void SetTextAndFont(Control control, string text, Color fontColor, int fontSize)
         {
             control.ForeColor = fontColor;
             control.Text = text;

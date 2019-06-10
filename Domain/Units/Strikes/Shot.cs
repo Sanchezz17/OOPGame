@@ -1,7 +1,6 @@
 using System.Windows;
 using Domain.Infrastructure;
 
-
 namespace Domain.Units
 {
     public abstract class Shot : IStrike, IMovable

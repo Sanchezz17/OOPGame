@@ -5,17 +5,16 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Domain.GameLogic;
-using Domain.Infrastructure;
 using Domain.Units;
 using WMPLib;
 using Size = System.Drawing.Size;
 
-namespace App
+namespace App.Graphics
 {
     public partial class GameWindow : Form
     {
-        public Game Game { get; set; }
-        public ResourceManager ResourceManager { get; set; }
+        public Game Game { get; private set; }
+        public ResourceManager ResourceManager { get; private set; }
         public readonly Form MainMenu;
         public readonly ShopForm ShopForm;
         
@@ -30,8 +29,8 @@ namespace App
         private TableLayoutPanel purchasePanel;
         private DescribeObject currentObjectToPurchase;
         private Button currentPurchaseButton;
-        private bool IsDelete;
-        private WindowsMediaPlayer audioPlayer;
+        private bool isDelete;
+        private readonly WindowsMediaPlayer audioPlayer;
         
         public GameWindow(Game game, ResourceManager resourceManager)
         {
@@ -50,11 +49,13 @@ namespace App
             ShopForm = new ShopForm(this);
             Shown += SwitchToMenu;
             InitializeGameWindow();
-            audioPlayer = new WindowsMediaPlayer();
-            audioPlayer.URL = Environment.CurrentDirectory + @"\Resources\Music\soundtrack.mp3";
+            audioPlayer = new WindowsMediaPlayer
+            {
+                URL = Environment.CurrentDirectory + @"\Resources\Music\soundtrack.mp3"
+            };
         }
 
-        public void PlaySoundrack()
+        public void PlaySoundtrack()
         {
             audioPlayer.settings.volume = 100; 
             audioPlayer.controls.play();
@@ -154,14 +155,14 @@ namespace App
             if (gemToDelete.Count > 0)
                 return;
             
-            if (IsDelete)
+            if (isDelete)
             {
                 foreach (var hero in Game.CurrentLevel.Map.GetHeroesFromLine((int)coordinatesInMap.Y))
                 {
                     if (Math.Abs(hero.Position.X - coordinatesInMap.X) < double.Epsilon)
                         Game.CurrentLevel.Map.Delete(hero);
                 }
-                IsDelete = false;
+                isDelete = false;
                 return;
             }
 
@@ -186,11 +187,13 @@ namespace App
             gamePanel.ColumnStyles[0] = new ColumnStyle(SizeType.Percent, 20F);
             gamePanel.ColumnStyles[1] = new ColumnStyle(SizeType.Percent, 80F);
 
-            var headquartersControl = new Label();
-            headquartersControl.BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\headquarters.jpg");
-            headquartersControl.BackgroundImageLayout = ImageLayout.Stretch;
+            var headquartersControl = new Label
+            {
+                BackgroundImage = Image.FromFile(Environment.CurrentDirectory + @"\Resources\headquarters.jpg"),
+                BackgroundImageLayout = ImageLayout.Stretch,
+                Margin = Padding.Empty
+            };
             FormUtils.SetAnchorForAllSides(headquartersControl);
-            headquartersControl.Margin = Padding.Empty;
             gamePanel.Controls.Add(headquartersControl, 0, 0);
 
             fieldPanel = FormUtils.GetTableLayoutPanel(5, 9);
@@ -243,7 +246,7 @@ namespace App
             Game.ToNextLevel();
             mainPanel.Controls.RemoveAt(1); 
             mainPanel.Controls.Add(gamePanel, 0, 1);
-            currentLevelLabel.Text = "Уровень " + (Game.CurrentLevelNumber + 1).ToString();
+            currentLevelLabel.Text = "Уровень " + (Game.CurrentLevelNumber + 1);
         }
 
         private void SwitchToMenu(object sender, EventArgs e)
@@ -258,7 +261,7 @@ namespace App
 
         private void DeleteHero(object sender, EventArgs e)
         {
-            IsDelete = true;
+            isDelete = true;
         }
 
         private void OnTimer(object sender, EventArgs e)

@@ -1,9 +1,10 @@
 ﻿using System.Windows.Forms;
+using App.Graphics;
 using Domain.GameLogic;
 
 namespace App
 {
-    internal class Program
+    internal static class Program
     {
         public static void Main(string[] args)
         {

@@ -30,7 +30,7 @@ namespace Domain.Units
         public override bool Equals(object obj)
         {
             var characteristic = obj as Characteristic;
-            return characteristic is null ? false : characteristic.Name == Name;
+            return !(characteristic is null) && characteristic.Name == Name;
 
         }
 
@@ -42,23 +42,23 @@ namespace Domain.Units
 
     public class UnitParameters
     {
-        public readonly HashSet<Characteristic> characteristics = new HashSet<Characteristic>();
+        public readonly HashSet<Characteristic> Characteristics = new HashSet<Characteristic>();
 
         public UnitParameters SetHealth(int value)
         {
-            characteristics.Add(new Characteristic("Health", value));
+            Characteristics.Add(new Characteristic("Health", value));
             return this;
         }
 
         public UnitParameters SetDamage(int value)
         {
-            characteristics.Add(new Characteristic("Damage", value));
+            Characteristics.Add(new Characteristic("Damage", value));
             return this;
         }
 
         public UnitParameters SetReload(int value)
         {
-            characteristics.Add(new Characteristic("Reload", value));
+            Characteristics.Add(new Characteristic("Reload", value));
             return this;
         }
 
@@ -66,7 +66,7 @@ namespace Domain.Units
         {
             get
             {
-                return characteristics
+                return Characteristics
                     .Where(c => c.Name == "Health")
                     .Select(c => c.Value)
                     .First();
@@ -77,7 +77,7 @@ namespace Domain.Units
         {
             get
             {
-                return characteristics
+                return Characteristics
                     .Where(c => c.Name == "Damage")
                     .Select(c => c.Value)
                     .First();
@@ -88,7 +88,7 @@ namespace Domain.Units
         {
             get
             {
-                return characteristics
+                return Characteristics
                    .Where(c => c.Name == "Reload")
                    .Select(c => c.Value)
                    .First();

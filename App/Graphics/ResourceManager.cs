@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 using System.IO;
-using App;
 
-namespace App
+namespace App.Graphics
 {
     public class ResourceManager
     {

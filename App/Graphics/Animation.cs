@@ -1,7 +1,6 @@
 using System.Drawing;
-using System.Windows.Forms.VisualStyles;
 
-namespace App
+namespace App.Graphics
 {
     public class Animation
     {

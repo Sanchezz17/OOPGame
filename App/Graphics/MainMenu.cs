@@ -1,13 +1,12 @@
 using System;
-using System.Windows.Forms;
 using System.Drawing;
-using Domain.GameLogic;
+using System.Windows.Forms;
 
-namespace App
+namespace App.Graphics
 {
     public class MainMenu : Form
     {
-        private GameWindow gameForm;
+        private readonly GameWindow gameForm;
         private Button continueButton;
         
         public MainMenu(GameWindow gameForm)
@@ -53,7 +52,7 @@ namespace App
             gameForm.Size = Size;
             gameForm.Show();
             gameForm.Game.Start();
-            gameForm.PlaySoundrack();
+            gameForm.PlaySoundtrack();
             Hide();
         }
 

@@ -1,13 +1,12 @@
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace App
+namespace App.Graphics
 {
     /// <summary>
     /// Double Buffered layout panel - removes flicker during resize operations.
     /// </summary>
-    public partial class DBLayoutPanel : TableLayoutPanel
+    public sealed class DBLayoutPanel : TableLayoutPanel
     {
         public DBLayoutPanel()
         {

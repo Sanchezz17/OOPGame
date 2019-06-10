@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Windows;
 using Domain.Infrastructure;
-using Domain.Units;
 
 namespace Domain.Units.Heroes
 {
@@ -17,7 +16,7 @@ namespace Domain.Units.Heroes
         public BaseHero(UnitParameters parametres, Vector position, State state, int countTick)
         {
             Health = parametres.Health;
-            if (parametres.characteristics.Where(c => c.Name == "Reload").Any())
+            if (parametres.Characteristics.Where(c => c.Name == "Reload").Any())
                 Reload = parametres.Reload;
             Position = position;
             State = state;
