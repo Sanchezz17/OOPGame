@@ -70,13 +70,13 @@
     <Compile Include="Infrastructure\TickСontroller.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Units\DescribeObject.cs" />
     <Compile Include="Units\GemFactory.cs" />
     <Compile Include="Units\Heroes\BaseHero.cs" />
     <Compile Include="Units\Heroes\CaptainAmerica.cs" />
     <Compile Include="Units\Heroes\IronMan.cs" />
     <Compile Include="Units\Heroes\Vision.cs" />
     <Compile Include="Units\IAttacking.cs" />
+    <Compile Include="Units\IDescribe.cs" />
     <Compile Include="Units\IGemFactory.cs" />
     <Compile Include="Units\IMalefactor.cs" />
     <Compile Include="Units\IGameObject.cs" />

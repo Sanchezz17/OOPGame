@@ -9,24 +9,14 @@ namespace Domain.GameLogic
     public class Player
     {
         public int Coins { get; set; }
-        public HashSet<DescribeObject> Heroes { get; }
-        public Player()
+        public IDescribe[] Heroes { get; }
+        public Player(IDescribe[] a)
         {
             Coins = 100;
-            Heroes = new HashSet<DescribeObject>
-            {
-                new DescribeObject(typeof(IronMan), 100,new UnitParameters()
-                .SetHealth(3000).SetDamage(10).SetReload(15)),
-
-                new DescribeObject(typeof(Vision), 50,
-                new UnitParameters().SetHealth(1000).SetReload(150)),
-
-                new DescribeObject(typeof(CaptainAmerica), 50,
-                new UnitParameters().SetHealth(10000))
-            };
+            Heroes = a;
         }
 
-        public DescribeObject GetHeroParameters(Type heroType)
+        public IDescribe GetHeroParameters(Type heroType)
         {
             return Heroes
                     .First(c => c.Type == heroType);

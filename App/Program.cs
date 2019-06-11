@@ -1,7 +1,9 @@
 ﻿using System.Windows.Forms;
 using Ninject;
+using Ninject.Extensions.Conventions;
 using App.Graphics;
 using Domain.GameLogic;
+using Domain.Units;
 using OOP_Game.GameLogic;
 
 namespace App
@@ -23,6 +25,10 @@ namespace App
             container.Bind<GameForm>().ToSelf().InSingletonScope();
             container.Bind<ResourceManager>().ToSelf().InSingletonScope();
             container.Bind<IGameFactory>().To<FactoryViaApi>();
+            container.Bind(c => c.FromAssembliesMatching("Domain*")
+                .SelectAllClasses()
+                .InheritedFrom<IDescribe>()
+                .BindAllInterfaces());
             return container;
         }
     }

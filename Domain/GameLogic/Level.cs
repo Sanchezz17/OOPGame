@@ -11,10 +11,10 @@ namespace Domain.GameLogic
         public int GemCount { get; set; }
         public List<Wave> Waves { get; }
         public bool IsWin => !Map.Malefactors.Any() && PassedWaves == Waves.Count;
-        public HashSet<DescribeObject> AvailableHeroes { get; }  
+        public IDescribe[] AvailableHeroes { get; }  
         public int PassedWaves;
 
-        public Level(Map map, HashSet<DescribeObject> availableHeroes)
+        public Level(Map map, IDescribe[] availableHeroes)
         {
             GemCount = 100;
             Map = map;

@@ -30,7 +30,7 @@ namespace App.Graphics
         private Label currentLevelLabel;
         private Label scoreLabel;
         private TableLayoutPanel purchasePanel;
-        private DescribeObject currentObjectToPurchase;
+        private IDescribe currentObjectToPurchase;
         private Button currentPurchaseButton;
         private bool isDeleteSelected;
         private readonly WindowsMediaPlayer audioPlayer;

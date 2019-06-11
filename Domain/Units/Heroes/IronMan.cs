@@ -1,9 +1,22 @@
+using System;
 using System.Windows;
 using Domain.Infrastructure;
 using Domain.Units.Strikes;
 
 namespace Domain.Units.Heroes
 {
+    
+    public class DescribeIronMan : IDescribe
+    {
+        public Type Type => typeof(IronMan);
+        public int Price => 100;
+
+        public UnitParameters Parameters => new UnitParameters()
+            .SetHealth(3000)
+            .SetDamage(10)
+            .SetReload(15);
+    }
+
     public class IronMan : BaseHero, IAttacking
     {
         public int Damage { get; private set; }

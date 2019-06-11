@@ -8,9 +8,9 @@ namespace Domain.Infrastructure
     public class LevelMaker
     {
         private Level level;
-        private HashSet<DescribeObject> availableHeroes;
+        private IDescribe[] availableHeroes;
 
-        public LevelMaker(HashSet<DescribeObject> availableHeroes)
+        public LevelMaker(IDescribe[] availableHeroes)
         {
             this.availableHeroes = availableHeroes;
             ResetLevel();

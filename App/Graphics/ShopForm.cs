@@ -14,14 +14,14 @@ namespace App.Graphics
         private ListBox heroParametersList;
         private Label heroLabel;
         private Button upgradeButton;
-        private Dictionary<string, DescribeObject> describeObjects;
-        private DescribeObject currentDescribeObject;
+        private Dictionary<string, IDescribe> describeObjects;
+        private IDescribe currentDescribeObject;
         private HashSet<Characteristic> currentParameters;
         private Characteristic currentParameter;
         private Label coinsLabel;
         public ShopForm(GameForm gameForm)
         {
-            describeObjects = new Dictionary<string, DescribeObject>();
+            describeObjects = new Dictionary<string, IDescribe>();
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
                                                 | ControlStyles.UserPaint, true);
             UpdateStyles();
