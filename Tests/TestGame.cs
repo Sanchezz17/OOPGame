@@ -1,6 +1,11 @@
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using NUnit.Framework;
 using Domain.GameLogic;
+using Domain.Infrastructure;
+using Domain.Units;
+using Domain.Units.Heroes;
 
 
 namespace Tests
@@ -8,8 +13,22 @@ namespace Tests
     [TestFixture]
     public class TestGame
     {
-        private Game GetGame() => new FactoryViaApi().Create(new Player());
-        
+        private Game GetGame()
+        {
+            var player = new Player(new[] {new DescribeIronMan()});
+            var levelMaker = new LevelMaker(player.Heroes);
+            levelMaker.AddHero(new IronMan(new UnitParameters().SetHealth(1000)
+                    .SetDamage(100)
+                    .SetReload(15), new Vector(2, 2)))
+                .AddMalefactor(new Octavius(10, new Vector(8, 2)))
+                .AddWave(new Wave(new List<IMalefactor>
+                {
+                    new Octavius(10, new Vector(1, 1)),
+                    new Octavius(10, new Vector(3, 3))
+                }, 900));
+            return new Game(new List<Level> {levelMaker.MakeLevel()}, player);
+        }
+
         [Test]
         public void TestStrikes()
         {

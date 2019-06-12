@@ -30,12 +30,11 @@ namespace Tests
         [TestCase(typeof(IronMan))]
         [TestCase(typeof(Vision))]
         [TestCase(typeof(CaptainAmerica))]
-        [TestCase(typeof(Thanos))]
         public void TestAdd(Type type)
         {
             var map = new Map(5, 10);
-            var ctor = type.GetConstructor(new[] {typeof(UnitParameters), typeof(Vector)});
-            var gameObject = (IGameObject) ctor.Invoke(new object [] {new UnitParameters(), new Vector(1, 1)});
+            var ctor = type.GetConstructors()[0];
+            var gameObject = (IGameObject) ctor.Invoke(new object [] {new UnitParameters().SetHealth(1000).SetDamage(10), new Vector(1, 1)});
             map.Add(gameObject);
             Assert.True(map.GetGameObjects().Contains(gameObject));
         }
@@ -43,12 +42,11 @@ namespace Tests
         [TestCase(typeof(IronMan))]
         [TestCase(typeof(Vision))]
         [TestCase(typeof(CaptainAmerica))]
-        [TestCase(typeof(Thanos))]
         public void TestRemove(Type type)
         {
             var map = new Map(5, 10);
-            var ctor = type.GetConstructor(new[] {typeof(int), typeof(Vector)});
-            var gameObject = (IGameObject) ctor.Invoke(new object [] {1, new Vector(1, 1)});
+            var ctor = type.GetConstructors()[0];
+            var gameObject = (IGameObject) ctor.Invoke(new object [] {new UnitParameters().SetHealth(1000).SetDamage(10), new Vector(1, 1)});
             map.Add(gameObject);
             map.Delete(gameObject);
             Assert.False(map.GetGameObjects().Contains(gameObject));
@@ -58,7 +56,7 @@ namespace Tests
         [TestCase(3, 1)]
         public void TestHeroOnLine(int x, int y)
         {
-            var player = new Player();
+            var player = new Player(new []{new DescribeIronMan()});
             var map = new Map(5, 10);
             var hero = new IronMan(player.GetHeroParameters(typeof(IronMan)).Parameters, new Vector(x, y));
             map.Add(hero);
