@@ -13,7 +13,7 @@ namespace Domain.Units.Heroes
         public bool IsDead { get; private set; }
         protected readonly TickСontroller tickСontroller;
 
-        public BaseHero(UnitParameters parametres, Vector position, State state, int countTick)
+        public BaseHero(UnitParameters parametres, Vector position, State state)
         {
             Health = parametres.Health;
             if (parametres.Characteristics.Where(c => c.Name == "Reload").Any())

@@ -20,7 +20,7 @@ namespace Domain.Units.Heroes
     public class IronMan : BaseHero, IAttacking
     {
         public int Damage { get; private set; }
-        public IronMan(UnitParameters parametres, Vector position) : base(parametres, position, State.Idle, 15)
+        public IronMan(UnitParameters parametres, Vector position) : base(parametres, position, State.Idle)
         {
             Damage = parametres.Damage;
         }

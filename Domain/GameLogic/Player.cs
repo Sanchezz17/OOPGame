@@ -10,10 +10,10 @@ namespace Domain.GameLogic
     {
         public int Coins { get; set; }
         public IDescribe[] Heroes { get; }
-        public Player(IDescribe[] a)
+        public Player(IDescribe[] describesHeroes)
         {
             Coins = 100;
-            Heroes = a;
+            Heroes = describesHeroes;
         }
 
         public IDescribe GetHeroParameters(Type heroType)
