@@ -5,9 +5,9 @@ using System.Linq;
 using System.Windows.Forms;
 using Domain.Units;
 
-namespace App.Graphics
+namespace App.Visualization
 {
-    public class ShopForm : Form
+    public class ShopForm : DBForm
     {
         private readonly GameForm gameForm;
         private ListBox heroesList;
@@ -29,8 +29,17 @@ namespace App.Graphics
             Text = "Shop";
             Size = gameForm.Size;
             Location = gameForm.Location;
-            Closed += OnExit;
+            VisibleChanged += OnVisibleChanged;
             InitializeShopForm();
+        }
+
+        private void OnVisibleChanged(object sender, EventArgs e)
+        {
+            if (Visible && Owner != null)
+            {
+                Location = Owner.Location;
+                Size = Owner.Size;
+            }
         }
 
         private void InitializeShopForm()
@@ -82,7 +91,7 @@ namespace App.Graphics
             if (heroesList.SelectedItem != null)
             {
                 currentDescribeObject = describeObjects[heroesList.SelectedItem.ToString()];
-                var visualObject = gameForm.ResourceManager.VisualObjects[currentDescribeObject.Type.Name];
+                var visualObject = gameForm.ResourceManager.GetVisualObject(currentDescribeObject.Type);
                 heroLabel.BackgroundImage = visualObject.PassiveImage;
                 heroLabel.BackgroundImageLayout = ImageLayout.Zoom;
             }
@@ -188,7 +197,7 @@ namespace App.Graphics
             rightPanel.Controls.Add(coinsTable, 0, 3);
 
             var coinsImage = FormUtils.GetLabelWithTextAndFontColor();
-            coinsImage.BackgroundImage = gameForm.ResourceManager.VisualObjects["Coins"].PassiveImage;
+            coinsImage.BackgroundImage = gameForm.ResourceManager.GetVisualObject("Coins").PassiveImage;
             coinsImage.BackgroundImageLayout = ImageLayout.Zoom;
             coinsImage.BorderStyle = BorderStyle.None;
             coinsTable.Controls.Add(coinsImage, 0, 0);
@@ -203,14 +212,7 @@ namespace App.Graphics
         private void SwitchToMenu(object sender, EventArgs e)
         {
             Hide();
-            gameForm.MainMenuForm.Size = Size;
-            gameForm.MainMenuForm.Location = Location;
-            gameForm.MainMenuForm.Show();
-        }
-        
-        private void OnExit(object sender, EventArgs e)
-        {
-            Application.Exit();
+            gameForm.MainMenuForm.Show(this);
         }
     }
 }

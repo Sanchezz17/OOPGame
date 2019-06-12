@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
+using App.Visualization;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using App.Graphics;
 using Domain.GameLogic;
 using Domain.Units;
 using OOP_Game.GameLogic;

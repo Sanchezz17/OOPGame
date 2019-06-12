@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace App.Graphics
+namespace App.Visualization
 {
     public static class AnimationUtils
     {

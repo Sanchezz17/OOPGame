@@ -2,9 +2,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace App.Graphics
+namespace App.Visualization
 {
-    public class MainMenuForm : Form
+    public class MainMenuForm : DBForm
     {
         private readonly GameForm gameForm;
         private Button continueButton;
@@ -12,7 +12,6 @@ namespace App.Graphics
         public MainMenuForm(GameForm gameForm)
         {
             this.gameForm = gameForm;
-            Name = "MainMenu";
             Text = "Главное меню";
             Closed += OnExit;
             InitializeMainMenu();
@@ -22,8 +21,7 @@ namespace App.Graphics
         {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             Location = gameForm.Location;
-            Size = gameForm.Size;
-            
+            Size = gameForm.Size;            
             
             continueButton = FormUtils.GetButtonWithTextAndFontColor("Продолжить", Color.Red, 20);
             var newGameButton = FormUtils.GetButtonWithTextAndFontColor("Новая игра", Color.Blue, 20);
@@ -48,20 +46,14 @@ namespace App.Graphics
         
         private void PlayClick(object sender, EventArgs e)
         {
-            gameForm.Location = Location;
-            gameForm.Size = Size;
-            gameForm.Show();
-            gameForm.Game.Start();
-            gameForm.PlaySoundtrack();
             Hide();
+            gameForm.Show(this);
         }
 
         private void ShopClick(object sender, EventArgs e)
         {
-            gameForm.ShopForm.Location = Location;
-            gameForm.ShopForm.Size = Size;
-            gameForm.ShopForm.Show();
             Hide();
+            gameForm.ShopForm.Show(this);
         }
 
         private void NewGameClick(object sender, EventArgs e)
@@ -71,9 +63,6 @@ namespace App.Graphics
             continueButton.Click += PlayClick;
         }
 
-        private void OnExit(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
+        private void OnExit(object sender, EventArgs e) => Application.Exit();
     }
 }

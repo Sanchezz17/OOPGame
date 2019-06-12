@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
-namespace App.Graphics
+namespace App.Visualization
 {
     public static class FormUtils
     {

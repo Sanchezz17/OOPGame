@@ -1,4 +1,4 @@
-﻿namespace App.Graphics
+﻿namespace App.Visualization
 {
     partial class GameForm
     {
@@ -19,20 +19,5 @@
             }
             base.Dispose(disposing);
         }
-
-        #region Код, автоматически созданный конструктором форм Windows
-
-        /// <summary>
-        /// Требуемый метод для поддержки конструктора — не изменяйте 
-        /// содержимое этого метода с помощью редактора кода.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
-        }
-
-        #endregion
     }
 }

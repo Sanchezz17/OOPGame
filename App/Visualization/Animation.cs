@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace App.Graphics
+namespace App.Visualization
 {
     public class Animation
     {

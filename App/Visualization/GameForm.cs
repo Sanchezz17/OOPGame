@@ -5,17 +5,18 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Domain.GameLogic;
+using Domain.Infrastructure;
 using Domain.Units;
 using OOP_Game.GameLogic;
-using WMPLib;
+using ContentAlignment = System.Drawing.ContentAlignment;
 using Size = System.Drawing.Size;
 
-namespace App.Graphics
+namespace App.Visualization
 {
-    public partial class GameForm : Form
+    public partial class GameForm : DBForm
     {
         public Game Game { get; private set; }
-        private IGameFactory gameFactory;
+        private readonly IGameFactory gameFactory;
         public ResourceManager ResourceManager { get; private set; }
         public readonly Form MainMenuForm;
         public readonly ShopForm ShopForm;
@@ -33,36 +34,44 @@ namespace App.Graphics
         private IDescribe currentObjectToPurchase;
         private Button currentPurchaseButton;
         private bool isDeleteSelected;
-        private readonly WindowsMediaPlayer audioPlayer;
+        private readonly AudioPlayer soundtrackPlayer;
         private readonly Player player;
+        private readonly Timer timer;
         
-        public GameForm(IGameFactory _gameFactory, ResourceManager resourceManager, Player player)
+        public GameForm(IGameFactory gameFactory, ResourceManager resourceManager, Player player)
         {
-            gameFactory = _gameFactory;
-            Game = gameFactory.Create(player);
+            this.gameFactory = gameFactory;
+            Game = this.gameFactory.Create(player);
             ResourceManager = resourceManager;
             this.player = player;
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.AllPaintingInWmPaint
                       | ControlStyles.UserPaint, true);
             UpdateStyles();
-            var timer = new Timer {Interval = 40};
-            timer.Tick += OnTimer;
-            timer.Start();
             Size = new Size(950, 700);
+            Text = "PvZ Marvel Edition";
             MainMenuForm = new MainMenuForm(this);
             ShopForm = new ShopForm(this);
+            soundtrackPlayer = new AudioPlayer(
+                Environment.CurrentDirectory + @"\Resources\Music\soundtrack.mp3");
             Shown += SwitchToMenu;
+            VisibleChanged += OnVisibleChanged;
             InitializeGameWindow();
-            audioPlayer = new WindowsMediaPlayer
-            {
-                URL = Environment.CurrentDirectory + @"\Resources\Music\soundtrack.mp3"
-            };
+            timer = new Timer {Interval = 40};
+            timer.Tick += OnTimer;
         }
 
-        public void PlaySoundtrack()
+        private void OnVisibleChanged(object sender, EventArgs e)
         {
-            audioPlayer.settings.volume = 100; 
-            audioPlayer.controls.play();
+            if (Visible)
+            {
+                soundtrackPlayer.Play();
+                timer.Start();
+            }
+            else
+            {
+                soundtrackPlayer.Stop();
+                timer.Stop();
+            }
         }
 
         private void InitializeGameWindow()
@@ -83,7 +92,7 @@ namespace App.Graphics
             topPanel.Controls.Add(currentLevelLabel, 0, 0);
 
             scoreLabel = FormUtils.GetLabelWithTextAndFontColor("", Color.Black);
-            scoreLabel.BackgroundImage = ResourceManager.VisualObjects["Gem"].PassiveImage;
+            scoreLabel.BackgroundImage = ResourceManager.GetVisualObject("Gem").PassiveImage;
             scoreLabel.BackgroundImageLayout = ImageLayout.Zoom;
             scoreLabel.TextAlign = ContentAlignment.BottomCenter;
             scoreLabel.Text = Game.CurrentLevel.GemCount.ToString();
@@ -95,7 +104,7 @@ namespace App.Graphics
             var deleteHeroButton = FormUtils.GetButtonWithTextAndFontColor(
                 "Удалить героя", Color.Teal, 13);
             deleteHeroButton.Margin = Padding.Empty;
-            deleteHeroButton.Click += DeleteHero;
+            deleteHeroButton.Click += ActivateDeletion;
             topPanel.Controls.Add(deleteHeroButton, 3, 0);
                       
             var exitToMenuButton = FormUtils.GetButtonWithTextAndFontColor(
@@ -119,7 +128,7 @@ namespace App.Graphics
             {
                 var heroPurchase = FormUtils.GetButtonWithTextAndFontColor(
                     hero.Price.ToString(), Color.Black);
-                heroPurchase.BackgroundImage = ResourceManager.VisualObjects[hero.Type.Name].PassiveImage;
+                heroPurchase.BackgroundImage = ResourceManager.GetVisualObject(hero.Type).PassiveImage;
                 heroPurchase.BackgroundImageLayout = ImageLayout.Zoom;
                 heroPurchase.TextAlign = ContentAlignment.BottomCenter;
                 heroPurchase.Margin = Padding.Empty;
@@ -140,11 +149,11 @@ namespace App.Graphics
         
         private void ProcessMouseClick(object sender, MouseEventArgs e)
         {
-            var coordinatesInMap = CoordinatesInLabelToMap(new Vector(e.X, e.Y), cellSize);
+            var locationInMap = CoordinatesUtils.GetLocationInMapByLocationInControl(new Vector(e.X, e.Y), cellSize);
             var gemToDelete = new List<Gem>();
             foreach (var gem in Game.CurrentLevel.Map.Gems)
             {                
-                if ((gem.Position - coordinatesInMap).Length < 0.9)
+                if ((gem.Position - locationInMap).Length < 0.9)
                 {
                     Game.CurrentLevel.GemCount += 25;
                     gemToDelete.Add(gem);
@@ -161,9 +170,9 @@ namespace App.Graphics
             
             if (isDeleteSelected)
             {
-                foreach (var hero in Game.CurrentLevel.Map.GetHeroesFromLine((int)coordinatesInMap.Y))
+                foreach (var hero in Game.CurrentLevel.Map.GetHeroesFromLine((int)locationInMap.Y))
                 {
-                    if (Math.Abs(hero.Position.X - coordinatesInMap.X) < double.Epsilon)
+                    if (Math.Abs(hero.Position.X - locationInMap.X) < double.Epsilon)
                         Game.CurrentLevel.Map.Delete(hero);
                 }
                 isDeleteSelected = false;
@@ -174,11 +183,11 @@ namespace App.Graphics
             {
                 if (Game.CurrentLevel.GemCount >= currentObjectToPurchase.Price
                     && !Game.CurrentLevel.Map.Heroes
-                        .Any(hero => (coordinatesInMap - hero.Position).Length < 0.1))
+                        .Any(hero => (locationInMap - hero.Position).Length < 0.1))
                 {
                     var ctor = currentObjectToPurchase.Type.GetConstructors()[0];
                     var heroToAdd = (IHero) ctor.Invoke(
-                        new object[] {currentObjectToPurchase.Parameters, coordinatesInMap});
+                        new object[] {currentObjectToPurchase.Parameters, locationInMap});
                     Game.CurrentLevel.Map.Add(heroToAdd);
                     Game.CurrentLevel.GemCount -= currentObjectToPurchase.Price;
                 }
@@ -244,9 +253,7 @@ namespace App.Graphics
 
         public void Restart(object sender, EventArgs e)
         {
-            ResourceManager = new ResourceManager();
             Game = gameFactory.Create(player);
-            Game.Start();
             mainPanel.Controls.RemoveAt(1); 
             mainPanel.Controls.Add(gamePanel, 0, 1);
         }
@@ -261,26 +268,16 @@ namespace App.Graphics
 
         private void SwitchToMenu(object sender, EventArgs e)
         {
-            audioPlayer.controls.stop();
-            Game.Pause();
             Hide();
-            MainMenuForm.Location = Location;
-            MainMenuForm.Size = Size;
-            MainMenuForm.Show();
+            MainMenuForm.Show(this);
         }
 
-        private void DeleteHero(object sender, EventArgs e)
-        {
-            isDeleteSelected = true;
-        }
+        private void ActivateDeletion(object sender, EventArgs e) => isDeleteSelected = true;
 
         private void OnTimer(object sender, EventArgs e)
         {
-            if (Game.Started)
-            {
-                Game.MakeGameIteration();
-                field.Invalidate();
-            }
+            Game.MakeGameIteration();
+            field.Invalidate();
         }
 
         private void OnPaint(object sender, PaintEventArgs e)
@@ -290,20 +287,6 @@ namespace App.Graphics
         }
         
         private void OnFrameChanged(object sender, EventArgs e) => field.Invalidate();
-        
-        private RectangleF GetCoordinatesInMapLabel(Vector location, Size cell)
-        {
-            var x = (float)(location.X * cell.Width);
-            var y = (float)(location.Y * cell.Height);
-            return new RectangleF(x, y, cell.Width, cell.Height);
-        }
-
-        private Vector CoordinatesInLabelToMap(Vector coordinatesInLayout, Size cell)
-        {
-            var x = Math.Truncate(coordinatesInLayout.X / cell.Width);
-            var y = Math.Truncate(coordinatesInLayout.Y / cell.Height);
-            return new Vector(x, y);
-        }
 
         private void CheckPanelAlreadySet(TableLayoutPanel panel)
         {
@@ -316,13 +299,13 @@ namespace App.Graphics
 
         private void DrawMap(object sender, PaintEventArgs e)
         {
-            if (Game.GameIsWin)
+            if (Game.IsWin)
             {
                 CheckPanelAlreadySet(gameWinPanel);
                 return;
             }
             
-            if (Game.GameIsOver)
+            if (Game.IsOver)
             {
                 CheckPanelAlreadySet(gameOverPanel);
                 return;
@@ -337,13 +320,13 @@ namespace App.Graphics
             
             foreach (var gameObject in Game.CurrentLevel.Map.GetGameObjects())
             {
-                var visualObject = ResourceManager.VisualObjects[gameObject.GetType().Name];
+                var visualObject = ResourceManager.GetVisualObject(gameObject.GetType());
                 var currentAnimation = visualObject.PassiveImage;
                 if (gameObject.State != State.Idle)
                 {
-                    currentAnimation = gameObject.State == State.Attacks || gameObject.State == State.Produce
-                        ? visualObject.AttackImage
-                        : visualObject.MoveImage;
+                    currentAnimation = gameObject.State == State.Moves
+                        ? visualObject.MoveImage
+                        : visualObject.AttackImage;
                     if (!visualObject.Animations.ContainsKey(gameObject))
                     {
                         visualObject.Animations[gameObject] = new Animation(
@@ -352,13 +335,13 @@ namespace App.Graphics
                     AnimationUtils.AnimateImage(visualObject.Animations[gameObject], currentAnimation, OnFrameChanged);
                     ImageAnimator.UpdateFrames();               
                 }
-                var rectangleInMapLayout = GetCoordinatesInMapLabel(gameObject.Position, cellSize);
+                var rectangleInMapControl = CoordinatesUtils.GetRectangleToPaintByLocationInMap(gameObject.Position, cellSize);
                 if (gameObject is IStrike)
                 {
-                    rectangleInMapLayout.Height /= 3;
-                    rectangleInMapLayout.Y += rectangleInMapLayout.Height / 2;
+                    rectangleInMapControl.Height /= 3;
+                    rectangleInMapControl.Y += rectangleInMapControl.Height / 2;
                 }
-                e.Graphics.DrawImage(currentAnimation, rectangleInMapLayout);
+                e.Graphics.DrawImage(currentAnimation, rectangleInMapControl);
             }
         }
     }

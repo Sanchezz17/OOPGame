@@ -1,7 +1,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace App.Graphics
+namespace App.Visualization
 {
     public sealed class DBLayoutPanel : TableLayoutPanel
     {

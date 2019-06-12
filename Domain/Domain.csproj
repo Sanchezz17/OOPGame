@@ -66,6 +66,7 @@
     <Compile Include="GameMaker\LevelMaker.cs" />
     <Compile Include="GameMaker\MalefactorPositionGenerator.cs" />
     <Compile Include="GameMaker\WaveMaker.cs" />
+    <Compile Include="Infrastructure\CoordinatesUtils.cs" />
     <Compile Include="Infrastructure\Direction.cs" />
     <Compile Include="Infrastructure\TickСontroller.cs" />
     <Compile Include="Program.cs" />

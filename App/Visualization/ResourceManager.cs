@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
-namespace App.Graphics
+namespace App.Visualization
 {
     public class ResourceManager
     {
-        public readonly Dictionary<string, VisualObject> VisualObjects = new Dictionary<string, VisualObject>();
+        private readonly Dictionary<string, VisualObject> visualObjects = new Dictionary<string, VisualObject>();
 
         public ResourceManager()
         {
@@ -15,7 +15,7 @@ namespace App.Graphics
             foreach (var heroDir in heroesDir.EnumerateDirectories())
             {
                 var visualObject = new VisualObject();
-                VisualObjects[heroDir.Name] = visualObject;
+                visualObjects[heroDir.Name] = visualObject;
                 visualObject.PassiveImage = new Bitmap(heroDir.FullName + @"\passive.gif");
                 visualObject.AttackImage = new Bitmap(heroDir.FullName + @"\attack.gif");
             }
@@ -24,7 +24,7 @@ namespace App.Graphics
             foreach (var malefactorDir in malefactorsDir.EnumerateDirectories())
             {
                 var visualObject = new VisualObject();
-                VisualObjects[malefactorDir.Name] = visualObject;
+                visualObjects[malefactorDir.Name] = visualObject;
                 visualObject.PassiveImage = new Bitmap(malefactorDir.FullName + @"\passive.gif");
                 visualObject.AttackImage = new Bitmap(malefactorDir.FullName + @"\attack.gif");
                 visualObject.MoveImage = new Bitmap(malefactorDir.FullName + @"\move.gif");
@@ -34,21 +34,25 @@ namespace App.Graphics
             foreach (var shotDir in shotsDir.EnumerateDirectories())
             {
                 var visualObject = new VisualObject();
-                VisualObjects[shotDir.Name] = visualObject;
+                visualObjects[shotDir.Name] = visualObject;
                 visualObject.PassiveImage = new Bitmap(
                     shotDir.FullName + $@"\{shotDir.Name}.gif");
                 visualObject.MoveImage = visualObject.PassiveImage;
             }
             
             var gemVisual = new VisualObject();
-            VisualObjects["Gem"] = gemVisual;
+            visualObjects["Gem"] = gemVisual;
             gemVisual.PassiveImage = new Bitmap(Environment.CurrentDirectory + @"\Resources\gem.gif");
             gemVisual.MoveImage = gemVisual.PassiveImage;  
             
             var coinsVisual = new VisualObject();
-            VisualObjects["Coins"] = coinsVisual;
+            visualObjects["Coins"] = coinsVisual;
             coinsVisual.PassiveImage = new Bitmap(Environment.CurrentDirectory + @"\Resources\coins.png");
             coinsVisual.MoveImage = coinsVisual.PassiveImage;
         }
+
+        public VisualObject GetVisualObject(Type type) => GetVisualObject(type.Name);
+
+        public VisualObject GetVisualObject(string name) => visualObjects[name];
     }
 }

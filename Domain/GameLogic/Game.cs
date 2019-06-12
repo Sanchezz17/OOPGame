@@ -6,24 +6,18 @@ namespace Domain.GameLogic
 {
     public class Game
     {
-        public bool Started { get; private set; }
         public int CurrentLevelNumber { get; private set; }
         private readonly List<Level> Levels;
         public Level CurrentLevel => Levels[CurrentLevelNumber];
-        public bool GameIsOver { get; private set; }
-        public bool GameIsWin { get; private set; }
+        public bool IsOver { get; private set; }
+        public bool IsWin { get; private set; }
         public Player Player { get; }
         public Game(List<Level> levels, Player player)
         {
-            Started = false;
             CurrentLevelNumber = 0;
             Levels = levels;
             Player = player;
         }
-
-        public void Start() => Started = true;
-
-        public void Pause() => Started = false;
         
         public void MakeGameIteration()
         {
@@ -34,7 +28,7 @@ namespace Domain.GameLogic
             CheckStrikes();
             UpdateGameObjects();
             MakeMove();
-            GameIsOver = CheckGameOver();
+            IsOver = CheckGameOver();
         }
 
         private void MakeWave()
@@ -150,7 +144,7 @@ namespace Domain.GameLogic
         {
             if (CurrentLevelNumber == Levels.Count - 1)
             {
-                GameIsWin = true;
+                IsWin = true;
                 return;
             }
             CurrentLevelNumber++;
