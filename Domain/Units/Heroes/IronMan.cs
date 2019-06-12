@@ -10,8 +10,8 @@ namespace Domain.Units.Heroes
     {
         public Type Type => typeof(IronMan);
         public int Price => 100;
-
-        public UnitParameters Parameters => new UnitParameters()
+        public UnitParameters Parameters => parameters;
+        private readonly UnitParameters parameters = new UnitParameters()
             .SetHealth(3000)
             .SetDamage(10)
             .SetReload(15);

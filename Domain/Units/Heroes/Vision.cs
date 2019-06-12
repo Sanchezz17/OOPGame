@@ -7,7 +7,8 @@ namespace Domain.Units.Heroes
     {
         public Type Type => typeof(Vision);
         public int Price => 50;
-        public UnitParameters Parameters => new UnitParameters().SetHealth(1000).SetReload(150);
+        public UnitParameters Parameters => parameters;
+        private readonly UnitParameters parameters = new UnitParameters().SetHealth(1000).SetReload(150);
     }
 
     public class Vision : BaseHero, IGemManufacturer
