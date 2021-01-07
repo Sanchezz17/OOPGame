@@ -27,4 +27,4 @@ https://github.com/Sanchezz17/OOPGame/blob/master/App/Program.cs
 https://bit.ly/PvZ_MarvelEdition
 
 Правила игры:
-https://bit.ly/Readme_PvZ_MarvelEdition
+https://bit.ly/3rVe6Vw
